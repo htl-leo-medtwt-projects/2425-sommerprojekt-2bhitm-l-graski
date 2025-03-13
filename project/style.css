@@ -1,0 +1,22 @@
+@font-face {
+    font-family: SF-Pro;
+    src: url(fonts/SF_Pro.OTF);
+}
+
+@font-face {
+    font-family: Pixel-Font;
+    src: url(fonts/Pixel_Font.ttf);
+}
+
+@font-face {
+    font-family: Uberschriften;
+    src: url(fonts/TT_Phobos.otf);
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
