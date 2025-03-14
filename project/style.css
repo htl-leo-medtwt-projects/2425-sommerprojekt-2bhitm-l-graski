@@ -20,3 +20,9 @@
     user-select: none;
 }
 
+body {
+    background-image: url(img/classroom_load_better.png);
+    background-repeat: no-repeat;
+    
+    
+}
