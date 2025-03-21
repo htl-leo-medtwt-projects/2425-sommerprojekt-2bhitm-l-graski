@@ -62,12 +62,17 @@ function chooseGame() {
     let buttonUnused = document.createElement("img");
     buttonUnused.src = "img/cyan_button.png";
     buttonUnused.style.height = "100%"
+    buttonUnused.style.width = "100%"
+    buttonUnused.style.display = "block"
     return buttonUnused;
   }
 
   function createButtonImgUsed() {
     let buttonUsed = document.createElement("img");
     buttonUsed.src = "img/yellow_button.png";
+    buttonUsed.style.height = "100%"
+    buttonUsed.style.width = "100%"
+    buttonUsed.style.display = "block"
     return buttonUsed;
   }
 
@@ -94,8 +99,13 @@ function chooseGame() {
   }
 
   button2.style.borderRadius = "100px"
+  button2.style.position = "relative"
+  button2.style.overflow = "hidden"
 
   button2Text.style.position = "absolute"
+  button2Text.style.top = "50%"
+  button2Text.style.left = "50%"
+  button2Text.style.transform = "translate(-50%, -50%)"
 
   button2.appendChild(button2Text)
   buttonDiv.appendChild(button2);
@@ -111,6 +121,12 @@ function chooseGame() {
   button3.style.borderRadius = "100px"
 
   button3.appendChild(button3Text)
+
+
+
+  buttonDiv.style.position = "absolute"
+  buttonDiv.style.display = "flex"
+
   buttonDiv.appendChild(button3);
 
   body.appendChild(buttonDiv);
