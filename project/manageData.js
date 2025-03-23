@@ -57,12 +57,12 @@ let playerData = {
 };
 
 function setPlayerData(game, data) {
-  playerData.Game[game] = data;
+  playerData.Game[game-1] = data;
   localStorage.setItem("playerData", JSON.stringify(playerData));
 }
 
 function getPlayerData(game) {
-  return JSON.parse(localStorage.getItem("playerData")).Game[game];
+  return JSON.parse(localStorage.getItem("playerData")).Game[game-1];
 }
 
 function savePlayerData() {
@@ -71,7 +71,8 @@ function savePlayerData() {
 
 function loadPlayerData() {
   if(localStorage.getItem("playerData") !== null) {
-    playerData = JSON.parse(localStorage.getItem(playerData));
+    playerData = JSON.parse(localStorage.getItem("playerData"));
+    console.log(playerData)
   }else{
     savePlayerData()
     loadPlayerData()
@@ -79,9 +80,25 @@ function loadPlayerData() {
 }
 
 function removePlayerData(game) {
-  playerData.Game[game] = PlayerBluePrint;
+  playerData.Game[game-1] = PlayerBluePrint;
   localStorage.setItem("playerData", JSON.stringify(playerData));
 }
+
+function resetPlayerData(game) {
+  playerData.Game[game-1] = PlayerBluePrint
+  console.log(playerData)
+  savePlayerData()
+}
+
+function resetAllPlayerData() {
+  for(let i = 0; i < 3; i++) {
+    playerData.Game[i] = PlayerBluePrint
+  }
+  savePlayerData()
+  console.log(playerData)
+}
+
+
 
 function setData(data, name) {
   localStorage.setItem(name, JSON.stringify(data));
