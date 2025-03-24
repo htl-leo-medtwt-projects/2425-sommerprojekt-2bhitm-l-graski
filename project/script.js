@@ -273,7 +273,7 @@ function startGame(game) {
   startButton.style.border = "none";
   startButton.style.backgroundColor = "transparent";
   startButton.style.position = "absolute";
-  startButton.style.top = "65%";
+  startButton.style.top = "85%";
   startButton.style.left = "50%";
   startButton.style.transform = "translate(-50%, -50%)";
 
@@ -305,7 +305,7 @@ function startGame(game) {
   });
 
   startButton.addEventListener("click", () => {
-    //gameScreen function
+    gameScreen(game);
   });
 
   startButton.appendChild(startButtonText);
@@ -317,7 +317,7 @@ function startGame(game) {
   nameButton.style.width = "294px";
   nameButton.style.height = "81px";
   nameButton.style.position = "absolute";
-  nameButton.style.top = "10%";
+  nameButton.style.top = "71%";
   nameButton.style.left = "50%";
   nameButton.style.transform = "translate(-50%, -50%)";
 
@@ -423,6 +423,95 @@ function startGame(game) {
   resetButton.appendChild(resetButtonImg);
   resetButton.appendChild(resetButtonText);
   body.appendChild(resetButton);
+
+  let backButton = document.createElement("button");
+  let backButtonImg = document.createElement("img");
+  let backImg = document.createElement("img");
+  let backButtonText = document.createElement("p");
+
+  backButtonImg.src = "img/blue_button.png";
+  backButtonImg.style.width = "100%";
+  backButtonImg.style.height = "100%";
+  backButtonImg.style.display = "block";
+
+  backImg.src = "img/back-arrow.png";
+  backImg.style.width = "20px";
+  backImg.style.height = "20px";
+  backImg.style.display = "block";
+  backImg.style.position = "absolute";
+  backImg.style.top = "50%";
+  backImg.style.left = "20%";
+  backImg.style.transform = "translate(-50%, -50%)";
+
+  backButtonText.innerHTML = "BACK";
+  backButtonText.style.position = "absolute";
+  backButtonText.style.top = "50%";
+  backButtonText.style.left = "60%";
+  backButtonText.style.transform = "translate(-50%, -50%)";
+  backButtonText.style.fontFamily = "SF-Pro";
+  backButtonText.style.fontSize = "18px";
+  backButtonText.style.color = "black";
+
+  backButton.style.display = "inline-block";
+  backButton.style.overflow = "hidden";
+  backButton.style.position = "absolute";
+  backButton.style.top = "3%";
+  backButton.style.left = "3%";
+  backButton.style.transform = "translate(-50%, -50%)";
+  backButton.style.border = "none";
+  backButton.style.backgroundColor = "transparent";
+  backButton.style.width = "95px";
+  backButton.style.height = "23px";
+
+  backButton.addEventListener("mouseover", () => {
+    backButton.style.cursor = "pointer";
+    backButton.style.filter = "grayscale(50%)";
+  });
+
+  backButton.addEventListener("mouseleave", () => {
+    backButton.style.cursor = "auto";
+    backButton.style.filter = "grayscale(0%)";
+  });
+
+  backButton.addEventListener("click", () => {
+    chooseGame();
+  });
+
+  backButton.appendChild(backButtonImg);
+  backButton.appendChild(backImg);
+  backButton.appendChild(backButtonText);
+  body.appendChild(backButton);
+
+  let gameDisplay = document.createElement("div");
+  let gameImg = document.createElement("img");
+  let gameText = document.createElement("p");
+
+  gameImg.src = "img/blue_button.png";
+  gameImg.style.width = "100%";
+  gameImg.style.height = "100%";
+  gameImg.style.display = "block";
+
+  gameText.innerHTML = `GAME ${game}`;
+  gameText.style.position = "absolute";
+  gameText.style.top = "50%";
+  gameText.style.left = "50%";
+  gameText.style.transform = "translate(-50%, -50%)";
+  gameText.style.fontFamily = "SF-Pro";
+  gameText.style.fontSize = "12px";
+  gameText.style.color = "black";
+
+  gameDisplay.style.display = "inline-block";
+  gameDisplay.style.overflow = "hidden";
+  gameDisplay.style.position = "absolute";
+  gameDisplay.style.top = "3%";
+  gameDisplay.style.left = "96.5%";
+  gameDisplay.style.transform = "translate(-50%, -50%)";
+  gameDisplay.style.width = "95px";
+  gameDisplay.style.height = "23px";
+
+  gameDisplay.appendChild(gameImg);
+  gameDisplay.appendChild(gameText);
+  body.appendChild(gameDisplay);
 }
 
 function confirmScreen(game, text) {
@@ -539,4 +628,9 @@ function confirmScreen(game, text) {
   yesButton.appendChild(yesText);
   backgroundDiv.appendChild(yesButton);
   body.appendChild(backgroundDiv);
+}
+
+function gameScreen(game) {
+  body.innerHTML = "";
+  body.removeAttribute("style");
 }

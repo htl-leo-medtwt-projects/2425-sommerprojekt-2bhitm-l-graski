@@ -57,12 +57,16 @@ let playerData = {
 };
 
 function setPlayerData(game, data) {
-  playerData.Game[game-1] = data;
-  localStorage.setItem("playerData", JSON.stringify(playerData));
+  if (game != -1) {
+    playerData.Game[game - 1] = data;
+    localStorage.setItem("playerData", JSON.stringify(playerData));
+  }
 }
 
 function getPlayerData(game) {
-  return JSON.parse(localStorage.getItem("playerData")).Game[game-1];
+  if (game != -1) {
+    return JSON.parse(localStorage.getItem("playerData")).Game[game - 1];
+  }
 }
 
 function savePlayerData() {
@@ -70,37 +74,37 @@ function savePlayerData() {
 }
 
 function loadPlayerData() {
-  if(localStorage.getItem("playerData") !== null) {
+  if (localStorage.getItem("playerData") !== null) {
     playerData = JSON.parse(localStorage.getItem("playerData"));
     //console.log(playerData)
-  }else{
-    savePlayerData()
-    loadPlayerData()
+  } else {
+    savePlayerData();
+    loadPlayerData();
   }
 }
 
 function removePlayerData(game) {
-  playerData.Game[game-1] = PlayerBluePrint;
-  localStorage.setItem("playerData", JSON.stringify(playerData));
+  if (game != -1) {
+    playerData.Game[game - 1] = PlayerBluePrint;
+    localStorage.setItem("playerData", JSON.stringify(playerData));
+  }
 }
 
 function resetPlayerData(game) {
-  if(game != -1) {
-    playerData.Game[game-1] = PlayerBluePrint
+  if (game != -1) {
+    playerData.Game[game - 1] = PlayerBluePrint;
     //console.log(playerData)
-    savePlayerData()
+    savePlayerData();
   }
 }
 
 function resetAllPlayerData() {
-  for(let i = 0; i < 3; i++) {
-    playerData.Game[i] = PlayerBluePrint
+  for (let i = 0; i < 3; i++) {
+    playerData.Game[i] = PlayerBluePrint;
   }
-  savePlayerData()
+  savePlayerData();
   //console.log(playerData)
 }
-
-
 
 function setData(data, name) {
   localStorage.setItem(name, JSON.stringify(data));
