@@ -1,6 +1,6 @@
 let PlayerBluePrint = {
   Used: false,
-  PlayerName: "",
+  PlayerName: "NAME",
   Coins: 0,
   BestScore: 0,
   GlobalScoreMultiplier: 1,
@@ -16,7 +16,7 @@ let playerData = {
   Game: [
     {
       Used: false,
-      PlayerName: "",
+      PlayerName: "NAME",
       Coins: 0,
       BestScore: 0,
       GlobalScoreMultiplier: 1,
@@ -29,7 +29,7 @@ let playerData = {
     },
     {
       Used: false,
-      PlayerName: "",
+      PlayerName: "NAME",
       Coins: 0,
       BestScore: 0,
       GlobalScoreMultiplier: 1,
@@ -42,7 +42,7 @@ let playerData = {
     },
     {
       Used: false,
-      PlayerName: "",
+      PlayerName: "NAME",
       Coins: 0,
       BestScore: 0,
       GlobalScoreMultiplier: 1,
@@ -72,7 +72,7 @@ function savePlayerData() {
 function loadPlayerData() {
   if(localStorage.getItem("playerData") !== null) {
     playerData = JSON.parse(localStorage.getItem("playerData"));
-    console.log(playerData)
+    //console.log(playerData)
   }else{
     savePlayerData()
     loadPlayerData()
@@ -86,7 +86,7 @@ function removePlayerData(game) {
 
 function resetPlayerData(game) {
   playerData.Game[game-1] = PlayerBluePrint
-  console.log(playerData)
+  //console.log(playerData)
   savePlayerData()
 }
 
@@ -95,7 +95,7 @@ function resetAllPlayerData() {
     playerData.Game[i] = PlayerBluePrint
   }
   savePlayerData()
-  console.log(playerData)
+  //console.log(playerData)
 }
 
 

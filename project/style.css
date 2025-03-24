@@ -1,45 +1,42 @@
 @font-face {
-    font-family: SF-Pro;
-    src: url(fonts/SF_Pro.OTF);
+  font-family: SF-Pro;
+  src: url(fonts/SF_Pro.OTF);
 }
 
 @font-face {
-    font-family: Pixel-Font;
-    src: url(fonts/Pixel_Font.ttf);
+  font-family: Pixel-Font;
+  src: url(fonts/Pixel_Font.ttf);
 }
 
 @font-face {
-    font-family: Uberschriften;
-    src: url(fonts/TT_Phobos.otf);
+  font-family: Uberschriften;
+  src: url(fonts/TT_Phobos.otf);
 }
-
 
 * {
-    margin: 0;
-    padding: 0;
-    user-select: none;
+  margin: 0;
+  padding: 0;
+  user-select: none;
 }
 
-
 @keyframes gameText {
-    0% {
-        transform: scale(100%);
-        
-    }
+  0% {
+    transform: scale(100%);
+  }
 
-    25% {
-        transform: scale(105%);
-    }
+  25% {
+    transform: scale(105%);
+  }
 
-    50% {
-        transform: scale(110%);
-    }
+  50% {
+    transform: scale(110%);
+  }
 
-    75% {
-        transform: scale(105%);
-    }
+  75% {
+    transform: scale(105%);
+  }
 
-    100% {
-        transform: scale(100%);
-    }
+  100% {
+    transform: scale(100%);
+  }
 }
