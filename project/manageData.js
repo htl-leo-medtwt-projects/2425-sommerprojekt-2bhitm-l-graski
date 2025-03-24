@@ -85,9 +85,11 @@ function removePlayerData(game) {
 }
 
 function resetPlayerData(game) {
-  playerData.Game[game-1] = PlayerBluePrint
-  //console.log(playerData)
-  savePlayerData()
+  if(game != -1) {
+    playerData.Game[game-1] = PlayerBluePrint
+    //console.log(playerData)
+    savePlayerData()
+  }
 }
 
 function resetAllPlayerData() {

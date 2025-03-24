@@ -1,4 +1,6 @@
 let body = document.body;
+const resetConfirmText =
+  "Are you sure you want to reset this profile?<br>Please note that all progress, settings, <br>and data associated with this profile will be permanently lost <br>if you proceed with the reset!";
 
 loadPlayerData();
 
@@ -11,11 +13,9 @@ document.addEventListener("keydown", function (event) {
 
 document.addEventListener("keydown", function (event) {
   if (event.key === "c") {
-    confirmScreen()
+    confirmScreen(-1, resetConfirmText);
   }
 });
-
-
 
 function chooseGame() {
   body.innerHTML = "";
@@ -417,7 +417,7 @@ function startGame(game) {
   });
 
   resetButton.addEventListener("click", () => {
-    confirmScreen();
+    confirmScreen(game, resetConfirmText);
   });
 
   resetButton.appendChild(resetButtonImg);
@@ -425,7 +425,7 @@ function startGame(game) {
   body.appendChild(resetButton);
 }
 
-function confirmScreen(_game, _text) {
+function confirmScreen(game, text) {
   let backgroundDiv = document.createElement("div");
   let confirmHeader = document.createElement("h1");
   let confirmText = document.createElement("p");
@@ -433,30 +433,110 @@ function confirmScreen(_game, _text) {
   let yesImg = document.createElement("img");
   let yesText = document.createElement("p");
   let noButton = document.createElement("button");
-  let noImg = document.createElement("img");
   let noText = document.createElement("p");
 
-  backgroundDiv.style.backgroundColor = "rgb(0,0,0,0.5)"
-  backgroundDiv.style.border = "3px solid rgb(0,0,0,0.75)"
-  backgroundDiv.style.borderRadius = "25px"
-  backgroundDiv.style.width = "33%"
+  backgroundDiv.style.backgroundColor = "rgb(0,0,0,0.75)";
+  backgroundDiv.style.border = "3px solid rgb(0,0,0,0.85)";
+  backgroundDiv.style.borderRadius = "25px";
+  backgroundDiv.style.width = "33%";
+  backgroundDiv.style.height = "55%";
   backgroundDiv.style.position = "absolute";
   backgroundDiv.style.top = "50%";
   backgroundDiv.style.left = "50%";
   backgroundDiv.style.transform = "translate(-50%, -50%)";
-  backgroundDiv.style.padding = "20% 0"
 
+  confirmHeader.innerHTML = "Confirm Screen";
+  confirmHeader.style.color = "white";
+  confirmHeader.style.fontFamily = "Uberschriften";
+  confirmHeader.style.textAlign = "center";
+  confirmHeader.style.paddingTop = "3px";
+  confirmHeader.style.borderBottom = "3.5px solid white";
 
+  confirmText.innerHTML = text;
+  confirmText.style.color = "white";
+  confirmText.style.fontFamily = "SF-Pro";
+  confirmText.style.fontSize = "35px";
+  confirmText.style.padding = "15px 10% 15px 10%";
+  confirmText.style.borderBottom = "3.5px solid white";
+
+  yesImg.src = "img/red_button.png";
+  yesImg.style.height = "100%";
+  yesImg.style.width = "100%";
+  yesImg.style.display = "block";
+
+  yesText.innerHTML = "Yes, Reset Profil";
+  yesText.style.position = "absolute";
+  yesText.style.top = "50%";
+  yesText.style.left = "50%";
+  yesText.style.transform = "translate(-50%, -50%)";
+  yesText.style.fontFamily = "SF-Pro";
+  yesText.style.fontSize = "18px";
+  yesText.style.color = "white";
+
+  yesButton.style.display = "inline-block";
+  yesButton.style.overflow = "hidden";
+  yesButton.style.position = "absolute";
+  yesButton.style.top = "92%";
+  yesButton.style.left = "85%";
+  yesButton.style.transform = "translate(-50%, -50%)";
+  yesButton.style.border = "none";
+  yesButton.style.backgroundColor = "transparent";
+  yesButton.style.width = "28%";
+  yesButton.style.height = "10%";
+
+  yesButton.addEventListener("mouseover", () => {
+    yesButton.style.cursor = "pointer";
+    yesButton.style.filter = "grayscale(50%)";
+  });
+
+  yesButton.addEventListener("mouseleave", () => {
+    yesButton.style.cursor = "auto";
+    yesButton.style.filter = "grayscale(0%)";
+  });
+
+  yesButton.addEventListener("click", () => {
+    resetPlayerData(game);
+    chooseGame();
+    //console.log(playerData)
+  });
+
+  noText.innerHTML = "No, Keep Profil";
+  noText.style.fontFamily = "SF-Pro";
+  noText.style.fontSize = "18px";
+  noText.style.color = "white";
+
+  noButton.style.display = "inline-block";
+  noButton.style.overflow = "hidden";
+  noButton.style.position = "absolute";
+  noButton.style.top = "92%";
+  noButton.style.left = "57.5%";
+  noButton.style.transform = "translate(-50%, -50%)";
+  noButton.style.border = "2px solid black";
+  noButton.style.backgroundColor = "rgb(48, 47, 47)";
+  noButton.style.borderRadius = "25px";
+  noButton.style.width = "25%";
+  noButton.style.height = "10%";
+
+  noButton.addEventListener("mouseover", () => {
+    noButton.style.cursor = "pointer";
+    noButton.style.backgroundColor = "rgb(30, 30, 30)";
+  });
+
+  noButton.addEventListener("mouseleave", () => {
+    noButton.style.cursor = "auto";
+    noButton.style.backgroundColor = "rgb(48, 47, 47)";
+  });
+
+  noButton.addEventListener("click", () => {
+    body.removeChild(backgroundDiv);
+  });
+
+  backgroundDiv.appendChild(confirmHeader);
+  backgroundDiv.appendChild(confirmText);
+  noButton.appendChild(noText);
+  backgroundDiv.appendChild(noButton);
   yesButton.appendChild(yesImg);
   yesButton.appendChild(yesText);
-  noButton.appendChild(noImg);
-  noButton.appendChild(noText);
-  backgroundDiv.appendChild(confirmText);
-  backgroundDiv.appendChild(confirmHeader);
   backgroundDiv.appendChild(yesButton);
-  backgroundDiv.appendChild(noButton);
   body.appendChild(backgroundDiv);
-
-  //resetPlayerData(1);
-  //chooseGame();
 }
