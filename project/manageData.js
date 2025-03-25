@@ -10,6 +10,11 @@ let PlayerBluePrint = {
     Skins: {},
     Layouts: {},
   },
+  Movement: {
+    Forword: "w",
+    Backword: "s",
+    Jump: "space",
+  },
 };
 
 let playerData = {
@@ -26,18 +31,10 @@ let playerData = {
         Skins: {},
         Layouts: {},
       },
-    },
-    {
-      Used: false,
-      PlayerName: "NAME",
-      Coins: 0,
-      BestScore: 0,
-      GlobalScoreMultiplier: 1,
-      Life: 1,
-      SpeedMultiplier: 1,
-      ItemUnlocked: {
-        Skins: {},
-        Layouts: {},
+      Movement: {
+        Forword: "w",
+        Backword: "s",
+        Jump: "space",
       },
     },
     {
@@ -51,6 +48,29 @@ let playerData = {
       ItemUnlocked: {
         Skins: {},
         Layouts: {},
+      },
+      Movement: {
+        Forword: "w",
+        Backword: "s",
+        Jump: "space",
+      },
+    },
+    {
+      Used: false,
+      PlayerName: "NAME",
+      Coins: 0,
+      BestScore: 0,
+      GlobalScoreMultiplier: 1,
+      Life: 1,
+      SpeedMultiplier: 1,
+      ItemUnlocked: {
+        Skins: {},
+        Layouts: {},
+      },
+      Movement: {
+        Forword: "w",
+        Backword: "s",
+        Jump: "space",
       },
     },
   ],
