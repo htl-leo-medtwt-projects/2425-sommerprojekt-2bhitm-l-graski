@@ -443,7 +443,7 @@ function settingsButton(game) {
     });
 
     backButton.addEventListener("click", () => {
-      chooseGame();
+      startGame(game);
     });
 
     backgroundDiv.appendChild(settingsHeader);
@@ -1253,7 +1253,7 @@ function gameScreen(game) {
   });
 
   startButton.addEventListener("click", () => {
-    gameScreen(game);
+    gameStarted(game);
   });
 
   startButton.appendChild(startButtonText);
@@ -1490,7 +1490,146 @@ function gameScreen(game) {
   score.style.position = "absolute";
   score.style.top = "7.5%";
   score.style.left = "2%";
-  //score.style.transform = "translate(-50%, -50%)";
+
+  let coinsImg = document.createElement("img");
+  coinsImg.src = `img/${coinImg}`;
+  coinsImg.style.display = "block";
+  coinsImg.style.width = "85px";
+  coinsImg.style.height = "64px";
+  coinsImg.style.position = "absolute";
+  coinsImg.style.top = "55%";
+  coinsImg.style.left = "10%";
+  coinsImg.style.transform = "translate(-50%, -50%)";
+  coinsImg.style.overflow = "hidden";
+
+  let coins = document.createElement("p");
+  coins.innerHTML = `: ${playerData.Game[game - 1].Coins}`;
+  coins.style.display = "inline-block";
+  coins.style.fontFamily = "SF-Pro";
+  coins.style.color = "white";
+  coins.style.fontSize = "20px";
+  coins.style.position = "absolute";
+  coins.style.top = "51.5%";
+  coins.style.left = "17.5%";
+  coins.style.transform = "translate(0, -50%)";
+  coins.style.overflow = "hidden";
+
+  statsDiv.appendChild(score);
+  statsDiv.appendChild(coinsImg);
+  statsDiv.appendChild(coins);
+  body.appendChild(statsDiv);
+}
+
+function gameStarted(game) {
+  body.innerHTML = "";
+  body.removeAttribute("style");
+
+  body.style.backgroundImage = "url(img/classroom_without-tables.png)";
+  body.style.backgroundRepeat = "no-repeat";
+  body.style.backgroundSize = "cover";
+
+  settingsButton(game);
+
+  let shopButton = document.createElement("button");
+  shopButton.style.display = "inline-block";
+  shopButton.style.borderRadius = "100px";
+  shopButton.style.overflow = "hidden";
+  shopButton.style.border = "none";
+  shopButton.style.backgroundColor = "transparent";
+  shopButton.style.position = "absolute";
+  shopButton.style.top = "3%";
+  shopButton.style.left = "95%";
+  shopButton.style.transform = "translate(-50%, -50%)";
+  shopButton.style.width = "48px";
+  shopButton.style.height = "38px";
+
+  let shopButtonImg = document.createElement("img");
+  shopButtonImg.src = "img/blue_button.png";
+  shopButtonImg.style.height = "100%";
+  shopButtonImg.style.width = "100%";
+  shopButtonImg.style.display = "block";
+
+  let shopButtonIcon = document.createElement("img");
+  shopButtonIcon.src = "img/shop-icon.png";
+  shopButtonIcon.style.width = "80%";
+  shopButtonIcon.style.height = "75%";
+  shopButtonIcon.style.display = "block";
+  shopButtonIcon.style.position = "absolute";
+  shopButtonIcon.style.top = "50%";
+  shopButtonIcon.style.left = "50%";
+  shopButtonIcon.style.transform = "translate(-50%, -50%)";
+
+  shopButton.addEventListener("mouseover", () => {
+    shopButton.style.cursor = "pointer";
+    shopButton.style.filter = "grayscale(50%)";
+  });
+
+  shopButton.addEventListener("mouseleave", () => {
+    shopButton.style.cursor = "auto";
+    shopButton.style.filter = "grayscale(0%)";
+  });
+
+  shopButton.addEventListener("click", () => {
+    //shop(game)
+  });
+
+  shopButton.appendChild(shopButtonImg);
+  shopButton.appendChild(shopButtonIcon);
+  body.appendChild(shopButton);
+
+  let playerNameDiv = document.createElement("div");
+  playerNameDiv.style.display = "inline-block";
+  playerNameDiv.style.overflow = "hidden";
+  playerNameDiv.style.position = "absolute";
+  playerNameDiv.style.top = "5%";
+  playerNameDiv.style.left = "50%";
+  playerNameDiv.style.transform = "translate(-50%, -50%)";
+  playerNameDiv.style.width = "256px";
+  playerNameDiv.style.height = "32px";
+  playerNameDiv.style.backgroundColor = "rgb(53, 53, 53)";
+  playerNameDiv.style.borderRadius = "10px";
+  playerNameDiv.style.border = "3px solid rgb(35, 35, 35)";
+
+  let playerName = document.createElement("p");
+  playerName.innerHTML = playerData.Game[game - 1].PlayerName;
+  playerName.style.display = "inline-block";
+  playerName.style.fontFamily = "SF-Pro";
+  playerName.style.color = "white";
+  playerName.style.fontSize = "20px";
+  playerName.style.textShadow =
+    "2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, " +
+    "1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000";
+  playerName.style.position = "absolute";
+  playerName.style.top = "50%";
+  playerName.style.left = "50%";
+  playerName.style.transform = "translate(-50%, -50%)";
+  playerName.style.overflow = "hidden";
+
+  playerNameDiv.appendChild(playerName);
+  body.appendChild(playerNameDiv);
+
+  let statsDiv = document.createElement("div");
+  statsDiv.style.display = "inline-block";
+  statsDiv.style.overflow = "hidden";
+  statsDiv.style.position = "absolute";
+  statsDiv.style.top = "7.5%";
+  statsDiv.style.left = "7.5%";
+  statsDiv.style.transform = "translate(-50%, -50%)";
+  statsDiv.style.width = "256px";
+  statsDiv.style.height = "100px";
+  statsDiv.style.backgroundColor = "rgb(53, 53, 53, 0.7)";
+  statsDiv.style.borderRadius = "20px";
+  statsDiv.style.border = "3px solid rgb(35, 35, 35, 0.7)";
+
+  let score = document.createElement("p");
+  score.innerHTML = `Best Score: ${playerData.Game[game - 1].BestScore}`;
+  score.style.display = "inline-block";
+  score.style.fontFamily = "SF-Pro";
+  score.style.color = "white";
+  score.style.fontSize = "20px";
+  score.style.position = "absolute";
+  score.style.top = "7.5%";
+  score.style.left = "2%";
 
   let coinsImg = document.createElement("img");
   coinsImg.src = `img/${coinImg}`;
