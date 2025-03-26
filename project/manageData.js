@@ -11,8 +11,8 @@ let PlayerBluePrint = {
     Layouts: {},
   },
   Movement: {
-    Forword: "w",
-    Backword: "s",
+    Forward: "w",
+    Backward: "s",
     Jump: "space",
   },
 };
@@ -32,8 +32,8 @@ let playerData = {
         Layouts: {},
       },
       Movement: {
-        Forword: "w",
-        Backword: "s",
+        Forward: "w",
+        Backward: "s",
         Jump: "space",
       },
     },
@@ -50,8 +50,8 @@ let playerData = {
         Layouts: {},
       },
       Movement: {
-        Forword: "w",
-        Backword: "s",
+        Forward: "w",
+        Backward: "s",
         Jump: "space",
       },
     },
@@ -68,8 +68,8 @@ let playerData = {
         Layouts: {},
       },
       Movement: {
-        Forword: "w",
-        Backword: "s",
+        Forward: "w",
+        Backward: "s",
         Jump: "space",
       },
     },
