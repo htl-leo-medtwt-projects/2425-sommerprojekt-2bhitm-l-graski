@@ -2,6 +2,7 @@ let body = document.body;
 const resetConfirmText =
   "Are you sure you want to reset this profile?<br>Please note that all progress, settings, <br>and data associated with this profile will be permanently lost <br>if you proceed with the reset!";
 let coinImg = "coin.png";
+let popUpOpen = false
 
 loadPlayerData();
 
@@ -937,7 +938,9 @@ function startGame(game) {
   });
 
   resetButton.addEventListener("click", () => {
-    confirmScreen(game, resetConfirmText);
+    if(!popUpOpen) {
+      confirmScreen(game, resetConfirmText);
+    }
   });
 
   resetButton.appendChild(resetButtonImg);
@@ -1098,6 +1101,8 @@ function confirmScreen(game, text) {
   let noButton = document.createElement("button");
   let noText = document.createElement("p");
 
+  popUpOpen = true
+
   backgroundDiv.style.backgroundColor = "rgb(0,0,0,0.75)";
   backgroundDiv.style.border = "3px solid rgb(0,0,0,0.85)";
   backgroundDiv.style.borderRadius = "25px";
@@ -1161,6 +1166,7 @@ function confirmScreen(game, text) {
     resetPlayerData(game);
     chooseGame();
     //console.log(playerData)
+    popUpOpen = false
   });
 
   noText.innerHTML = "No, Keep Profil";
@@ -1192,7 +1198,8 @@ function confirmScreen(game, text) {
 
   noButton.addEventListener("click", () => {
     body.removeChild(backgroundDiv);
-  });
+    popUpOpen = false
+    });
 
   backgroundDiv.appendChild(confirmHeader);
   backgroundDiv.appendChild(confirmText);
