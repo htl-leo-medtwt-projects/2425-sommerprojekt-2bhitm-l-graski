@@ -102,14 +102,14 @@ function settingsButton(game) {
     musicButtonImg.style.display = "block";
 
     let musicButtonIcon = document.createElement("img");
-    musicButtonIcon.src = "img/sound-icon-off.png";
-    /*
-    if(checkMusic()) {
-      musicButtonIcon.src = "img/blue_button.png";
+    musicButtonIcon.classList = "music-button-icon"
+
+    if(isPlaying) {
+      musicButtonIcon.src = "img/sound-icon-on.png";
     }else {
-      musicButtonIcon.src = "img/blue_button.png";
+      musicButtonIcon.src = "img/sound-icon-off.png";
     }
-    */
+
     musicButtonIcon.style.width = "80%";
     musicButtonIcon.style.height = "80%";
     musicButtonIcon.style.display = "block";
@@ -129,7 +129,7 @@ function settingsButton(game) {
     });
 
     musicButton.addEventListener("click", () => {
-      //toggleMusic()
+      toggleSound()
     });
 
     let keyDiv = document.createElement("div");
@@ -208,11 +208,14 @@ function settingsButton(game) {
     });
 
     forwardButtonInput.addEventListener("input", () => {
+      let forwardKey = document.getElementById("forwardText")
       if (forwardButtonInput.value != "") {
         playerData.Game[game - 1].Movement.Forward = forwardButtonInput.value;
+        forwardKey.innerHTML = forwardButtonInput.value
         savePlayerData();
       } else {
         playerData.Game[game - 1].Movement.Forward = "w";
+        forwardKey.innerHTML = "w"
         savePlayerData();
       }
       //console.log(playerData);
@@ -285,11 +288,14 @@ function settingsButton(game) {
     });
 
     backwardButtonInput.addEventListener("input", () => {
+      let backwardKey = document.getElementById("backwardText")
       if (backwardButtonInput.value != "") {
         playerData.Game[game - 1].Movement.Backward = backwardButtonInput.value;
+        backwardKey.innerHTML = backwardButtonInput.value
         savePlayerData();
       } else {
         playerData.Game[game - 1].Movement.Backward = "s";
+        backwardKey.innerHTML = "s"
         savePlayerData();
       }
       //console.log(playerData);
@@ -362,11 +368,14 @@ function settingsButton(game) {
     });
 
     jumpButtonInput.addEventListener("input", () => {
+      let jumpKey = document.getElementById("jumpText")
       if (jumpButtonInput.value != "") {
+        jumpKey.innerHTML = jumpButtonInput.value
         playerData.Game[game - 1].Movement.Jump = jumpButtonInput.value;
         savePlayerData();
       } else {
         playerData.Game[game - 1].Movement.Jump = "space";
+        jumpKey.innerHTML = "space"
         savePlayerData();
       }
       //console.log(playerData);
@@ -702,14 +711,14 @@ function chooseGame() {
   musicButtonImg.style.display = "block";
 
   let musicButtonIcon = document.createElement("img");
-  musicButtonIcon.src = "img/sound-icon-off.png";
-  /*
-    if(checkMusic()) {
-      musicButtonIcon.src = "img/blue_button.png";
+  musicButtonIcon.classList = "music-button-icon"
+
+    if(isPlaying) {
+      musicButtonIcon.src = "img/sound-icon-on.png";
     }else {
-      musicButtonIcon.src = "img/blue_button.png";
+      musicButtonIcon.src = "img/sound-icon-off.png";
     }
-    */
+  
   musicButtonIcon.style.width = "80%";
   musicButtonIcon.style.height = "80%";
   musicButtonIcon.style.display = "block";
@@ -729,7 +738,7 @@ function chooseGame() {
   });
 
   musicButton.addEventListener("click", () => {
-    //toggleMusic()
+    toggleSound()
   });
 
   musicButton.appendChild(musicButtonImg);
@@ -1056,14 +1065,14 @@ function startGame(game) {
   musicButtonImg.style.display = "block";
 
   let musicButtonIcon = document.createElement("img");
-  musicButtonIcon.src = "img/sound-icon-off.png";
-  /*
-    if(checkMusic()) {
-      musicButtonIcon.src = "img/blue_button.png";
-    }else {
-      musicButtonIcon.src = "img/blue_button.png";
-    }
-    */
+  musicButtonIcon.classList = "music-button-icon"
+
+  if(isPlaying) {
+    musicButtonIcon.src = "img/sound-icon-on.png";
+  }else {
+    musicButtonIcon.src = "img/sound-icon-off.png";
+  }
+
   musicButtonIcon.style.width = "80%";
   musicButtonIcon.style.height = "80%";
   musicButtonIcon.style.display = "block";
@@ -1083,7 +1092,7 @@ function startGame(game) {
   });
 
   musicButton.addEventListener("click", () => {
-    //toggleMusic()
+    toggleSound()
   });
 
   musicButton.appendChild(musicButtonImg);
@@ -1272,15 +1281,16 @@ function gameScreen(game) {
   moveText.style.display = "inline-block";
   moveText.style.fontFamily = "SF-Pro";
   moveText.style.color = "white";
-  moveText.style.fontSize = "40px";
+  moveText.style.fontSize = "45px";
   moveText.style.textShadow =
     "2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, " +
     "1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000";
   moveText.style.position = "absolute";
   moveText.style.top = "15%";
-  moveText.style.left = "42.5%";
+  moveText.style.left = "41.5%";
   moveText.style.transform = "translate(-50%, -50%)";
   moveText.style.animation = "gameText 2s infinite linear";
+  moveText.style.transformOrigin = "center";
 
   body.appendChild(moveText);
 
@@ -1289,7 +1299,7 @@ function gameScreen(game) {
   forwardDiv.style.overflow = "hidden";
   forwardDiv.style.position = "absolute";
   forwardDiv.style.top = "27.5%";
-  forwardDiv.style.left = "55%";
+  forwardDiv.style.left = "45%";
   forwardDiv.style.transform = "translate(-50%, -50%)";
   forwardDiv.style.width = "64px";
   forwardDiv.style.height = "64px";
@@ -1301,6 +1311,7 @@ function gameScreen(game) {
   forwardImg.style.display = "block";
 
   let forwardText = document.createElement("p");
+  forwardText.id = "forwardText"
   forwardText.innerHTML = playerData.Game[game - 1].Movement.Forward;
   forwardText.style.display = "inline-block";
   forwardText.style.fontFamily = "SF-Pro";
@@ -1321,7 +1332,7 @@ function gameScreen(game) {
   backwardDiv.style.overflow = "hidden";
   backwardDiv.style.position = "absolute";
   backwardDiv.style.top = "27.5%";
-  backwardDiv.style.left = "45%";
+  backwardDiv.style.left = "55%";
   backwardDiv.style.transform = "translate(-50%, -50%)";
   backwardDiv.style.width = "64px";
   backwardDiv.style.height = "64px";
@@ -1333,6 +1344,7 @@ function gameScreen(game) {
   backwardImg.style.display = "block";
 
   let backwardText = document.createElement("p");
+  backwardText.id = "backwardText"
   backwardText.innerHTML = playerData.Game[game - 1].Movement.Backward;
   backwardText.style.display = "inline-block";
   backwardText.style.fontFamily = "SF-Pro";
@@ -1353,15 +1365,16 @@ function gameScreen(game) {
   jumpText.style.display = "inline-block";
   jumpText.style.fontFamily = "SF-Pro";
   jumpText.style.color = "white";
-  jumpText.style.fontSize = "25px";
+  jumpText.style.fontSize = "35px";
   jumpText.style.textShadow =
     "2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, " +
     "1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000";
   jumpText.style.position = "absolute";
   jumpText.style.top = "35.25%";
-  jumpText.style.left = "45.25%";
+  jumpText.style.left = "43.5%";
   jumpText.style.transform = "translate(-50%, -50%)";
   jumpText.style.animation = "gameText 1.5s infinite linear";
+  jumpText.style.transformOrigin = "center";
 
   body.appendChild(jumpText);
 
@@ -1382,6 +1395,7 @@ function gameScreen(game) {
   jumpImg.style.display = "block";
 
   let jumpButtonText = document.createElement("p");
+  jumpButtonText.id = "jumpText"
   jumpButtonText.innerHTML = playerData.Game[game - 1].Movement.Jump;
   jumpButtonText.style.display = "inline-block";
   jumpButtonText.style.fontFamily = "SF-Pro";
@@ -1666,3 +1680,4 @@ function gameStarted(game) {
   statsDiv.appendChild(coins);
   body.appendChild(statsDiv);
 }
+
