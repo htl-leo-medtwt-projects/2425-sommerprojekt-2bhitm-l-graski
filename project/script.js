@@ -1,8 +1,8 @@
 let body = document.body;
-const resetConfirmText =
+let resetConfirmText =
   "Are you sure you want to reset this profile?<br>Please note that all progress, settings, <br>and data associated with this profile will be permanently lost <br>if you proceed with the reset!";
 let coinImg = "coin.png";
-let popUpOpen = false
+let popUpOpen = false;
 
 loadPlayerData();
 
@@ -102,11 +102,11 @@ function settingsButton(game) {
     musicButtonImg.style.display = "block";
 
     let musicButtonIcon = document.createElement("img");
-    musicButtonIcon.classList = "music-button-icon"
+    musicButtonIcon.classList = "music-button-icon";
 
-    if(isPlaying) {
+    if (isPlaying) {
       musicButtonIcon.src = "img/sound-icon-on.png";
-    }else {
+    } else {
       musicButtonIcon.src = "img/sound-icon-off.png";
     }
 
@@ -129,7 +129,7 @@ function settingsButton(game) {
     });
 
     musicButton.addEventListener("click", () => {
-      toggleSound()
+      toggleSound();
     });
 
     let keyDiv = document.createElement("div");
@@ -208,14 +208,14 @@ function settingsButton(game) {
     });
 
     forwardButtonInput.addEventListener("input", () => {
-      let forwardKey = document.getElementById("forwardText")
+      let forwardKey = document.getElementById("forwardText");
       if (forwardButtonInput.value != "") {
         playerData.Game[game - 1].Movement.Forward = forwardButtonInput.value;
-        forwardKey.innerHTML = forwardButtonInput.value
+        forwardKey.innerHTML = forwardButtonInput.value;
         savePlayerData();
       } else {
         playerData.Game[game - 1].Movement.Forward = "w";
-        forwardKey.innerHTML = "w"
+        forwardKey.innerHTML = "w";
         savePlayerData();
       }
       //console.log(playerData);
@@ -288,14 +288,14 @@ function settingsButton(game) {
     });
 
     backwardButtonInput.addEventListener("input", () => {
-      let backwardKey = document.getElementById("backwardText")
+      let backwardKey = document.getElementById("backwardText");
       if (backwardButtonInput.value != "") {
         playerData.Game[game - 1].Movement.Backward = backwardButtonInput.value;
-        backwardKey.innerHTML = backwardButtonInput.value
+        backwardKey.innerHTML = backwardButtonInput.value;
         savePlayerData();
       } else {
         playerData.Game[game - 1].Movement.Backward = "s";
-        backwardKey.innerHTML = "s"
+        backwardKey.innerHTML = "s";
         savePlayerData();
       }
       //console.log(playerData);
@@ -368,14 +368,14 @@ function settingsButton(game) {
     });
 
     jumpButtonInput.addEventListener("input", () => {
-      let jumpKey = document.getElementById("jumpText")
+      let jumpKey = document.getElementById("jumpText");
       if (jumpButtonInput.value != "") {
-        jumpKey.innerHTML = jumpButtonInput.value
+        jumpKey.innerHTML = jumpButtonInput.value;
         playerData.Game[game - 1].Movement.Jump = jumpButtonInput.value;
         savePlayerData();
       } else {
         playerData.Game[game - 1].Movement.Jump = "space";
-        jumpKey.innerHTML = "space"
+        jumpKey.innerHTML = "space";
         savePlayerData();
       }
       //console.log(playerData);
@@ -711,14 +711,14 @@ function chooseGame() {
   musicButtonImg.style.display = "block";
 
   let musicButtonIcon = document.createElement("img");
-  musicButtonIcon.classList = "music-button-icon"
+  musicButtonIcon.classList = "music-button-icon";
 
-    if(isPlaying) {
-      musicButtonIcon.src = "img/sound-icon-on.png";
-    }else {
-      musicButtonIcon.src = "img/sound-icon-off.png";
-    }
-  
+  if (isPlaying) {
+    musicButtonIcon.src = "img/sound-icon-on.png";
+  } else {
+    musicButtonIcon.src = "img/sound-icon-off.png";
+  }
+
   musicButtonIcon.style.width = "80%";
   musicButtonIcon.style.height = "80%";
   musicButtonIcon.style.display = "block";
@@ -738,7 +738,7 @@ function chooseGame() {
   });
 
   musicButton.addEventListener("click", () => {
-    toggleSound()
+    toggleSound();
   });
 
   musicButton.appendChild(musicButtonImg);
@@ -947,7 +947,7 @@ function startGame(game) {
   });
 
   resetButton.addEventListener("click", () => {
-    if(!popUpOpen) {
+    if (!popUpOpen) {
       confirmScreen(game, resetConfirmText);
     }
   });
@@ -1065,11 +1065,11 @@ function startGame(game) {
   musicButtonImg.style.display = "block";
 
   let musicButtonIcon = document.createElement("img");
-  musicButtonIcon.classList = "music-button-icon"
+  musicButtonIcon.classList = "music-button-icon";
 
-  if(isPlaying) {
+  if (isPlaying) {
     musicButtonIcon.src = "img/sound-icon-on.png";
-  }else {
+  } else {
     musicButtonIcon.src = "img/sound-icon-off.png";
   }
 
@@ -1092,7 +1092,7 @@ function startGame(game) {
   });
 
   musicButton.addEventListener("click", () => {
-    toggleSound()
+    toggleSound();
   });
 
   musicButton.appendChild(musicButtonImg);
@@ -1110,7 +1110,7 @@ function confirmScreen(game, text) {
   let noButton = document.createElement("button");
   let noText = document.createElement("p");
 
-  popUpOpen = true
+  popUpOpen = true;
 
   backgroundDiv.style.backgroundColor = "rgb(0,0,0,0.75)";
   backgroundDiv.style.border = "3px solid rgb(0,0,0,0.85)";
@@ -1175,7 +1175,7 @@ function confirmScreen(game, text) {
     resetPlayerData(game);
     chooseGame();
     //console.log(playerData)
-    popUpOpen = false
+    popUpOpen = false;
   });
 
   noText.innerHTML = "No, Keep Profil";
@@ -1207,8 +1207,8 @@ function confirmScreen(game, text) {
 
   noButton.addEventListener("click", () => {
     body.removeChild(backgroundDiv);
-    popUpOpen = false
-    });
+    popUpOpen = false;
+  });
 
   backgroundDiv.appendChild(confirmHeader);
   backgroundDiv.appendChild(confirmText);
@@ -1311,7 +1311,7 @@ function gameScreen(game) {
   forwardImg.style.display = "block";
 
   let forwardText = document.createElement("p");
-  forwardText.id = "forwardText"
+  forwardText.id = "forwardText";
   forwardText.innerHTML = playerData.Game[game - 1].Movement.Forward;
   forwardText.style.display = "inline-block";
   forwardText.style.fontFamily = "SF-Pro";
@@ -1344,7 +1344,7 @@ function gameScreen(game) {
   backwardImg.style.display = "block";
 
   let backwardText = document.createElement("p");
-  backwardText.id = "backwardText"
+  backwardText.id = "backwardText";
   backwardText.innerHTML = playerData.Game[game - 1].Movement.Backward;
   backwardText.style.display = "inline-block";
   backwardText.style.fontFamily = "SF-Pro";
@@ -1395,7 +1395,7 @@ function gameScreen(game) {
   jumpImg.style.display = "block";
 
   let jumpButtonText = document.createElement("p");
-  jumpButtonText.id = "jumpText"
+  jumpButtonText.id = "jumpText";
   jumpButtonText.innerHTML = playerData.Game[game - 1].Movement.Jump;
   jumpButtonText.style.display = "inline-block";
   jumpButtonText.style.fontFamily = "SF-Pro";
@@ -1548,6 +1548,7 @@ function gameStarted(game) {
   body.style.backgroundImage = "url(img/classroom_without-tables.png)";
   body.style.backgroundRepeat = "no-repeat";
   body.style.backgroundSize = "cover";
+  body.style.overflow = "hidden";
 
   settingsButton(game);
 
@@ -1679,5 +1680,207 @@ function gameStarted(game) {
   statsDiv.appendChild(coinsImg);
   statsDiv.appendChild(coins);
   body.appendChild(statsDiv);
-}
 
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+  
+  let canvas = document.createElement("canvas");
+  document.body.appendChild(canvas);
+  let ctx = canvas.getContext("2d");
+
+  let groundHeight = 100;
+  let playerWidth = 50;
+  let playerHeight = 70;
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let playerX = 0;
+  let playerY = canvas.height - groundHeight - playerHeight;
+  let playerSpeed = 6;
+  let playerDirection = 0;
+  let velocityY = 0;
+  let gravity = 0.8;
+  let jumpPower = -15;
+  let isJumping = false;
+  let jumpTimer = 0;
+  let maxJumpTime = 60;
+
+  let isInAir = false;
+
+  let groundImage = new Image();
+  groundImage.src = "img/cyan_button.png";
+
+  let ground = [];
+  let groundSpeed = 4;
+  let gameStarted = false;
+
+  function drawPlayer() {
+    ctx.fillStyle = "red";
+    ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
+  }
+
+  function drawGround() {
+    ground.forEach((segment) => {
+      ctx.drawImage(groundImage, segment.x, canvas.height - groundHeight, segment.width, groundHeight);
+    });
+  }
+
+  function movePlayer() {
+    let wasOnGround = false;
+
+    for (let i = 0; i < ground.length; i++) {
+      let platform = ground[i];
+
+      let platformTop = canvas.height - groundHeight;
+      let playerBottom = playerY + playerHeight;
+      let nextPlayerBottom = playerBottom + velocityY;
+
+      let isFallingOntoPlatform =
+        playerBottom <= platformTop &&
+        nextPlayerBottom >= platformTop &&
+        playerX + playerWidth > platform.x &&
+        playerX < platform.x + platform.width;
+
+      if (isFallingOntoPlatform) {
+        playerY = platformTop - playerHeight;
+        velocityY = 0;
+        isJumping = false;
+        wasOnGround = true;
+        break;
+      }
+    }
+
+    if (!wasOnGround) {
+      velocityY += gravity;
+      isJumping = true;
+    }
+
+    playerY += velocityY;
+
+    let groundY = canvas.height - groundHeight - playerHeight;
+    if (playerY >= groundY) {
+      playerY = groundY;
+      velocityY = 0;
+      isJumping = false;
+    }
+
+    playerX += playerSpeed * playerDirection;
+    playerX = Math.max(0, Math.min(playerX, canvas.width / 2 - playerWidth));
+  }
+
+  function jump() {
+    let isGrounded = false;
+    let groundY = canvas.height - groundHeight - playerHeight;
+
+    if (playerY >= groundY - 1 && playerY <= groundY + 1) {
+      isGrounded = true;
+    } else {
+      for (let i = 0; i < ground.length; i++) {
+        let platform = ground[i];
+        let platformTop = canvas.height - groundHeight;
+        let playerBottom = playerY + playerHeight;
+
+        let isOnPlatform =
+          playerBottom >= platformTop - 2 &&
+          playerBottom <= platformTop + 2 &&
+          playerX + playerWidth > platform.x &&
+          playerX < platform.x + platform.width;
+
+        if (isOnPlatform) {
+          isGrounded = true;
+          break;
+        }
+      }
+    }
+
+    if (isGrounded && !isJumping) {
+      velocityY = jumpPower;
+      isJumping = true;
+    }
+  }
+
+  function moveGround() {
+    for (let i = 0; i < ground.length; i++) {
+      ground[i].x -= groundSpeed;
+    }
+
+    if (ground[ground.length - 1].x + ground[ground.length - 1].width < canvas.width) {
+      let width = Math.random() * (200 - 100) + 100;
+      let gap = Math.random() * (200 - 100) + 100;
+      ground.push({ x: canvas.width + gap, width: width });
+    }
+
+    if (ground[0].x + ground[0].width < 0) {
+      ground.shift();
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawGround();
+    drawPlayer();
+    movePlayer();
+
+    if (playerX >= canvas.width / 2) {
+      moveGround();
+    }
+
+    if (gameStarted) {
+      requestAnimationFrame(draw);
+    }
+  }
+
+  window.addEventListener('click', function () {
+    if (!gameStarted) {
+      gameStarted = true;
+      gameLoop();
+    }
+  });
+
+  for (let i = 0; i < 20; i++) {
+    let width = Math.random() * (150 - 80) + 80;
+    let xPos = i * (width + Math.random() * 100);
+    ground.push({ x: xPos, width: width });
+  }
+
+  function gameLoop() {
+    draw();
+  }
+
+  document.addEventListener("keydown", (e) => {
+    let jumpKey = playerData.Game[game - 1].Movement.Jump;
+    if (jumpKey === "space") jumpKey = " ";
+    let forwardKey = playerData.Game[game - 1].Movement.Forward;
+    let backwardKey = playerData.Game[game - 1].Movement.Backward;
+
+    if (e.key === backwardKey) {
+      playerDirection = -1;
+    } else if (e.key === forwardKey) {
+      playerDirection = 1;
+    } else if (e.key === jumpKey) {
+      jump();
+    }
+  });
+
+  document.addEventListener("keyup", (e) => {
+    let forwardKey = playerData.Game[game - 1].Movement.Forward;
+    let backwardKey = playerData.Game[game - 1].Movement.Backward;
+
+    if (e.key === backwardKey || e.key === forwardKey) {
+      playerDirection = 0;
+    }
+  });
+
+}
