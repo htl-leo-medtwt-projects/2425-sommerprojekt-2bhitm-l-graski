@@ -1,24 +1,24 @@
-let startScreenSound;
-let inGameSound;
-let pickupSound;
-let deathSound;
-let interactSound;
-let buySound;
-let equiptSound;
+let startScreenSound = "sounds/";
+let inGameSound = "sounds/";
+let pickupSound = "sounds/";
+let deathSound = "sounds/";
+let interactSound = "sounds/";
+let buySound = "sounds/";
+let equiptSound = "sounds/";
 let isPlaying = false;
 
-function toggleSound(_location) {
+function toggleSound(location) {
   let musicIcon = [...document.getElementsByClassName("music-button-icon")];
 
   if (isPlaying) {
-    musicIcon.forEach(e => {
+    musicIcon.forEach((e) => {
       e.src = "img/sound-icon-off.png";
     });
 
     isPlaying = false;
     stopSound();
   } else {
-    musicIcon.forEach(e => {
+    musicIcon.forEach((e) => {
       e.src = "img/sound-icon-on.png";
     });
 
@@ -30,6 +30,12 @@ function toggleSound(_location) {
 function stopSound() {}
 
 function playSound(location) {
+  let musicIcon = [...document.getElementsByClassName("music-button-icon")];
+  musicIcon.forEach((e) => {
+    e.src = "img/sound-icon-on.png";
+    isPlaying = true;
+  });
+
   switch (location) {
     case 0:
       console.log("Start Menu");

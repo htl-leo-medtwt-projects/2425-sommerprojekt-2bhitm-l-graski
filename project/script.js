@@ -129,7 +129,7 @@ function settingsButton(game) {
     });
 
     musicButton.addEventListener("click", () => {
-      toggleSound();
+      toggleSound(1);
     });
 
     let keyDiv = document.createElement("div");
@@ -600,6 +600,7 @@ function chooseGame() {
 
   button1.addEventListener("click", () => {
     startGame(1);
+    playSound(0);
   });
 
   button1.appendChild(button1Text);
@@ -638,6 +639,7 @@ function chooseGame() {
 
   button2.addEventListener("click", () => {
     startGame(2);
+    playSound(0);
   });
 
   button2.appendChild(button2Text);
@@ -676,6 +678,7 @@ function chooseGame() {
 
   button3.addEventListener("click", () => {
     startGame(3);
+    playSound(0);
   });
 
   button3.appendChild(button3Text);
@@ -738,7 +741,7 @@ function chooseGame() {
   });
 
   musicButton.addEventListener("click", () => {
-    toggleSound();
+    toggleSound(0);
   });
 
   musicButton.appendChild(musicButtonImg);
@@ -1092,7 +1095,7 @@ function startGame(game) {
   });
 
   musicButton.addEventListener("click", () => {
-    toggleSound();
+    toggleSound(0);
   });
 
   musicButton.appendChild(musicButtonImg);
@@ -1681,20 +1684,6 @@ function gameStarted(game) {
   statsDiv.appendChild(coins);
   body.appendChild(statsDiv);
 
-
-
-
-
-
-
-
-
-
-  
-
-
-  
-  
   let canvas = document.createElement("canvas");
   document.body.appendChild(canvas);
   let ctx = canvas.getContext("2d");
@@ -1733,7 +1722,13 @@ function gameStarted(game) {
 
   function drawGround() {
     ground.forEach((segment) => {
-      ctx.drawImage(groundImage, segment.x, canvas.height - groundHeight, segment.width, groundHeight);
+      ctx.drawImage(
+        groundImage,
+        segment.x,
+        canvas.height - groundHeight,
+        segment.width,
+        groundHeight
+      );
     });
   }
 
@@ -1816,7 +1811,10 @@ function gameStarted(game) {
       ground[i].x -= groundSpeed;
     }
 
-    if (ground[ground.length - 1].x + ground[ground.length - 1].width < canvas.width) {
+    if (
+      ground[ground.length - 1].x + ground[ground.length - 1].width <
+      canvas.width
+    ) {
       let width = Math.random() * (200 - 100) + 100;
       let gap = Math.random() * (200 - 100) + 100;
       ground.push({ x: canvas.width + gap, width: width });
@@ -1842,7 +1840,7 @@ function gameStarted(game) {
     }
   }
 
-  window.addEventListener('click', function () {
+  window.addEventListener("click", function () {
     if (!gameStarted) {
       gameStarted = true;
       gameLoop();
@@ -1882,5 +1880,4 @@ function gameStarted(game) {
       playerDirection = 0;
     }
   });
-
 }
