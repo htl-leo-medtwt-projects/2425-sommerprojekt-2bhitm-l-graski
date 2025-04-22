@@ -1646,15 +1646,16 @@ function gameStarted(game) {
   statsDiv.style.borderRadius = "20px";
   statsDiv.style.border = "3px solid rgb(35, 35, 35, 0.7)";
 
-  let score = document.createElement("p");
-  score.innerHTML = `Best Score: ${playerData.Game[game - 1].BestScore}`;
-  score.style.display = "inline-block";
-  score.style.fontFamily = "SF-Pro";
-  score.style.color = "white";
-  score.style.fontSize = "20px";
-  score.style.position = "absolute";
-  score.style.top = "7.5%";
-  score.style.left = "2%";
+  let scoreText = document.createElement("p");
+  scoreText.id = "score-text";
+  scoreText.innerHTML = `Score: 0`;
+  scoreText.style.display = "inline-block";
+  scoreText.style.fontFamily = "SF-Pro";
+  scoreText.style.color = "white";
+  scoreText.style.fontSize = "20px";
+  scoreText.style.position = "absolute";
+  scoreText.style.top = "7.5%";
+  scoreText.style.left = "2%";
 
   let coinsImg = document.createElement("img");
   coinsImg.src = `img/${coinImg}`;
@@ -1679,7 +1680,7 @@ function gameStarted(game) {
   coins.style.transform = "translate(0, -50%)";
   coins.style.overflow = "hidden";
 
-  statsDiv.appendChild(score);
+  statsDiv.appendChild(scoreText);
   statsDiv.appendChild(coinsImg);
   statsDiv.appendChild(coins);
   body.appendChild(statsDiv);
@@ -1690,23 +1691,29 @@ function gameStarted(game) {
 
   let groundHeight = 100;
   let playerWidth = 50;
-  let playerHeight = 70;
+  let playerHeight = 50;
 
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
+  let score = 0;
   let playerX = 0;
   let playerY = canvas.height - groundHeight - playerHeight;
   let playerSpeed = 6;
   let playerDirection = 0;
   let velocityY = 0;
   let gravity = 0.8;
-  let jumpPower = -15;
+  let jumpPower = -17.5;
   let isJumping = false;
-  let jumpTimer = 0;
-  let maxJumpTime = 60;
+  let isGameOver = false;
+  let highScoreShown
 
-  let isInAir = false;
+  if(playerData.Game[game - 1].BestScore > 0) {
+    highScoreShown = false;
+  }else {
+    highScoreShown = true;
+  }
+  
 
   let groundImage = new Image();
   groundImage.src = "img/cyan_button.png";
@@ -1735,21 +1742,24 @@ function gameStarted(game) {
   function movePlayer() {
     let wasOnGround = false;
 
-    for (let i = 0; i < ground.length; i++) {
-      let platform = ground[i];
+    if (playerY > 4000) {
+      isGameOver = true;
+    }
 
-      let platformTop = canvas.height - groundHeight;
-      let playerBottom = playerY + playerHeight;
-      let nextPlayerBottom = playerBottom + velocityY;
+    for (let i = 0; i < ground.length; i++) {
+      let current = ground[i];
+
+      let nextPlayerBottom = playerY + playerHeight + velocityY;
+      let groundY = canvas.height - groundHeight;
 
       let isFallingOntoPlatform =
-        playerBottom <= platformTop &&
-        nextPlayerBottom >= platformTop &&
-        playerX + playerWidth > platform.x &&
-        playerX < platform.x + platform.width;
+        playerY + playerHeight <= groundY &&
+        nextPlayerBottom >= groundY &&
+        playerX + playerWidth > current.x &&
+        playerX < current.x + current.width;
 
       if (isFallingOntoPlatform) {
-        playerY = platformTop - playerHeight;
+        playerY = groundY - playerHeight;
         velocityY = 0;
         isJumping = false;
         wasOnGround = true;
@@ -1764,15 +1774,8 @@ function gameStarted(game) {
 
     playerY += velocityY;
 
-    let groundY = canvas.height - groundHeight - playerHeight;
-    if (playerY >= groundY) {
-      playerY = groundY;
-      velocityY = 0;
-      isJumping = false;
-    }
-
     playerX += playerSpeed * playerDirection;
-    playerX = Math.max(0, Math.min(playerX, canvas.width / 2 - playerWidth));
+    playerX = Math.max(0, Math.min(playerX, canvas.width / 2));
   }
 
   function jump() {
@@ -1823,11 +1826,53 @@ function gameStarted(game) {
     if (ground[0].x + ground[0].width < 0) {
       ground.shift();
     }
+
+    //! update score
+    
+      if (!isGameOver) {
+        score += 0.1;
+        document.getElementById("score-text").innerHTML = `Score: ${Math.floor(
+          score
+        )}`;
+      }
+
+      if (score > playerData.Game[game - 1].BestScore) {
+        playerData.Game[game - 1].BestScore = Math.floor(score);
+        savePlayerData(game);
+
+        if (!highScoreShown) {
+          highScoreShown = true;
+
+          let newHighScore = document.createElement("h1");
+          newHighScore.innerHTML = "You reached a new high score!";
+          newHighScore.style.color = "black";
+          newHighScore.style.fontFamily = "Uberschriften";
+          newHighScore.style.position = "absolute";
+          newHighScore.style.top = "50%";
+          newHighScore.style.left = "50%";
+          newHighScore.style.transform = "translate(-50%, -50%)";
+          newHighScore.style.fontSize = "50px";
+
+          body.appendChild(newHighScore);
+
+          setTimeout(() => {
+            body.removeChild(newHighScore);
+          }, 2500);
+        }
+      }
   }
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawGround();
+
+    if (isGameOver) {
+      ctx.fillStyle = "black";
+      ctx.font = "30px Arial";
+      ctx.fillText("Game Over", canvas.width / 2 - 50, canvas.height / 2);
+      return;
+    }
+
     drawPlayer();
     movePlayer();
 
@@ -1847,10 +1892,12 @@ function gameStarted(game) {
     }
   });
 
-  for (let i = 0; i < 20; i++) {
-    let width = Math.random() * (150 - 80) + 80;
-    let xPos = i * (width + Math.random() * 100);
-    ground.push({ x: xPos, width: width });
+  let x = 0;
+
+  for (let i = 0; i < 10; i++) {
+    const width = Math.floor(Math.random() * 100) + 100;
+    ground.push({ x, width });
+    x += width + Math.floor(Math.random() * 100) + 50;
   }
 
   function gameLoop() {
