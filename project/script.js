@@ -62,6 +62,9 @@ function settingsButton(game) {
   });
 
   settingButton.addEventListener("click", () => {
+    if (!popUpOpen) {
+      popUpOpen = true;
+
     let backgroundDiv = document.createElement("div");
 
     backgroundDiv.style.backgroundColor = "rgb(0,0,0,0.75)";
@@ -421,6 +424,7 @@ function settingsButton(game) {
 
     resumeButton.addEventListener("click", () => {
       body.removeChild(backgroundDiv);
+      popUpOpen = false;
     });
 
     let backButton = document.createElement("button");
@@ -454,6 +458,7 @@ function settingsButton(game) {
 
     backButton.addEventListener("click", () => {
       startGame(game);
+      popUpOpen = false;
     });
 
     backgroundDiv.appendChild(settingsHeader);
@@ -486,6 +491,7 @@ function settingsButton(game) {
 
     backgroundDiv.appendChild(keyDiv);
     body.appendChild(backgroundDiv);
+  }
   });
 
   settingButton.appendChild(settingButtonImg);
@@ -1706,21 +1712,21 @@ function gameStarted(game) {
   let jumpPower = -17.5;
   let isJumping = false;
   let isGameOver = false;
-  let highScoreShown
+  let gameOverShown = false;
+  let highScoreShown;
 
-  if(playerData.Game[game - 1].BestScore > 0) {
+  if (playerData.Game[game - 1].BestScore > 0) {
     highScoreShown = false;
-  }else {
+  } else {
     highScoreShown = true;
   }
-  
 
   let groundImage = new Image();
   groundImage.src = "img/cyan_button.png";
 
   let ground = [];
   let groundSpeed = 4;
-  let gameStarted = false;
+  let isStarted = false;
 
   function drawPlayer() {
     ctx.fillStyle = "red";
@@ -1742,7 +1748,7 @@ function gameStarted(game) {
   function movePlayer() {
     let wasOnGround = false;
 
-    if (playerY > 4000) {
+    if (playerY > 3000) {
       isGameOver = true;
     }
 
@@ -1827,67 +1833,162 @@ function gameStarted(game) {
       ground.shift();
     }
 
-    //! update score
-    
-      if (!isGameOver) {
-        score += 0.1;
-        document.getElementById("score-text").innerHTML = `Score: ${Math.floor(
-          score
-        )}`;
+    if (!isGameOver) {
+      score += 0.1;
+      document.getElementById("score-text").innerHTML = `Score: ${Math.floor(
+        score
+      )}`;
+    }
+
+    if (score > playerData.Game[game - 1].BestScore) {
+      playerData.Game[game - 1].BestScore = Math.floor(score);
+      savePlayerData(game);
+
+      if (!highScoreShown) {
+        highScoreShown = true;
+
+        let newHighScore = document.createElement("h1");
+        newHighScore.innerHTML = "You reached a new high score!";
+        newHighScore.style.color = "black";
+        newHighScore.style.fontFamily = "Uberschriften";
+        newHighScore.style.position = "absolute";
+        newHighScore.style.top = "50%";
+        newHighScore.style.left = "50%";
+        newHighScore.style.transform = "translate(-50%, -50%)";
+        newHighScore.style.fontSize = "50px";
+
+        body.appendChild(newHighScore);
+
+        setTimeout(() => {
+          body.removeChild(newHighScore);
+        }, 2500);
       }
-
-      if (score > playerData.Game[game - 1].BestScore) {
-        playerData.Game[game - 1].BestScore = Math.floor(score);
-        savePlayerData(game);
-
-        if (!highScoreShown) {
-          highScoreShown = true;
-
-          let newHighScore = document.createElement("h1");
-          newHighScore.innerHTML = "You reached a new high score!";
-          newHighScore.style.color = "black";
-          newHighScore.style.fontFamily = "Uberschriften";
-          newHighScore.style.position = "absolute";
-          newHighScore.style.top = "50%";
-          newHighScore.style.left = "50%";
-          newHighScore.style.transform = "translate(-50%, -50%)";
-          newHighScore.style.fontSize = "50px";
-
-          body.appendChild(newHighScore);
-
-          setTimeout(() => {
-            body.removeChild(newHighScore);
-          }, 2500);
-        }
-      }
+    }
   }
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawGround();
 
-    if (isGameOver) {
-      ctx.fillStyle = "black";
-      ctx.font = "30px Arial";
-      ctx.fillText("Game Over", canvas.width / 2 - 50, canvas.height / 2);
-      return;
+    if (isGameOver && !gameOverShown) {
+      gameOverShown = true;
+      popUpOpen = true;
+
+      let gameOverText = document.createElement("h1");
+      gameOverText.innerHTML = "Game Over!";
+      gameOverText.style.color = "black";
+      gameOverText.style.fontFamily = "Uberschriften";
+      gameOverText.style.position = "absolute";
+      gameOverText.style.top = "30%";
+      gameOverText.style.left = "50%";
+      gameOverText.style.transform = "translate(-50%, -50%)";
+      gameOverText.style.fontSize = "50px";
+
+      let restartButton = document.createElement("button");
+      restartButton.style.display = "inline-block";
+      restartButton.style.borderRadius = "100px";
+      restartButton.style.overflow = "hidden";
+      restartButton.style.border = "none";
+      restartButton.style.backgroundColor = "transparent";
+      restartButton.style.position = "absolute";
+      restartButton.style.top = "37.5%";
+      restartButton.style.left = "57.5%";
+      restartButton.style.transform = "translate(-50%, -50%)";
+
+      let restartButtonImg = document.createElement("img");
+      restartButtonImg.src = "img/green_button.png";
+      restartButtonImg.style.height = "100%";
+      restartButtonImg.style.width = "100%";
+      restartButtonImg.style.display = "block";
+
+      let restartButtonText = document.createElement("p");
+      restartButtonText.innerHTML = "RESTART";
+      restartButtonText.style.display = "inline-block";
+      restartButtonText.style.fontFamily = "SF-Pro";
+      restartButtonText.style.color = "white";
+      restartButtonText.style.fontSize = "18px";
+      restartButtonText.style.position = "absolute";
+      restartButtonText.style.top = "50%";
+      restartButtonText.style.left = "50%";
+      restartButtonText.style.transform = "translate(-50%, -50%)";
+      restartButtonText.style.overflow = "hidden";
+
+      restartButton.addEventListener("mouseover", () => {
+        restartButton.style.cursor = "pointer";
+        restartButton.style.filter = "grayscale(50%)";
+      });
+
+      restartButton.addEventListener("mouseleave", () => {
+        restartButton.style.cursor = "auto";
+        restartButton.style.filter = "grayscale(0%)";
+      });
+
+      restartButton.addEventListener("click", () => {
+        popUpOpen = false;
+        gameStarted(game);
+      });
+
+      restartButton.appendChild(restartButtonImg);
+      restartButton.appendChild(restartButtonText);
+      body.appendChild(restartButton);
+
+      let backButton = document.createElement("button");
+      backButton.style.display = "inline-block";
+      backButton.style.overflow = "hidden";
+      backButton.style.position = "absolute";
+      backButton.style.top = "37.5%";
+      backButton.style.left = "42.5%";
+      backButton.style.transform = "translate(-50%, -50%)";
+      backButton.style.border = "2px solid black";
+      backButton.style.backgroundColor = "rgb(48, 47, 47)";
+      backButton.style.borderRadius = "25px";
+      backButton.style.width = "15%";
+      backButton.style.height = "8%";
+
+      let backButtonText = document.createElement("p");
+      backButtonText.innerHTML = "BACK";
+      backButtonText.style.fontFamily = "SF-Pro";
+      backButtonText.style.fontSize = "18px";
+      backButtonText.style.color = "white";
+
+      backButton.addEventListener("mouseover", () => {
+        backButton.style.cursor = "pointer";
+        backButton.style.backgroundColor = "rgb(30, 30, 30)";
+      });
+
+      backButton.addEventListener("mouseleave", () => {
+        backButton.style.cursor = "auto";
+        backButton.style.backgroundColor = "rgb(48, 47, 47)";
+      });
+
+      backButton.addEventListener("click", () => {
+        popUpOpen = false;
+        startGame(game);
+      });
+
+      backButton.appendChild(backButtonText);
+      body.appendChild(backButton);
+
+      body.appendChild(gameOverText);
     }
 
     drawPlayer();
     movePlayer();
 
     if (playerX >= canvas.width / 2) {
-      moveGround();
+      if (!isGameOver) {
+        moveGround();
+      }
     }
 
-    if (gameStarted) {
+    if (isStarted) {
       requestAnimationFrame(draw);
     }
   }
 
   window.addEventListener("click", function () {
-    if (!gameStarted) {
-      gameStarted = true;
+    if (!isStarted) {
+      isStarted = true;
       gameLoop();
     }
   });
