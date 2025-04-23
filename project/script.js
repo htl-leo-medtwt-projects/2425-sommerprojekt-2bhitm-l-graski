@@ -3,6 +3,7 @@ let resetConfirmText =
   "Are you sure you want to reset this profile?<br>Please note that all progress, settings, <br>and data associated with this profile will be permanently lost <br>if you proceed with the reset!";
 let coinImg = "coin.png";
 let popUpOpen = false;
+let firstLoad = false;
 
 loadPlayerData();
 
@@ -16,11 +17,12 @@ document.addEventListener("keydown", function (event) {
 document.addEventListener("keydown", function (event) {
   if (event.key === "c") {
     //confirmScreen(-1, resetConfirmText);
-    settingsButton(1);
+    //settingsButton(1);
+    volumeOff()
   }
 });
 
-function settingsButton(game) {
+function settingsButton(game, currentScreen) {
   let settingButton = document.createElement("button");
   settingButton.style.display = "inline-block";
   settingButton.style.overflow = "hidden";
@@ -65,433 +67,464 @@ function settingsButton(game) {
     if (!popUpOpen) {
       popUpOpen = true;
 
-    let backgroundDiv = document.createElement("div");
-
-    backgroundDiv.style.backgroundColor = "rgb(0,0,0,0.75)";
-    backgroundDiv.style.border = "3px solid rgb(0,0,0,0.85)";
-    backgroundDiv.style.borderRadius = "25px";
-    backgroundDiv.style.width = "25%";
-    backgroundDiv.style.height = "60%";
-    backgroundDiv.style.position = "absolute";
-    backgroundDiv.style.top = "50%";
-    backgroundDiv.style.left = "50%";
-    backgroundDiv.style.transform = "translate(-50%, -50%)";
-
-    let settingsHeader = document.createElement("h1");
-    settingsHeader.innerHTML = "Settings";
-    settingsHeader.style.color = "white";
-    settingsHeader.style.fontFamily = "Uberschriften";
-    settingsHeader.style.textAlign = "center";
-    settingsHeader.style.padding = "5px 0";
-    settingsHeader.style.borderBottom = "3.5px solid white";
-
-    let musicButton = document.createElement("button");
-    musicButton.style.display = "inline-block";
-    musicButton.style.borderRadius = "100px";
-    musicButton.style.overflow = "hidden";
-    musicButton.style.border = "none";
-    musicButton.style.backgroundColor = "transparent";
-    musicButton.style.position = "absolute";
-    musicButton.style.top = "15%";
-    musicButton.style.left = "92.5%";
-    musicButton.style.transform = "translate(-50%, -50%)";
-    musicButton.style.width = "60px";
-    musicButton.style.height = "47.5px";
-
-    let musicButtonImg = document.createElement("img");
-    musicButtonImg.src = "img/blue_button.png";
-    musicButtonImg.style.height = "100%";
-    musicButtonImg.style.width = "100%";
-    musicButtonImg.style.display = "block";
-
-    let musicButtonIcon = document.createElement("img");
-    musicButtonIcon.classList = "music-button-icon";
-
-    if (isPlaying) {
-      musicButtonIcon.src = "img/sound-icon-on.png";
-    } else {
-      musicButtonIcon.src = "img/sound-icon-off.png";
-    }
-
-    musicButtonIcon.style.width = "80%";
-    musicButtonIcon.style.height = "80%";
-    musicButtonIcon.style.display = "block";
-    musicButtonIcon.style.position = "absolute";
-    musicButtonIcon.style.top = "50%";
-    musicButtonIcon.style.left = "50%";
-    musicButtonIcon.style.transform = "translate(-50%, -50%)";
-
-    musicButton.addEventListener("mouseover", () => {
-      musicButton.style.cursor = "pointer";
-      musicButton.style.filter = "grayscale(50%)";
-    });
-
-    musicButton.addEventListener("mouseleave", () => {
-      musicButton.style.cursor = "auto";
-      musicButton.style.filter = "grayscale(0%)";
-    });
-
-    musicButton.addEventListener("click", () => {
-      toggleSound(1);
-    });
-
-    let keyDiv = document.createElement("div");
-    keyDiv.style.width = "100%";
-    keyDiv.style.height = "62%";
-    keyDiv.style.position = "absolute";
-    keyDiv.style.top = "51.5%";
-    keyDiv.style.left = "50%";
-    keyDiv.style.transform = "translate(-50%, -50%)";
-    keyDiv.style.borderBottom = "3.5px solid white";
-
-    let forwardText = document.createElement("p");
-    forwardText.innerHTML = "Forward";
-    forwardText.style.position = "absolute";
-    forwardText.style.top = "10%";
-    forwardText.style.left = "30%";
-    forwardText.style.transform = "translate(-50%, -50%)";
-    forwardText.style.fontFamily = "SF-Pro";
-    forwardText.style.fontSize = "25px";
-    forwardText.style.color = "white";
-
-    let forwardButtonDiv = document.createElement("div");
-    forwardButtonDiv.style.position = "absolute";
-    forwardButtonDiv.style.top = "13%";
-    forwardButtonDiv.style.left = "75%";
-    forwardButtonDiv.style.transform = "translate(-50%, -50%)";
-
-    let forwardButtonImg = document.createElement("img");
-    forwardButtonImg.src = "img/key.png";
-    forwardButtonImg.style.height = "64px";
-    forwardButtonImg.style.width = "64px";
-    forwardButtonImg.style.display = "block";
-
-    let forwardButtonInput = document.createElement("Input");
-    forwardButtonInput.type = "text";
-    forwardButtonInput.value = playerData.Game[game - 1].Movement.Forward;
-    forwardButtonInput.style.display = "inline-block";
-    forwardButtonInput.style.overflow = "hidden";
-    forwardButtonInput.style.position = "absolute";
-    forwardButtonInput.style.top = "50%";
-    forwardButtonInput.style.left = "50%";
-    forwardButtonInput.style.transform = "translate(-50%, -50%)";
-    forwardButtonInput.style.border = "none";
-    forwardButtonInput.style.outline = "none";
-    forwardButtonInput.style.backgroundColor = "transparent";
-    forwardButtonInput.style.fontFamily = "SF-Pro";
-    forwardButtonInput.style.width = "100%";
-    forwardButtonInput.style.height = "100%";
-    forwardButtonInput.style.fontSize = "20px";
-    forwardButtonInput.style.textAlign = "center";
-    forwardButtonInput.style.color = "white";
-
-    forwardButtonImg.addEventListener("mouseover", () => {
-      forwardButtonImg.style.cursor = "pointer";
-      forwardButtonImg.style.filter = "grayscale(50%)";
-    });
-
-    forwardButtonImg.addEventListener("mouseleave", () => {
-      forwardButtonImg.style.cursor = "auto";
-      forwardButtonImg.style.filter = "grayscale(0%)";
-    });
-
-    forwardButtonInput.addEventListener("mouseover", () => {
-      forwardButtonInput.style.cursor = "pointer";
-      forwardButtonImg.style.filter = "grayscale(50%)";
-    });
-
-    forwardButtonInput.addEventListener("mouseleave", () => {
-      forwardButtonInput.style.cursor = "auto";
-      forwardButtonImg.style.filter = "grayscale(0%)";
-    });
-
-    forwardButtonInput.addEventListener("click", () => {
-      forwardButtonInput.style.cursor = "text";
-      forwardButtonInput.value = "";
-    });
-
-    forwardButtonInput.addEventListener("input", () => {
-      let forwardKey = document.getElementById("forwardText");
-      if (forwardButtonInput.value != "") {
-        playerData.Game[game - 1].Movement.Forward = forwardButtonInput.value;
-        forwardKey.innerHTML = forwardButtonInput.value;
-        savePlayerData();
-      } else {
-        playerData.Game[game - 1].Movement.Forward = "w";
-        forwardKey.innerHTML = "w";
-        savePlayerData();
+      if (playing) {
+        playInteractSound();
       }
-      //console.log(playerData);
-    });
 
-    let backwardText = document.createElement("p");
-    backwardText.innerHTML = "Backward";
-    backwardText.style.position = "absolute";
-    backwardText.style.top = "42%";
-    backwardText.style.left = "30%";
-    backwardText.style.transform = "translate(-50%, -50%)";
-    backwardText.style.fontFamily = "SF-Pro";
-    backwardText.style.fontSize = "25px";
-    backwardText.style.color = "white";
+      let backgroundDiv = document.createElement("div");
 
-    let backwardButtonDiv = document.createElement("div");
-    backwardButtonDiv.style.position = "absolute";
-    backwardButtonDiv.style.top = "45%";
-    backwardButtonDiv.style.left = "75%";
-    backwardButtonDiv.style.transform = "translate(-50%, -50%)";
+      backgroundDiv.style.backgroundColor = "rgb(0,0,0,0.75)";
+      backgroundDiv.style.border = "3px solid rgb(0,0,0,0.85)";
+      backgroundDiv.style.borderRadius = "25px";
+      backgroundDiv.style.width = "25%";
+      backgroundDiv.style.height = "60%";
+      backgroundDiv.style.position = "absolute";
+      backgroundDiv.style.top = "50%";
+      backgroundDiv.style.left = "50%";
+      backgroundDiv.style.transform = "translate(-50%, -50%)";
 
-    let backwardButtonImg = document.createElement("img");
-    backwardButtonImg.src = "img/key.png";
-    backwardButtonImg.style.height = "64px";
-    backwardButtonImg.style.width = "64px";
-    backwardButtonImg.style.display = "block";
+      let settingsHeader = document.createElement("h1");
+      settingsHeader.innerHTML = "Settings";
+      settingsHeader.style.color = "white";
+      settingsHeader.style.fontFamily = "Uberschriften";
+      settingsHeader.style.textAlign = "center";
+      settingsHeader.style.padding = "5px 0";
+      settingsHeader.style.borderBottom = "3.5px solid white";
 
-    let backwardButtonInput = document.createElement("Input");
-    backwardButtonInput.type = "text";
-    backwardButtonInput.value = playerData.Game[game - 1].Movement.Backward;
-    backwardButtonInput.style.display = "inline-block";
-    backwardButtonInput.style.overflow = "hidden";
-    backwardButtonInput.style.position = "absolute";
-    backwardButtonInput.style.top = "50%";
-    backwardButtonInput.style.left = "50%";
-    backwardButtonInput.style.transform = "translate(-50%, -50%)";
-    backwardButtonInput.style.border = "none";
-    backwardButtonInput.style.outline = "none";
-    backwardButtonInput.style.backgroundColor = "transparent";
-    backwardButtonInput.style.fontFamily = "SF-Pro";
-    backwardButtonInput.style.width = "100%";
-    backwardButtonInput.style.height = "100%";
-    backwardButtonInput.style.fontSize = "20px";
-    backwardButtonInput.style.textAlign = "center";
-    backwardButtonInput.style.color = "white";
+      let musicButton = document.createElement("button");
+      musicButton.style.display = "inline-block";
+      musicButton.style.borderRadius = "100px";
+      musicButton.style.overflow = "hidden";
+      musicButton.style.border = "none";
+      musicButton.style.backgroundColor = "transparent";
+      musicButton.style.position = "absolute";
+      musicButton.style.top = "15%";
+      musicButton.style.left = "92.5%";
+      musicButton.style.transform = "translate(-50%, -50%)";
+      musicButton.style.width = "60px";
+      musicButton.style.height = "47.5px";
 
-    backwardButtonImg.addEventListener("mouseover", () => {
-      backwardButtonImg.style.cursor = "pointer";
-      backwardButtonImg.style.filter = "grayscale(50%)";
-    });
+      let musicButtonImg = document.createElement("img");
+      musicButtonImg.src = "img/blue_button.png";
+      musicButtonImg.style.height = "100%";
+      musicButtonImg.style.width = "100%";
+      musicButtonImg.style.display = "block";
 
-    backwardButtonImg.addEventListener("mouseleave", () => {
-      backwardButtonImg.style.cursor = "auto";
-      backwardButtonImg.style.filter = "grayscale(0%)";
-    });
+      let musicButtonIcon = document.createElement("img");
+      musicButtonIcon.classList = "music-button-icon";
 
-    backwardButtonInput.addEventListener("mouseover", () => {
-      backwardButtonInput.style.cursor = "pointer";
-      backwardButtonImg.style.filter = "grayscale(50%)";
-    });
-
-    backwardButtonInput.addEventListener("mouseleave", () => {
-      backwardButtonInput.style.cursor = "auto";
-      backwardButtonImg.style.filter = "grayscale(0%)";
-    });
-
-    backwardButtonInput.addEventListener("click", () => {
-      backwardButtonInput.style.cursor = "text";
-      backwardButtonInput.value = "";
-    });
-
-    backwardButtonInput.addEventListener("input", () => {
-      let backwardKey = document.getElementById("backwardText");
-      if (backwardButtonInput.value != "") {
-        playerData.Game[game - 1].Movement.Backward = backwardButtonInput.value;
-        backwardKey.innerHTML = backwardButtonInput.value;
-        savePlayerData();
+      if (playing) {
+        musicButtonIcon.src = "img/sound-icon-on.png";
       } else {
-        playerData.Game[game - 1].Movement.Backward = "s";
-        backwardKey.innerHTML = "s";
-        savePlayerData();
+        musicButtonIcon.src = "img/sound-icon-off.png";
       }
-      //console.log(playerData);
-    });
 
-    let jumpText = document.createElement("p");
-    jumpText.innerHTML = "Jump";
-    jumpText.style.position = "absolute";
-    jumpText.style.top = "74%";
-    jumpText.style.left = "30%";
-    jumpText.style.transform = "translate(-50%, -50%)";
-    jumpText.style.fontFamily = "SF-Pro";
-    jumpText.style.fontSize = "25px";
-    jumpText.style.color = "white";
+      musicButtonIcon.style.width = "80%";
+      musicButtonIcon.style.height = "80%";
+      musicButtonIcon.style.display = "block";
+      musicButtonIcon.style.position = "absolute";
+      musicButtonIcon.style.top = "50%";
+      musicButtonIcon.style.left = "50%";
+      musicButtonIcon.style.transform = "translate(-50%, -50%)";
 
-    let jumpButtonDiv = document.createElement("div");
-    jumpButtonDiv.style.position = "absolute";
-    jumpButtonDiv.style.top = "77%";
-    jumpButtonDiv.style.left = "75%";
-    jumpButtonDiv.style.transform = "translate(-50%, -50%)";
+      musicButton.addEventListener("mouseover", () => {
+        musicButton.style.cursor = "pointer";
+        musicButton.style.filter = "grayscale(50%)";
+      });
 
-    let jumpButtonImg = document.createElement("img");
-    jumpButtonImg.src = "img/key.png";
-    jumpButtonImg.style.height = "64px";
-    jumpButtonImg.style.width = "64px";
-    jumpButtonImg.style.display = "block";
+      musicButton.addEventListener("mouseleave", () => {
+        musicButton.style.cursor = "auto";
+        musicButton.style.filter = "grayscale(0%)";
+      });
 
-    let jumpButtonInput = document.createElement("Input");
-    jumpButtonInput.type = "text";
-    jumpButtonInput.value = playerData.Game[game - 1].Movement.Jump;
-    jumpButtonInput.style.display = "inline-block";
-    jumpButtonInput.style.overflow = "hidden";
-    jumpButtonInput.style.position = "absolute";
-    jumpButtonInput.style.top = "50%";
-    jumpButtonInput.style.left = "50%";
-    jumpButtonInput.style.transform = "translate(-50%, -50%)";
-    jumpButtonInput.style.border = "none";
-    jumpButtonInput.style.outline = "none";
-    jumpButtonInput.style.backgroundColor = "transparent";
-    jumpButtonInput.style.fontFamily = "SF-Pro";
-    jumpButtonInput.style.width = "100%";
-    jumpButtonInput.style.height = "100%";
-    jumpButtonInput.style.fontSize = "20px";
-    jumpButtonInput.style.textAlign = "center";
-    jumpButtonInput.style.color = "white";
+      musicButton.addEventListener("click", () => {
+        if (currentScreen == 4) {
+          toggleSound(1);
+        } else {
+          toggleSound(0);
+        }
 
-    jumpButtonImg.addEventListener("mouseover", () => {
-      jumpButtonImg.style.cursor = "pointer";
-      jumpButtonImg.style.filter = "grayscale(50%)";
-    });
+        if (playing) {
+          playInteractSound();
+        }
+      });
 
-    jumpButtonImg.addEventListener("mouseleave", () => {
-      jumpButtonImg.style.cursor = "auto";
-      jumpButtonImg.style.filter = "grayscale(0%)";
-    });
+      let keyDiv = document.createElement("div");
+      keyDiv.style.width = "100%";
+      keyDiv.style.height = "62%";
+      keyDiv.style.position = "absolute";
+      keyDiv.style.top = "51.5%";
+      keyDiv.style.left = "50%";
+      keyDiv.style.transform = "translate(-50%, -50%)";
+      keyDiv.style.borderBottom = "3.5px solid white";
 
-    jumpButtonInput.addEventListener("mouseover", () => {
-      jumpButtonInput.style.cursor = "pointer";
-      jumpButtonImg.style.filter = "grayscale(50%)";
-    });
+      let forwardText = document.createElement("p");
+      forwardText.innerHTML = "Forward";
+      forwardText.style.position = "absolute";
+      forwardText.style.top = "10%";
+      forwardText.style.left = "30%";
+      forwardText.style.transform = "translate(-50%, -50%)";
+      forwardText.style.fontFamily = "SF-Pro";
+      forwardText.style.fontSize = "25px";
+      forwardText.style.color = "white";
 
-    jumpButtonInput.addEventListener("mouseleave", () => {
-      jumpButtonInput.style.cursor = "auto";
-      jumpButtonImg.style.filter = "grayscale(0%)";
-    });
+      let forwardButtonDiv = document.createElement("div");
+      forwardButtonDiv.style.position = "absolute";
+      forwardButtonDiv.style.top = "13%";
+      forwardButtonDiv.style.left = "75%";
+      forwardButtonDiv.style.transform = "translate(-50%, -50%)";
 
-    jumpButtonInput.addEventListener("click", () => {
-      jumpButtonInput.style.cursor = "text";
-      jumpButtonInput.value = "";
-    });
+      let forwardButtonImg = document.createElement("img");
+      forwardButtonImg.src = "img/key.png";
+      forwardButtonImg.style.height = "64px";
+      forwardButtonImg.style.width = "64px";
+      forwardButtonImg.style.display = "block";
 
-    jumpButtonInput.addEventListener("input", () => {
-      let jumpKey = document.getElementById("jumpText");
-      if (jumpButtonInput.value != "") {
-        jumpKey.innerHTML = jumpButtonInput.value;
-        playerData.Game[game - 1].Movement.Jump = jumpButtonInput.value;
-        savePlayerData();
-      } else {
-        playerData.Game[game - 1].Movement.Jump = "space";
-        jumpKey.innerHTML = "space";
-        savePlayerData();
-      }
-      //console.log(playerData);
-    });
+      let forwardButtonInput = document.createElement("Input");
+      forwardButtonInput.type = "text";
+      forwardButtonInput.value = playerData.Game[game - 1].Movement.Forward;
+      forwardButtonInput.style.display = "inline-block";
+      forwardButtonInput.style.overflow = "hidden";
+      forwardButtonInput.style.position = "absolute";
+      forwardButtonInput.style.top = "50%";
+      forwardButtonInput.style.left = "50%";
+      forwardButtonInput.style.transform = "translate(-50%, -50%)";
+      forwardButtonInput.style.border = "none";
+      forwardButtonInput.style.outline = "none";
+      forwardButtonInput.style.backgroundColor = "transparent";
+      forwardButtonInput.style.fontFamily = "SF-Pro";
+      forwardButtonInput.style.width = "100%";
+      forwardButtonInput.style.height = "100%";
+      forwardButtonInput.style.fontSize = "20px";
+      forwardButtonInput.style.textAlign = "center";
+      forwardButtonInput.style.color = "white";
 
-    let resumeButton = document.createElement("button");
-    resumeButton.style.display = "inline-block";
-    resumeButton.style.overflow = "hidden";
-    resumeButton.style.position = "absolute";
-    resumeButton.style.top = "92%";
-    resumeButton.style.left = "80%";
-    resumeButton.style.transform = "translate(-50%, -50%)";
-    resumeButton.style.border = "none";
-    resumeButton.style.backgroundColor = "transparent";
-    resumeButton.style.width = "28%";
-    resumeButton.style.height = "10%";
+      forwardButtonImg.addEventListener("mouseover", () => {
+        forwardButtonImg.style.cursor = "pointer";
+        forwardButtonImg.style.filter = "grayscale(50%)";
+      });
 
-    let resumeButtonImg = document.createElement("img");
-    resumeButtonImg.src = "img/green_button.png";
-    resumeButtonImg.style.height = "100%";
-    resumeButtonImg.style.width = "100%";
-    resumeButtonImg.style.display = "block";
+      forwardButtonImg.addEventListener("mouseleave", () => {
+        forwardButtonImg.style.cursor = "auto";
+        forwardButtonImg.style.filter = "grayscale(0%)";
+      });
 
-    let resumeButtonText = document.createElement("p");
-    resumeButtonText.innerHTML = "Resume";
-    resumeButtonText.style.position = "absolute";
-    resumeButtonText.style.top = "50%";
-    resumeButtonText.style.left = "50%";
-    resumeButtonText.style.transform = "translate(-50%, -50%)";
-    resumeButtonText.style.fontFamily = "SF-Pro";
-    resumeButtonText.style.fontSize = "18px";
-    resumeButtonText.style.color = "white";
+      forwardButtonInput.addEventListener("mouseover", () => {
+        forwardButtonInput.style.cursor = "pointer";
+        forwardButtonImg.style.filter = "grayscale(50%)";
+      });
 
-    resumeButton.addEventListener("mouseover", () => {
-      resumeButton.style.cursor = "pointer";
-      resumeButton.style.filter = "grayscale(50%)";
-    });
+      forwardButtonInput.addEventListener("mouseleave", () => {
+        forwardButtonInput.style.cursor = "auto";
+        forwardButtonImg.style.filter = "grayscale(0%)";
+      });
 
-    resumeButton.addEventListener("mouseleave", () => {
-      resumeButton.style.cursor = "auto";
-      resumeButton.style.filter = "grayscale(0%)";
-    });
+      forwardButtonInput.addEventListener("click", () => {
+        forwardButtonInput.style.cursor = "text";
+        forwardButtonInput.value = "";
+      });
 
-    resumeButton.addEventListener("click", () => {
-      body.removeChild(backgroundDiv);
-      popUpOpen = false;
-    });
+      forwardButtonInput.addEventListener("input", () => {
+        let forwardKey = document.getElementById("forwardText");
+        if (forwardButtonInput.value != "") {
+          playerData.Game[game - 1].Movement.Forward = forwardButtonInput.value;
+          forwardKey.innerHTML = forwardButtonInput.value;
+          savePlayerData();
+        } else {
+          playerData.Game[game - 1].Movement.Forward = "w";
+          forwardKey.innerHTML = "w";
+          savePlayerData();
+        }
+        //console.log(playerData);
+      });
 
-    let backButton = document.createElement("button");
-    backButton.style.display = "inline-block";
-    backButton.style.overflow = "hidden";
-    backButton.style.position = "absolute";
-    backButton.style.top = "92%";
-    backButton.style.left = "50%";
-    backButton.style.transform = "translate(-50%, -50%)";
-    backButton.style.border = "2px solid black";
-    backButton.style.backgroundColor = "rgb(48, 47, 47)";
-    backButton.style.borderRadius = "25px";
-    backButton.style.width = "28%";
-    backButton.style.height = "10%";
+      let backwardText = document.createElement("p");
+      backwardText.innerHTML = "Backward";
+      backwardText.style.position = "absolute";
+      backwardText.style.top = "42%";
+      backwardText.style.left = "30%";
+      backwardText.style.transform = "translate(-50%, -50%)";
+      backwardText.style.fontFamily = "SF-Pro";
+      backwardText.style.fontSize = "25px";
+      backwardText.style.color = "white";
 
-    let backButtonText = document.createElement("p");
-    backButtonText.innerHTML = "Back";
-    backButtonText.style.fontFamily = "SF-Pro";
-    backButtonText.style.fontSize = "18px";
-    backButtonText.style.color = "white";
+      let backwardButtonDiv = document.createElement("div");
+      backwardButtonDiv.style.position = "absolute";
+      backwardButtonDiv.style.top = "45%";
+      backwardButtonDiv.style.left = "75%";
+      backwardButtonDiv.style.transform = "translate(-50%, -50%)";
 
-    backButton.addEventListener("mouseover", () => {
-      backButton.style.cursor = "pointer";
-      backButton.style.backgroundColor = "rgb(30, 30, 30)";
-    });
+      let backwardButtonImg = document.createElement("img");
+      backwardButtonImg.src = "img/key.png";
+      backwardButtonImg.style.height = "64px";
+      backwardButtonImg.style.width = "64px";
+      backwardButtonImg.style.display = "block";
 
-    backButton.addEventListener("mouseleave", () => {
-      backButton.style.cursor = "auto";
+      let backwardButtonInput = document.createElement("Input");
+      backwardButtonInput.type = "text";
+      backwardButtonInput.value = playerData.Game[game - 1].Movement.Backward;
+      backwardButtonInput.style.display = "inline-block";
+      backwardButtonInput.style.overflow = "hidden";
+      backwardButtonInput.style.position = "absolute";
+      backwardButtonInput.style.top = "50%";
+      backwardButtonInput.style.left = "50%";
+      backwardButtonInput.style.transform = "translate(-50%, -50%)";
+      backwardButtonInput.style.border = "none";
+      backwardButtonInput.style.outline = "none";
+      backwardButtonInput.style.backgroundColor = "transparent";
+      backwardButtonInput.style.fontFamily = "SF-Pro";
+      backwardButtonInput.style.width = "100%";
+      backwardButtonInput.style.height = "100%";
+      backwardButtonInput.style.fontSize = "20px";
+      backwardButtonInput.style.textAlign = "center";
+      backwardButtonInput.style.color = "white";
+
+      backwardButtonImg.addEventListener("mouseover", () => {
+        backwardButtonImg.style.cursor = "pointer";
+        backwardButtonImg.style.filter = "grayscale(50%)";
+      });
+
+      backwardButtonImg.addEventListener("mouseleave", () => {
+        backwardButtonImg.style.cursor = "auto";
+        backwardButtonImg.style.filter = "grayscale(0%)";
+      });
+
+      backwardButtonInput.addEventListener("mouseover", () => {
+        backwardButtonInput.style.cursor = "pointer";
+        backwardButtonImg.style.filter = "grayscale(50%)";
+      });
+
+      backwardButtonInput.addEventListener("mouseleave", () => {
+        backwardButtonInput.style.cursor = "auto";
+        backwardButtonImg.style.filter = "grayscale(0%)";
+      });
+
+      backwardButtonInput.addEventListener("click", () => {
+        backwardButtonInput.style.cursor = "text";
+        backwardButtonInput.value = "";
+      });
+
+      backwardButtonInput.addEventListener("input", () => {
+        let backwardKey = document.getElementById("backwardText");
+        if (backwardButtonInput.value != "") {
+          playerData.Game[game - 1].Movement.Backward =
+            backwardButtonInput.value;
+          backwardKey.innerHTML = backwardButtonInput.value;
+          savePlayerData();
+        } else {
+          playerData.Game[game - 1].Movement.Backward = "s";
+          backwardKey.innerHTML = "s";
+          savePlayerData();
+        }
+        //console.log(playerData);
+      });
+
+      let jumpText = document.createElement("p");
+      jumpText.innerHTML = "Jump";
+      jumpText.style.position = "absolute";
+      jumpText.style.top = "74%";
+      jumpText.style.left = "30%";
+      jumpText.style.transform = "translate(-50%, -50%)";
+      jumpText.style.fontFamily = "SF-Pro";
+      jumpText.style.fontSize = "25px";
+      jumpText.style.color = "white";
+
+      let jumpButtonDiv = document.createElement("div");
+      jumpButtonDiv.style.position = "absolute";
+      jumpButtonDiv.style.top = "77%";
+      jumpButtonDiv.style.left = "75%";
+      jumpButtonDiv.style.transform = "translate(-50%, -50%)";
+
+      let jumpButtonImg = document.createElement("img");
+      jumpButtonImg.src = "img/key.png";
+      jumpButtonImg.style.height = "64px";
+      jumpButtonImg.style.width = "64px";
+      jumpButtonImg.style.display = "block";
+
+      let jumpButtonInput = document.createElement("Input");
+      jumpButtonInput.type = "text";
+      jumpButtonInput.value = playerData.Game[game - 1].Movement.Jump;
+      jumpButtonInput.style.display = "inline-block";
+      jumpButtonInput.style.overflow = "hidden";
+      jumpButtonInput.style.position = "absolute";
+      jumpButtonInput.style.top = "50%";
+      jumpButtonInput.style.left = "50%";
+      jumpButtonInput.style.transform = "translate(-50%, -50%)";
+      jumpButtonInput.style.border = "none";
+      jumpButtonInput.style.outline = "none";
+      jumpButtonInput.style.backgroundColor = "transparent";
+      jumpButtonInput.style.fontFamily = "SF-Pro";
+      jumpButtonInput.style.width = "100%";
+      jumpButtonInput.style.height = "100%";
+      jumpButtonInput.style.fontSize = "20px";
+      jumpButtonInput.style.textAlign = "center";
+      jumpButtonInput.style.color = "white";
+
+      jumpButtonImg.addEventListener("mouseover", () => {
+        jumpButtonImg.style.cursor = "pointer";
+        jumpButtonImg.style.filter = "grayscale(50%)";
+      });
+
+      jumpButtonImg.addEventListener("mouseleave", () => {
+        jumpButtonImg.style.cursor = "auto";
+        jumpButtonImg.style.filter = "grayscale(0%)";
+      });
+
+      jumpButtonInput.addEventListener("mouseover", () => {
+        jumpButtonInput.style.cursor = "pointer";
+        jumpButtonImg.style.filter = "grayscale(50%)";
+      });
+
+      jumpButtonInput.addEventListener("mouseleave", () => {
+        jumpButtonInput.style.cursor = "auto";
+        jumpButtonImg.style.filter = "grayscale(0%)";
+      });
+
+      jumpButtonInput.addEventListener("click", () => {
+        jumpButtonInput.style.cursor = "text";
+        jumpButtonInput.value = "";
+      });
+
+      jumpButtonInput.addEventListener("input", () => {
+        let jumpKey = document.getElementById("jumpText");
+        if (jumpButtonInput.value != "") {
+          jumpKey.innerHTML = jumpButtonInput.value;
+          playerData.Game[game - 1].Movement.Jump = jumpButtonInput.value;
+          savePlayerData();
+        } else {
+          playerData.Game[game - 1].Movement.Jump = "space";
+          jumpKey.innerHTML = "space";
+          savePlayerData();
+        }
+        //console.log(playerData);
+      });
+
+      let resumeButton = document.createElement("button");
+      resumeButton.style.display = "inline-block";
+      resumeButton.style.overflow = "hidden";
+      resumeButton.style.position = "absolute";
+      resumeButton.style.top = "92%";
+      resumeButton.style.left = "80%";
+      resumeButton.style.transform = "translate(-50%, -50%)";
+      resumeButton.style.border = "none";
+      resumeButton.style.backgroundColor = "transparent";
+      resumeButton.style.width = "28%";
+      resumeButton.style.height = "10%";
+
+      let resumeButtonImg = document.createElement("img");
+      resumeButtonImg.src = "img/green_button.png";
+      resumeButtonImg.style.height = "100%";
+      resumeButtonImg.style.width = "100%";
+      resumeButtonImg.style.display = "block";
+
+      let resumeButtonText = document.createElement("p");
+      resumeButtonText.innerHTML = "Resume";
+      resumeButtonText.style.position = "absolute";
+      resumeButtonText.style.top = "50%";
+      resumeButtonText.style.left = "50%";
+      resumeButtonText.style.transform = "translate(-50%, -50%)";
+      resumeButtonText.style.fontFamily = "SF-Pro";
+      resumeButtonText.style.fontSize = "18px";
+      resumeButtonText.style.color = "white";
+
+      resumeButton.addEventListener("mouseover", () => {
+        resumeButton.style.cursor = "pointer";
+        resumeButton.style.filter = "grayscale(50%)";
+      });
+
+      resumeButton.addEventListener("mouseleave", () => {
+        resumeButton.style.cursor = "auto";
+        resumeButton.style.filter = "grayscale(0%)";
+      });
+
+      resumeButton.addEventListener("click", () => {
+        body.removeChild(backgroundDiv);
+        popUpOpen = false;
+
+        if (playing) {
+          playInteractSound();
+        }
+      });
+
+      let backButton = document.createElement("button");
+      backButton.style.display = "inline-block";
+      backButton.style.overflow = "hidden";
+      backButton.style.position = "absolute";
+      backButton.style.top = "92%";
+      backButton.style.left = "50%";
+      backButton.style.transform = "translate(-50%, -50%)";
+      backButton.style.border = "2px solid black";
       backButton.style.backgroundColor = "rgb(48, 47, 47)";
-    });
+      backButton.style.borderRadius = "25px";
+      backButton.style.width = "28%";
+      backButton.style.height = "10%";
 
-    backButton.addEventListener("click", () => {
-      startGame(game);
-      popUpOpen = false;
-    });
+      let backButtonText = document.createElement("p");
+      backButtonText.innerHTML = "Back";
+      backButtonText.style.fontFamily = "SF-Pro";
+      backButtonText.style.fontSize = "18px";
+      backButtonText.style.color = "white";
 
-    backgroundDiv.appendChild(settingsHeader);
+      backButton.addEventListener("mouseover", () => {
+        backButton.style.cursor = "pointer";
+        backButton.style.backgroundColor = "rgb(30, 30, 30)";
+      });
 
-    musicButton.appendChild(musicButtonImg);
-    musicButton.appendChild(musicButtonIcon);
-    backgroundDiv.appendChild(musicButton);
+      backButton.addEventListener("mouseleave", () => {
+        backButton.style.cursor = "auto";
+        backButton.style.backgroundColor = "rgb(48, 47, 47)";
+      });
 
-    keyDiv.appendChild(forwardText);
-    forwardButtonDiv.appendChild(forwardButtonImg);
-    forwardButtonDiv.appendChild(forwardButtonInput);
-    keyDiv.appendChild(forwardButtonDiv);
+      backButton.addEventListener("click", () => {
+        if (currentScreen == 1) {
+          chooseGame(game);
+        } else if (currentScreen == 2) {
+          chooseGame(game);
+        } else if (currentScreen == 3) {
+          startGame(game);
+        } else if (currentScreen == 4) {
+          gameScreen(game);
+        }
 
-    keyDiv.appendChild(backwardText);
-    backwardButtonDiv.appendChild(backwardButtonImg);
-    backwardButtonDiv.appendChild(backwardButtonInput);
-    keyDiv.appendChild(backwardButtonDiv);
+        if (playing) {
+          playSound(0);
+          playInteractSound();
+        }
 
-    keyDiv.appendChild(jumpText);
-    jumpButtonDiv.appendChild(jumpButtonImg);
-    jumpButtonDiv.appendChild(jumpButtonInput);
-    keyDiv.appendChild(jumpButtonDiv);
+        popUpOpen = false;
+      });
 
-    resumeButton.appendChild(resumeButtonImg);
-    resumeButton.appendChild(resumeButtonText);
-    backgroundDiv.appendChild(resumeButton);
+      backgroundDiv.appendChild(settingsHeader);
 
-    backButton.appendChild(backButtonText);
-    backgroundDiv.appendChild(backButton);
+      musicButton.appendChild(musicButtonImg);
+      musicButton.appendChild(musicButtonIcon);
+      backgroundDiv.appendChild(musicButton);
 
-    backgroundDiv.appendChild(keyDiv);
-    body.appendChild(backgroundDiv);
-  }
+      keyDiv.appendChild(forwardText);
+      forwardButtonDiv.appendChild(forwardButtonImg);
+      forwardButtonDiv.appendChild(forwardButtonInput);
+      keyDiv.appendChild(forwardButtonDiv);
+
+      keyDiv.appendChild(backwardText);
+      backwardButtonDiv.appendChild(backwardButtonImg);
+      backwardButtonDiv.appendChild(backwardButtonInput);
+      keyDiv.appendChild(backwardButtonDiv);
+
+      keyDiv.appendChild(jumpText);
+      jumpButtonDiv.appendChild(jumpButtonImg);
+      jumpButtonDiv.appendChild(jumpButtonInput);
+      keyDiv.appendChild(jumpButtonDiv);
+
+      resumeButton.appendChild(resumeButtonImg);
+      resumeButton.appendChild(resumeButtonText);
+      backgroundDiv.appendChild(resumeButton);
+
+      backButton.appendChild(backButtonText);
+      backgroundDiv.appendChild(backButton);
+
+      backgroundDiv.appendChild(keyDiv);
+      body.appendChild(backgroundDiv);
+    }
   });
 
   settingButton.appendChild(settingButtonImg);
@@ -502,6 +535,8 @@ function settingsButton(game) {
 function chooseGame() {
   body.innerHTML = "";
   body.removeAttribute("style");
+
+  console.log("chooseGame", playerData);
 
   body.style.backgroundImage = "url(img/classroom_load_better.png)";
   body.style.backgroundRepeat = "no-repeat";
@@ -606,7 +641,14 @@ function chooseGame() {
 
   button1.addEventListener("click", () => {
     startGame(1);
-    playSound(0);
+    if (playing || !firstLoad) {
+      firstLoad = true;
+      playSound(0);
+      playInteractSound();
+    }
+
+    playerData.Game[0].Used = true;
+    savePlayerData();
   });
 
   button1.appendChild(button1Text);
@@ -645,7 +687,14 @@ function chooseGame() {
 
   button2.addEventListener("click", () => {
     startGame(2);
-    playSound(0);
+    if (playing || !firstLoad) {
+      firstLoad = true;
+      playSound(0);
+      playInteractSound();
+    }
+
+    playerData.Game[1].Used = true;
+    savePlayerData();
   });
 
   button2.appendChild(button2Text);
@@ -684,7 +733,14 @@ function chooseGame() {
 
   button3.addEventListener("click", () => {
     startGame(3);
-    playSound(0);
+    if (playing || !firstLoad) {
+      firstLoad = true;
+      playSound(0);
+      playInteractSound();
+    }
+
+    playerData.Game[2].Used = true;
+    savePlayerData();
   });
 
   button3.appendChild(button3Text);
@@ -722,7 +778,7 @@ function chooseGame() {
   let musicButtonIcon = document.createElement("img");
   musicButtonIcon.classList = "music-button-icon";
 
-  if (isPlaying) {
+  if (playing) {
     musicButtonIcon.src = "img/sound-icon-on.png";
   } else {
     musicButtonIcon.src = "img/sound-icon-off.png";
@@ -748,6 +804,9 @@ function chooseGame() {
 
   musicButton.addEventListener("click", () => {
     toggleSound(0);
+    if (playing) {
+      playInteractSound();
+    }
   });
 
   musicButton.appendChild(musicButtonImg);
@@ -761,9 +820,7 @@ function startGame(game) {
   body.innerHTML = "";
   body.removeAttribute("style");
 
-  //console.log(playerData);
-  playerData.Game[game - 1].Used = true;
-  savePlayerData();
+  console.log("startGame", playerData);
 
   body.style.backgroundImage = "url(img/classroom_load_better.png)";
   body.style.backgroundRepeat = "no-repeat";
@@ -845,6 +902,9 @@ function startGame(game) {
 
   startButton.addEventListener("click", () => {
     gameScreen(game);
+    if (playing) {
+      playInteractSound();
+    }
   });
 
   startButton.appendChild(startButtonText);
@@ -958,6 +1018,9 @@ function startGame(game) {
   resetButton.addEventListener("click", () => {
     if (!popUpOpen) {
       confirmScreen(game, resetConfirmText);
+      if (playing) {
+        playInteractSound();
+      }
     }
   });
 
@@ -1016,6 +1079,10 @@ function startGame(game) {
 
   backButton.addEventListener("click", () => {
     chooseGame();
+    if (playing) {
+      playSound(0);
+      playInteractSound();
+    }
   });
 
   backButton.appendChild(backButtonImg);
@@ -1076,7 +1143,7 @@ function startGame(game) {
   let musicButtonIcon = document.createElement("img");
   musicButtonIcon.classList = "music-button-icon";
 
-  if (isPlaying) {
+  if (playing) {
     musicButtonIcon.src = "img/sound-icon-on.png";
   } else {
     musicButtonIcon.src = "img/sound-icon-off.png";
@@ -1102,6 +1169,9 @@ function startGame(game) {
 
   musicButton.addEventListener("click", () => {
     toggleSound(0);
+    if (playing) {
+      playInteractSound();
+    }
   });
 
   musicButton.appendChild(musicButtonImg);
@@ -1182,8 +1252,11 @@ function confirmScreen(game, text) {
 
   yesButton.addEventListener("click", () => {
     resetPlayerData(game);
+    console.log("resetPlayerData", playerData);
     chooseGame();
-    //console.log(playerData)
+    if (playing) {
+      playInteractSound();
+    }
     popUpOpen = false;
   });
 
@@ -1217,6 +1290,9 @@ function confirmScreen(game, text) {
   noButton.addEventListener("click", () => {
     body.removeChild(backgroundDiv);
     popUpOpen = false;
+    if (playing) {
+      playInteractSound();
+    }
   });
 
   backgroundDiv.appendChild(confirmHeader);
@@ -1237,7 +1313,7 @@ function gameScreen(game) {
   body.style.backgroundRepeat = "no-repeat";
   body.style.backgroundSize = "cover";
 
-  settingsButton(game);
+  settingsButton(game, 3);
 
   let startButton = document.createElement("button");
   startButton.style.display = "inline-block";
@@ -1279,6 +1355,10 @@ function gameScreen(game) {
 
   startButton.addEventListener("click", () => {
     gameStarted(game);
+    if (playing) {
+      playSound(1);
+      playInteractSound();
+    }
   });
 
   startButton.appendChild(startButtonText);
@@ -1492,6 +1572,9 @@ function gameScreen(game) {
 
   shopButton.addEventListener("click", () => {
     //shop(game)
+    if (playing) {
+      playInteractSound();
+    }
   });
 
   shopButton.appendChild(shopButtonImg);
@@ -1559,7 +1642,7 @@ function gameStarted(game) {
   body.style.backgroundSize = "cover";
   body.style.overflow = "hidden";
 
-  settingsButton(game);
+  settingsButton(game, 4);
 
   let shopButton = document.createElement("button");
   shopButton.style.display = "inline-block";
@@ -1602,6 +1685,9 @@ function gameStarted(game) {
 
   shopButton.addEventListener("click", () => {
     //shop(game)
+    if (playing) {
+      playInteractSound();
+    }
   });
 
   shopButton.appendChild(shopButtonImg);
@@ -1781,7 +1867,7 @@ function gameStarted(game) {
     playerY += velocityY;
 
     playerX += playerSpeed * playerDirection;
-    playerX = Math.max(0, Math.min(playerX, canvas.width / 2));
+    playerX = Math.max(0, Math.min(playerX, canvas.width / 1.5));
   }
 
   function jump() {
@@ -1874,6 +1960,10 @@ function gameStarted(game) {
       gameOverShown = true;
       popUpOpen = true;
 
+      if (playing) {
+        playSound(2)
+      }
+
       let gameOverText = document.createElement("h1");
       gameOverText.innerHTML = "Game Over!";
       gameOverText.style.color = "black";
@@ -1926,6 +2016,9 @@ function gameStarted(game) {
       restartButton.addEventListener("click", () => {
         popUpOpen = false;
         gameStarted(game);
+        if (playing) {
+          playInteractSound();
+        }
       });
 
       restartButton.appendChild(restartButtonImg);
@@ -1963,7 +2056,11 @@ function gameStarted(game) {
 
       backButton.addEventListener("click", () => {
         popUpOpen = false;
-        startGame(game);
+        gameScreen(game);
+        if (playing) {
+          playSound(0);
+          playInteractSound();
+        }
       });
 
       backButton.appendChild(backButtonText);
@@ -1975,7 +2072,7 @@ function gameStarted(game) {
     drawPlayer();
     movePlayer();
 
-    if (playerX >= canvas.width / 2) {
+    if (playerX >= canvas.width / 1.5) {
       if (!isGameOver) {
         moveGround();
       }

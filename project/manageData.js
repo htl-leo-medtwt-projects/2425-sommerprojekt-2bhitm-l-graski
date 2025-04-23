@@ -123,7 +123,7 @@ function resetAllPlayerData() {
     playerData.Game[i] = PlayerBluePrint;
   }
   savePlayerData();
-  //console.log(playerData)
+  console.log(playerData)
 }
 
 function setData(data, name) {
