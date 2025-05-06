@@ -1790,7 +1790,7 @@ function gameStarted(game) {
 
   let score = 0;
   let playerX = 0;
-  let playerY = canvas.height - 1.5 * groundHeight - playerHeight;
+  let playerY = canvas.height - 1.5 * groundHeight - playerHeight + 4;
   let playerSpeed = 6;
   let playerDirection = 0;
   let velocityY = 0;
@@ -1976,7 +1976,7 @@ function gameStarted(game) {
       let current = ground[i];
 
       let nextPlayerBottom = playerY + playerHeight + velocityY;
-      let groundY = canvas.height - 1.5 * groundHeight;
+      let groundY = canvas.height - 1.5 * groundHeight + 4;
 
       let isFallingOntoPlatform =
         playerY + playerHeight <= groundY &&
@@ -2019,14 +2019,14 @@ function gameStarted(game) {
 
   function jump() {
     let isGrounded = false;
-    let groundY = canvas.height - 1.5 * groundHeight - playerHeight;
+    let groundY = canvas.height - 1.5 * groundHeight - playerHeight + 4;
 
     if (playerY >= groundY - 1 && playerY <= groundY + 1) {
       isGrounded = true;
     } else {
       for (let i = 0; i < ground.length; i++) {
         let platform = ground[i];
-        let platformTop = canvas.height - 1.5 * groundHeight;
+        let platformTop = canvas.height - 1.5 * groundHeight + 4;
         let playerBottom = playerY + playerHeight;
 
         let isOnPlatform =
