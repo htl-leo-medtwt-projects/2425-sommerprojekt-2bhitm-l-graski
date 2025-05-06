@@ -18,7 +18,7 @@ document.addEventListener("keydown", function (event) {
   if (event.key === "c") {
     //confirmScreen(-1, resetConfirmText);
     //settingsButton(1);
-    volumeOff()
+    volumeOff();
   }
 });
 
@@ -1814,9 +1814,73 @@ function gameStarted(game) {
   let groundSpeed = 4;
   let isStarted = false;
 
+  let spriteImage = new Image();
+  spriteImage.src = "img/thomas_sprite_all-big.png";
+
+  const SPRITE_WIDTH = 350;
+  const SPRITE_HEIGHT = 425;
+  const SPRITE_SPACING = 200;
+  const RUN_FRAMES = 2;
+  const JUMP_FRAMES = 3;
+  let currentFrame = 0;
+  let frameCounter = 0;
+  let isFlipped = false;
+
   function drawPlayer() {
-    ctx.fillStyle = "red";
-    ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
+    let spriteRow;
+    if (isJumping) {
+      spriteRow = 2;
+    } else {
+      spriteRow = 1;
+    }
+
+    let totalFrames = isJumping ? JUMP_FRAMES : RUN_FRAMES;
+
+    let sourceY = (spriteRow - 1) * (SPRITE_HEIGHT + 150);
+
+    const isBeyondSecondThird = playerX >= (2 * canvas.width) / 3;
+
+    if (
+      playerDirection !== 0 ||
+      isJumping ||
+      (isBeyondSecondThird && groundSpeed > 0)
+    ) {
+      frameCounter++;
+      if (frameCounter >= 10) {
+        currentFrame = (currentFrame + 1) % totalFrames;
+        frameCounter = 0;
+      }
+    } else {
+      currentFrame = 0;
+    }
+
+    if (playerDirection < 0) {
+      isFlipped = true;
+    } else if (playerDirection > 0) {
+      isFlipped = false;
+    }
+
+    ctx.save();
+
+    if (isFlipped) {
+      ctx.translate(playerX + playerWidth / 2, 0);
+      ctx.scale(-1, 1);
+      ctx.translate(-(playerX + playerWidth / 2), 0);
+    }
+
+    ctx.drawImage(
+      spriteImage,
+      currentFrame * (SPRITE_WIDTH + SPRITE_SPACING),
+      sourceY,
+      SPRITE_WIDTH,
+      SPRITE_HEIGHT,
+      playerX,
+      playerY + 10,
+      playerWidth,
+      playerHeight
+    );
+
+    ctx.restore();
   }
 
   function drawGround() {
@@ -1961,7 +2025,7 @@ function gameStarted(game) {
       popUpOpen = true;
 
       if (playing) {
-        playSound(2)
+        playSound(2);
       }
 
       let gameOverText = document.createElement("h1");
