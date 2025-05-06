@@ -1790,7 +1790,7 @@ function gameStarted(game) {
 
   let score = 0;
   let playerX = 0;
-  let playerY = canvas.height - groundHeight - playerHeight;
+  let playerY = canvas.height - 1.5*groundHeight - playerHeight;
   let playerSpeed = 6;
   let playerDirection = 0;
   let velocityY = 0;
@@ -1815,49 +1815,66 @@ function gameStarted(game) {
   let isStarted = false;
 
   let spriteImage = new Image();
-  spriteImage.src = "img/thomas_sprite_all-big.png";
+  spriteImage.src = "img/thomas_sprite_all.png";
 
-  const SPRITE_WIDTH = 350;
-  const SPRITE_HEIGHT = 425;
-  const SPRITE_SPACING = 200;
+  let scaledSpriteImage = document.createElement("canvas");
+  let scaledSpriteCtx = scaledSpriteImage.getContext("2d");
+
+  spriteImage.onload = () => {
+    scaledSpriteImage.width = spriteImage.width * 2;
+    scaledSpriteImage.height = spriteImage.height * 2;
+    scaledSpriteCtx.drawImage(spriteImage, 0, 0, scaledSpriteImage.width, scaledSpriteImage.height);
+  };
+
+  const SPRITE_WIDTH = 700;
+  const SPRITE_HEIGHT = 850;
+  const SPRITE_SPACING = 400;
+  const SPRITE_ROW_SPACING = 300;
   const RUN_FRAMES = 2;
   const JUMP_FRAMES = 3;
+  const IDLE_FRAMES = 4;
+  const IDLE_ROW = 3;
   let currentFrame = 0;
   let frameCounter = 0;
   let isFlipped = false;
+  let idleTimer = 0;
+  let isIdle = false;
+  let idleFrameDelay = Math.floor(Math.random() * (900 - 300 + 1)) + 300;
 
   function drawPlayer() {
     let spriteRow;
-    if (isJumping) {
-      spriteRow = 2;
-    } else {
-      spriteRow = 1;
-    }
-
-    let totalFrames = isJumping ? JUMP_FRAMES : RUN_FRAMES;
-
-    let sourceY = (spriteRow - 1) * (SPRITE_HEIGHT + 150);
+    let totalFrames;
 
     const isBeyondSecondThird = playerX >= (2 * canvas.width) / 3;
 
-    if (
-      playerDirection !== 0 ||
-      isJumping ||
-      (isBeyondSecondThird && groundSpeed > 0)
-    ) {
+    if (isIdle && !isBeyondSecondThird) {
+      spriteRow = IDLE_ROW;
+      totalFrames = IDLE_FRAMES;
+    } else if (isJumping) {
+      spriteRow = 2;
+      totalFrames = JUMP_FRAMES;
+    } else {
+      spriteRow = 1;
+      totalFrames = RUN_FRAMES;
+    }
+
+    let sourceY = (spriteRow - 1) * (SPRITE_HEIGHT + SPRITE_ROW_SPACING);
+
+    if (isBeyondSecondThird || playerDirection !== 0 || isJumping) {
       frameCounter++;
       if (frameCounter >= 10) {
         currentFrame = (currentFrame + 1) % totalFrames;
         frameCounter = 0;
       }
+    } else if (isIdle) {
+      idleTimer++;
+      if (idleTimer >= idleFrameDelay) {
+        currentFrame = Math.floor(Math.random() * totalFrames);
+        idleTimer = 0;
+        idleFrameDelay = Math.floor(Math.random() * (900 - 300 + 1)) + 300;
+      }
     } else {
       currentFrame = 0;
-    }
-
-    if (playerDirection < 0) {
-      isFlipped = true;
-    } else if (playerDirection > 0) {
-      isFlipped = false;
     }
 
     ctx.save();
@@ -1869,15 +1886,15 @@ function gameStarted(game) {
     }
 
     ctx.drawImage(
-      spriteImage,
+      scaledSpriteImage,
       currentFrame * (SPRITE_WIDTH + SPRITE_SPACING),
       sourceY,
       SPRITE_WIDTH,
       SPRITE_HEIGHT,
       playerX,
-      playerY + 10,
-      playerWidth,
-      playerHeight
+      playerY,
+      playerWidth * 2,
+      playerHeight * 2 
     );
 
     ctx.restore();
@@ -1906,7 +1923,7 @@ function gameStarted(game) {
       let current = ground[i];
 
       let nextPlayerBottom = playerY + playerHeight + velocityY;
-      let groundY = canvas.height - groundHeight;
+      let groundY = canvas.height - 1.5*groundHeight;
 
       let isFallingOntoPlatform =
         playerY + playerHeight <= groundY &&
@@ -1915,7 +1932,7 @@ function gameStarted(game) {
         playerX < current.x + current.width;
 
       if (isFallingOntoPlatform) {
-        playerY = groundY - playerHeight;
+        playerY = groundY - playerHeight; 
         velocityY = 0;
         isJumping = false;
         wasOnGround = true;
@@ -1932,18 +1949,31 @@ function gameStarted(game) {
 
     playerX += playerSpeed * playerDirection;
     playerX = Math.max(0, Math.min(playerX, canvas.width / 1.5));
+
+    const isBeyondSecondThird = playerX >= (2 * canvas.width) / 3;
+    isIdle = playerDirection === 0 && !isJumping && !isBeyondSecondThird;
+
+    if (!isIdle) {
+      idleTimer = 0;
+    }
+
+    if (playerDirection < 0) {
+      isFlipped = true;
+    } else if (playerDirection > 0) {
+      isFlipped = false;
+    }
   }
 
   function jump() {
     let isGrounded = false;
-    let groundY = canvas.height - groundHeight - playerHeight;
+    let groundY = canvas.height - 1.5*groundHeight - playerHeight;
 
     if (playerY >= groundY - 1 && playerY <= groundY + 1) {
       isGrounded = true;
     } else {
       for (let i = 0; i < ground.length; i++) {
         let platform = ground[i];
-        let platformTop = canvas.height - groundHeight;
+        let platformTop = canvas.height - 1.5*groundHeight;
         let playerBottom = playerY + playerHeight;
 
         let isOnPlatform =
@@ -2163,6 +2193,15 @@ function gameStarted(game) {
   }
 
   function gameLoop() {
+    const isBeyondSecondThird = playerX >= (2 * canvas.width) / 3;
+
+    if (playerDirection === 0 && !isJumping && !isBeyondSecondThird) {
+      isIdle = true;
+    } else {
+      isIdle = false;
+      idleTimer = 0;
+    }
+
     draw();
   }
 

@@ -9,23 +9,27 @@ let buySound;
 let equiptSound;
 let playing = false;
 
+let gobalFalse = true;
+
 function toggleSound(location) {
-  let musicIcon = [...document.getElementsByClassName("music-button-icon")];
+  if (gobalFalse) {
+    let musicIcon = [...document.getElementsByClassName("music-button-icon")];
 
-  if (playing) {
-    musicIcon.forEach((e) => {
-      e.src = "img/sound-icon-off.png";
-    });
+    if (playing) {
+      musicIcon.forEach((e) => {
+        e.src = "img/sound-icon-off.png";
+      });
 
-    playing = false;
-    stopSound();
-  } else {
-    musicIcon.forEach((e) => {
-      e.src = "img/sound-icon-on.png";
-    });
+      playing = false;
+      stopSound();
+    } else {
+      musicIcon.forEach((e) => {
+        e.src = "img/sound-icon-on.png";
+      });
 
-    playing = true;
-    playSound(location);
+      playing = true;
+      playSound(location);
+    }
   }
 }
 
@@ -45,37 +49,43 @@ function stopSound() {
 }
 
 function playSound(location) {
-  let musicIcon = [...document.getElementsByClassName("music-button-icon")];
-  musicIcon.forEach((e) => {
-    e.src = "img/sound-icon-on.png";
-    playing = true;
-  });
+  if (gobalFalse) {
+    let musicIcon = [...document.getElementsByClassName("music-button-icon")];
+    musicIcon.forEach((e) => {
+      e.src = "img/sound-icon-on.png";
+      playing = true;
+    });
 
-  stopSound();
+    stopSound();
 
-  switch (location) {
-    case 0:
-      startScreenSound.play();
-      startScreenSound.loop = true;
-      break;
+    switch (location) {
+      case 0:
+        startScreenSound.play();
+        startScreenSound.loop = true;
+        break;
 
-    case 1:
-      inGameSound.play();
-      inGameSound.loop = true;
-      break;
+      case 1:
+        inGameSound.play();
+        inGameSound.loop = true;
+        break;
 
-    case 2:
-      deathSound.play();
-      break;
+      case 2:
+        deathSound.play();
+        break;
+    }
   }
 }
 
 function playInteractSound() {
-  interactSound.play();
+  if (gobalFalse) {
+    interactSound.play();
+  }
 }
 
 function playPickupSound() {
-  pickupSound.play();
+  if (gobalFalse) {
+    pickupSound.play();
+  }
 }
 
 function volumeOff() {
