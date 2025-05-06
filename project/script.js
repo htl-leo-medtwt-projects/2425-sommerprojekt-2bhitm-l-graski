@@ -536,7 +536,7 @@ function chooseGame() {
   body.innerHTML = "";
   body.removeAttribute("style");
 
-  console.log("chooseGame", playerData);
+  //console.log("chooseGame", playerData);
 
   body.style.backgroundImage = "url(img/classroom_load_better.png)";
   body.style.backgroundRepeat = "no-repeat";
@@ -820,7 +820,7 @@ function startGame(game) {
   body.innerHTML = "";
   body.removeAttribute("style");
 
-  console.log("startGame", playerData);
+  //console.log("startGame", playerData);
 
   body.style.backgroundImage = "url(img/classroom_load_better.png)";
   body.style.backgroundRepeat = "no-repeat";
@@ -947,7 +947,7 @@ function startGame(game) {
       savePlayerData();
     }
 
-    console.log(playerData);
+    //console.log(playerData);
   });
 
   nameButton.addEventListener("mouseover", () => {
@@ -1252,7 +1252,7 @@ function confirmScreen(game, text) {
 
   yesButton.addEventListener("click", () => {
     resetPlayerData(game);
-    console.log("resetPlayerData", playerData);
+    //console.log("resetPlayerData", playerData);
     chooseGame();
     if (playing) {
       playInteractSound();
@@ -1388,7 +1388,7 @@ function gameScreen(game) {
   forwardDiv.style.overflow = "hidden";
   forwardDiv.style.position = "absolute";
   forwardDiv.style.top = "27.5%";
-  forwardDiv.style.left = "45%";
+  forwardDiv.style.left = "55%";
   forwardDiv.style.transform = "translate(-50%, -50%)";
   forwardDiv.style.width = "64px";
   forwardDiv.style.height = "64px";
@@ -1421,7 +1421,7 @@ function gameScreen(game) {
   backwardDiv.style.overflow = "hidden";
   backwardDiv.style.position = "absolute";
   backwardDiv.style.top = "27.5%";
-  backwardDiv.style.left = "55%";
+  backwardDiv.style.left = "45%";
   backwardDiv.style.transform = "translate(-50%, -50%)";
   backwardDiv.style.width = "64px";
   backwardDiv.style.height = "64px";
@@ -1790,7 +1790,7 @@ function gameStarted(game) {
 
   let score = 0;
   let playerX = 0;
-  let playerY = canvas.height - 1.5*groundHeight - playerHeight;
+  let playerY = canvas.height - 1.5 * groundHeight - playerHeight;
   let playerSpeed = 6;
   let playerDirection = 0;
   let velocityY = 0;
@@ -1823,7 +1823,13 @@ function gameStarted(game) {
   spriteImage.onload = () => {
     scaledSpriteImage.width = spriteImage.width * 2;
     scaledSpriteImage.height = spriteImage.height * 2;
-    scaledSpriteCtx.drawImage(spriteImage, 0, 0, scaledSpriteImage.width, scaledSpriteImage.height);
+    scaledSpriteCtx.drawImage(
+      spriteImage,
+      0,
+      0,
+      scaledSpriteImage.width,
+      scaledSpriteImage.height
+    );
   };
 
   const SPRITE_WIDTH = 700;
@@ -1840,6 +1846,9 @@ function gameStarted(game) {
   let idleTimer = 0;
   let isIdle = false;
   let idleFrameDelay = Math.floor(Math.random() * (900 - 300 + 1)) + 300;
+
+  let coinImage = new Image();
+  coinImage.src = "img/brain.gif";
 
   function drawPlayer() {
     let spriteRow;
@@ -1894,7 +1903,7 @@ function gameStarted(game) {
       playerX,
       playerY,
       playerWidth * 2,
-      playerHeight * 2 
+      playerHeight * 2
     );
 
     ctx.restore();
@@ -1912,6 +1921,50 @@ function gameStarted(game) {
     });
   }
 
+  function drawCoins() {
+    ground.forEach((segment) => {
+      if (segment.coin && !segment.coin.element) {
+        const img = document.createElement("img");
+        img.src = "img/brain.gif";
+        img.style.position = "absolute";
+        img.style.width = "128px";
+        img.style.height = "128px";
+        img.style.left = `${segment.coin.x}px`;
+        img.style.top = `${segment.coin.y}px`;
+        img.style.pointerEvents = "none";
+
+        document.body.appendChild(img);
+        segment.coin.element = img;
+      } else if (segment.coin && segment.coin.element) {
+        segment.coin.element.style.left = `${segment.coin.x}px`;
+      }
+    });
+  }
+
+  function checkCoinCollision() {
+    ground.forEach((segment) => {
+      if (segment.coin) {
+        let coin = segment.coin;
+        if (
+          playerX < coin.x + 32 &&
+          playerX + playerWidth > coin.x &&
+          playerY < coin.y + 32 &&
+          playerY + playerHeight > coin.y
+        ) {
+          if (coin.element) document.body.removeChild(coin.element);
+          segment.coin = null;
+          playerData.Game[game - 1].Coins += 1;
+          savePlayerData();
+          coins.innerHTML = `: ${playerData.Game[game - 1].Coins}`;
+
+          if (playing) {
+            playPickupSound();
+          }
+        }
+      }
+    });
+  }
+
   function movePlayer() {
     let wasOnGround = false;
 
@@ -1923,7 +1976,7 @@ function gameStarted(game) {
       let current = ground[i];
 
       let nextPlayerBottom = playerY + playerHeight + velocityY;
-      let groundY = canvas.height - 1.5*groundHeight;
+      let groundY = canvas.height - 1.5 * groundHeight;
 
       let isFallingOntoPlatform =
         playerY + playerHeight <= groundY &&
@@ -1932,7 +1985,7 @@ function gameStarted(game) {
         playerX < current.x + current.width;
 
       if (isFallingOntoPlatform) {
-        playerY = groundY - playerHeight; 
+        playerY = groundY - playerHeight;
         velocityY = 0;
         isJumping = false;
         wasOnGround = true;
@@ -1966,14 +2019,14 @@ function gameStarted(game) {
 
   function jump() {
     let isGrounded = false;
-    let groundY = canvas.height - 1.5*groundHeight - playerHeight;
+    let groundY = canvas.height - 1.5 * groundHeight - playerHeight;
 
     if (playerY >= groundY - 1 && playerY <= groundY + 1) {
       isGrounded = true;
     } else {
       for (let i = 0; i < ground.length; i++) {
         let platform = ground[i];
-        let platformTop = canvas.height - 1.5*groundHeight;
+        let platformTop = canvas.height - 1.5 * groundHeight;
         let playerBottom = playerY + playerHeight;
 
         let isOnPlatform =
@@ -1996,17 +2049,30 @@ function gameStarted(game) {
   }
 
   function moveGround() {
-    for (let i = 0; i < ground.length; i++) {
-      ground[i].x -= groundSpeed;
-    }
+    ground.forEach((segment) => {
+      segment.x -= groundSpeed;
+      if (segment.coin) {
+        segment.coin.x -= groundSpeed;
+      }
+    });
 
     if (
       ground[ground.length - 1].x + ground[ground.length - 1].width <
       canvas.width
     ) {
       let width = Math.random() * (200 - 100) + 100;
-      let gap = Math.random() * (200 - 100) + 100;
-      ground.push({ x: canvas.width + gap, width: width });
+      let gap = Math.random() * (200 - 100) + 75;
+      let newSegment = { x: canvas.width + gap, width: width };
+      if (Math.random() < 0.5) {
+        newSegment.coin = {
+          x: newSegment.x + Math.random() * (width - 128),
+          y: canvas.height - groundHeight - 110,
+        };
+        //console.log("Coin spawned at:", newSegment.coin);
+      } else {
+        newSegment.coin = null;
+      }
+      ground.push(newSegment);
     }
 
     if (ground[0].x + ground[0].width < 0) {
@@ -2049,6 +2115,8 @@ function gameStarted(game) {
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawGround();
+    drawCoins();
+    checkCoinCollision();
 
     if (isGameOver && !gameOverShown) {
       gameOverShown = true;
@@ -2112,6 +2180,7 @@ function gameStarted(game) {
         gameStarted(game);
         if (playing) {
           playInteractSound();
+          playSound(1);
         }
       });
 

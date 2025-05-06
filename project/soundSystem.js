@@ -2,14 +2,13 @@ let startScreenSound = new Audio("sounds/start-screen.mp3");
 startScreenSound.volume = 0.7;
 let inGameSound = new Audio("sounds/in-game.mp3");
 inGameSound.volume = 0.4;
-let pickupSound = new Audio("sounds/pick-up.wav");
 let deathSound = new Audio("sounds/death.wav");
 let interactSound = new Audio("sounds/interact.wav");
 let buySound;
 let equiptSound;
 let playing = false;
 
-let gobalFalse = true;
+let gobalFalse = false;
 
 function toggleSound(location) {
   if (gobalFalse) {
@@ -37,9 +36,6 @@ function stopSound() {
   startScreenSound.pause();
 
   inGameSound.pause();
-
-  pickupSound.pause();
-  pickupSound.currentTime = 0;
 
   deathSound.pause();
   deathSound.currentTime = 0;
@@ -84,6 +80,7 @@ function playInteractSound() {
 
 function playPickupSound() {
   if (gobalFalse) {
+    let pickupSound = new Audio("sounds/pick-up.wav");
     pickupSound.play();
   }
 }
