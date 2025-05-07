@@ -2156,10 +2156,11 @@ function gameStarted(game) {
 
     /*
       fallen object spawn chance
-      standart: 0,05%
+      standard: 0,5%
       alle 250 score doppelte chance
     */
-    if (Math.random() < 0.0005 * (score % 250 + 1)) {
+   console.log(score)
+    if (Math.random() < 0.005 * (Math.floor(score / 250) + 1)) {
       spawnFallingObject();
     }
   }
