@@ -8,7 +8,11 @@ let PlayerBluePrint = {
   SpeedMultiplier: 1,
   ItemUnlocked: {
     Skins: {},
-    Layouts: {},
+    Items: {
+      Watch: false,
+      Eistee: false,
+      Crocs: false
+    },
   },
   Movement: {
     Forward: "w",
@@ -29,7 +33,11 @@ let playerData = {
       SpeedMultiplier: 1,
       ItemUnlocked: {
         Skins: {},
-        Layouts: {},
+        Items: {
+          Watch: false,
+          Eistee: false,
+          Crocs: false
+        },
       },
       Movement: {
         Forward: "w",
@@ -47,7 +55,11 @@ let playerData = {
       SpeedMultiplier: 1,
       ItemUnlocked: {
         Skins: {},
-        Layouts: {},
+        Items: {
+          Watch: false,
+          Eistee: false,
+          Crocs: false
+        },
       },
       Movement: {
         Forward: "w",
@@ -65,7 +77,11 @@ let playerData = {
       SpeedMultiplier: 1,
       ItemUnlocked: {
         Skins: {},
-        Layouts: {},
+        Items: {
+          Watch: false,
+          Eistee: false,
+          Crocs: false
+        },
       },
       Movement: {
         Forward: "w",

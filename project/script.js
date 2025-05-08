@@ -1179,8 +1179,6 @@ function startGame(game) {
   body.appendChild(musicButton);
 }
 
-
-
 function confirmScreen(game, text) {
   let backgroundDiv = document.createElement("div");
   let confirmHeader = document.createElement("h1");
@@ -1814,42 +1812,42 @@ function gameStarted(game) {
 
   let particles = [];
 
-class Particle {
-  constructor(x, y, color) {
-    this.x = x;
-    this.y = y;
-    this.size = Math.random() * 5 + 5;
-    this.speedX = (Math.random() - 0.5) * 8;
-    this.speedY = (Math.random() - 0.5) * 8;
-    this.color = color;
-    this.alpha = 1;
-    this.decay = 0.06;
+  class Particle {
+    constructor(x, y, color) {
+      this.x = x;
+      this.y = y;
+      this.size = Math.random() * 5 + 5;
+      this.speedX = (Math.random() - 0.5) * 8;
+      this.speedY = (Math.random() - 0.5) * 8;
+      this.color = color;
+      this.alpha = 1;
+      this.decay = 0.06;
+    }
+
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.alpha -= this.decay;
+      if (this.alpha < 0) this.alpha = 0;
+    }
+
+    draw(ctx) {
+      ctx.save();
+      ctx.globalAlpha = this.alpha;
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
   }
 
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    this.alpha -= this.decay;
-    if (this.alpha < 0) this.alpha = 0;
+  function spawnParticles(x, y, color) {
+    console.log(`Spawning particles at (${x}, ${y})`);
+    for (let i = 0; i < 20; i++) {
+      particles.push(new Particle(x, y, color));
+    }
   }
-
-  draw(ctx) {
-    ctx.save();
-    ctx.globalAlpha = this.alpha;
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-  }
-}
-
-function spawnParticles(x, y, color) {
-  console.log(`Spawning particles at (${x}, ${y})`);
-  for (let i = 0; i < 20; i++) {
-    particles.push(new Particle(x, y, color));
-  }
-}
 
   let groundImage = new Image();
   groundImage.src = "img/tisch.png";
@@ -2065,7 +2063,11 @@ function spawnParticles(x, y, color) {
     popUpOpen = true;
     gameOverShown = true;
     playerVisible = false;
-    spawnParticles(playerX + playerWidth / 2, playerY + playerHeight / 2,"#ff0000");
+    spawnParticles(
+      playerX + playerWidth / 2,
+      playerY + playerHeight / 2,
+      "#ff0000"
+    );
 
     if (playing) {
       playSound(2);
@@ -2337,7 +2339,7 @@ function spawnParticles(x, y, color) {
     }
   }
 
-function draw() {
+  function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     particles = particles.filter((p) => p.alpha > 0);
