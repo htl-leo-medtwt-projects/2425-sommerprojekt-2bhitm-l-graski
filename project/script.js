@@ -1179,6 +1179,8 @@ function startGame(game) {
   body.appendChild(musicButton);
 }
 
+
+
 function confirmScreen(game, text) {
   let backgroundDiv = document.createElement("div");
   let confirmHeader = document.createElement("h1");
@@ -1793,7 +1795,7 @@ function gameStarted(game) {
   let score = 0;
   let playerX = 0;
   let playerY = canvas.height - 1.5 * groundHeight - playerHeight + 14;
-  let playerSpeed = 6;
+  let playerSpeed = 6 * playerData.Game[game - 1].SpeedMultiplier;
   let playerDirection = 0;
   let velocityY = 0;
   let gravity = 0.8;
@@ -1809,6 +1811,45 @@ function gameStarted(game) {
   } else {
     highScoreShown = true;
   }
+
+  let particles = [];
+
+class Particle {
+  constructor(x, y, color) {
+    this.x = x;
+    this.y = y;
+    this.size = Math.random() * 5 + 5;
+    this.speedX = (Math.random() - 0.5) * 8;
+    this.speedY = (Math.random() - 0.5) * 8;
+    this.color = color;
+    this.alpha = 1;
+    this.decay = 0.06;
+  }
+
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.alpha -= this.decay;
+    if (this.alpha < 0) this.alpha = 0;
+  }
+
+  draw(ctx) {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+function spawnParticles(x, y, color) {
+  console.log(`Spawning particles at (${x}, ${y})`);
+  for (let i = 0; i < 20; i++) {
+    particles.push(new Particle(x, y, color));
+  }
+}
 
   let groundImage = new Image();
   groundImage.src = "img/tisch.png";
@@ -1886,6 +1927,7 @@ function gameStarted(game) {
         playerY < obj.y + 64 &&
         playerY + playerHeight > obj.y
       ) {
+        spawnParticles(obj.x + 32, obj.y + 32, "#fff");
         checkHealth();
         return false;
       }
@@ -2023,6 +2065,7 @@ function gameStarted(game) {
     popUpOpen = true;
     gameOverShown = true;
     playerVisible = false;
+    spawnParticles(playerX + playerWidth / 2, playerY + playerHeight / 2,"#ff0000");
 
     if (playing) {
       playSound(2);
@@ -2294,8 +2337,15 @@ function gameStarted(game) {
     }
   }
 
-  function draw() {
+function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles = particles.filter((p) => p.alpha > 0);
+    particles.forEach((p) => {
+      p.update();
+      p.draw(ctx);
+    });
+
     drawGround();
     drawCoins();
     drawFallingObjects();
