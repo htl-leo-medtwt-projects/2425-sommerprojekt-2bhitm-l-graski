@@ -4,8 +4,8 @@ let inGameSound = new Audio("sounds/in-game.mp3");
 inGameSound.volume = 0.4;
 let deathSound = new Audio("sounds/death.wav");
 let interactSound = new Audio("sounds/interact.wav");
+let shopSound
 let buySound;
-let equiptSound;
 let playing = false;
 
 let gobalFalse = false;
@@ -42,6 +42,7 @@ function stopSound() {
 
   interactSound.pause();
   interactSound.currentTime = 0;
+
 }
 
 function playSound(location) {
@@ -68,7 +69,10 @@ function playSound(location) {
       case 2:
         deathSound.play();
         break;
-    }
+
+        case 3:
+          break;
+    } 
   }
 }
 
@@ -82,6 +86,12 @@ function playPickupSound() {
   if (gobalFalse) {
     let pickupSound = new Audio("sounds/pick-up.wav");
     pickupSound.play();
+  }
+}
+
+function playBuySound() {
+  if (gobalFalse) {
+    buySound.play();
   }
 }
 

@@ -6,17 +6,19 @@ let PlayerBluePrint = {
   GlobalScoreMultiplier: 1,
   Life: 1,
   SpeedMultiplier: 1,
+  JumpPower: 0,
+  Sprite: "img/thomas_sprite_all.png",
   ItemUnlocked: {
     Skins: {},
     Items: {
-      Watch: false,
-      Eistee: false,
-      Crocs: false
+      0: false, // 0 = Watch
+      1: false, // 1 = Eistee
+      2: false, // 2 = Crocs
     },
   },
   Movement: {
-    Forward: "w",
-    Backward: "s",
+    Forward: "d",
+    Backward: "a",
     Jump: "space",
   },
 };
@@ -31,17 +33,19 @@ let playerData = {
       GlobalScoreMultiplier: 1,
       Life: 1,
       SpeedMultiplier: 1,
+      JumpPower: 0,
+      Sprite: "img/thomas_sprite_all.png",
       ItemUnlocked: {
         Skins: {},
         Items: {
-          Watch: false,
-          Eistee: false,
-          Crocs: false
+          0: false, // 0 = Watch
+          1: false, // 1 = Eistee
+          2: false, // 2 = Crocs
         },
       },
       Movement: {
-        Forward: "w",
-        Backward: "s",
+        Forward: "d",
+        Backward: "a",
         Jump: "space",
       },
     },
@@ -53,17 +57,19 @@ let playerData = {
       GlobalScoreMultiplier: 1,
       Life: 1,
       SpeedMultiplier: 1,
+      JumpPower: 0,
+      Sprite: "img/thomas_sprite_all.png",
       ItemUnlocked: {
         Skins: {},
         Items: {
-          Watch: false,
-          Eistee: false,
-          Crocs: false
+          0: false, // 0 = Watch
+          1: false, // 1 = Eistee
+          2: false, // 2 = Crocs
         },
       },
       Movement: {
-        Forward: "w",
-        Backward: "s",
+        Forward: "d",
+        Backward: "a",
         Jump: "space",
       },
     },
@@ -75,17 +81,19 @@ let playerData = {
       GlobalScoreMultiplier: 1,
       Life: 1,
       SpeedMultiplier: 1,
+      JumpPower: 0,
+      Sprite: "img/thomas_sprite_all.png",
       ItemUnlocked: {
         Skins: {},
         Items: {
-          Watch: false,
-          Eistee: false,
-          Crocs: false
+          0: false, // 0 = Watch
+          1: false, // 1 = Eistee
+          2: false, // 2 = Crocs
         },
       },
       Movement: {
-        Forward: "w",
-        Backward: "s",
+        Forward: "d",
+        Backward: "a",
         Jump: "space",
       },
     },
@@ -139,7 +147,7 @@ function resetAllPlayerData() {
     playerData.Game[i] = PlayerBluePrint;
   }
   savePlayerData();
-  console.log(playerData)
+  console.log(playerData);
 }
 
 function setData(data, name) {
