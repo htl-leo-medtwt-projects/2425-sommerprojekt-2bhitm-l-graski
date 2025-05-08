@@ -1634,6 +1634,8 @@ function gameScreen(game) {
 }
 
 function gameStarted(game) {
+  let lifes = playerData.Game[game - 1].Life;
+
   body.innerHTML = "";
   body.removeAttribute("style");
 
@@ -1858,7 +1860,7 @@ function gameStarted(game) {
 
   function spawnFallingObject() {
     const x = Math.random() * (canvas.width / 3) + (2 * canvas.width) / 3;
-    fallingObjects.push({ x, y: -100, speedX: -3, speedY: 4 }); 
+    fallingObjects.push({ x, y: -100, speedX: -3, speedY: 4 });
   }
 
   function drawFallingObjects() {
@@ -1877,17 +1879,17 @@ function gameStarted(game) {
   }
 
   function checkFallingObjectCollision() {
-    fallingObjects.forEach((obj) => {
+    fallingObjects = fallingObjects.filter((obj) => {
       if (
         playerX < obj.x + 64 &&
         playerX + playerWidth > obj.x &&
         playerY < obj.y + 64 &&
         playerY + playerHeight > obj.y
       ) {
-        playerVisible = false;
-        isGameOver = true;
-        
+        checkHealth();
+        return false;
       }
+      return true;
     });
   }
 
@@ -2009,11 +2011,138 @@ function gameStarted(game) {
     });
   }
 
+  function checkHealth() {
+    lifes -= 1;
+    if (lifes <= 0 && !gameOverShown) {
+      gameOver();
+    }
+  }
+
+  function gameOver() {
+    isGameOver = true;
+    popUpOpen = true;
+    gameOverShown = true;
+    playerVisible = false;
+
+    if (playing) {
+      playSound(2);
+    }
+
+    setTimeout(() => {
+      let gameOverText = document.createElement("h1");
+      gameOverText.innerHTML = "Game Over!";
+      gameOverText.style.color = "black";
+      gameOverText.style.fontFamily = "Uberschriften";
+      gameOverText.style.position = "absolute";
+      gameOverText.style.top = "30%";
+      gameOverText.style.left = "50%";
+      gameOverText.style.transform = "translate(-50%, -50%)";
+      gameOverText.style.fontSize = "50px";
+
+      let restartButton = document.createElement("button");
+      restartButton.style.display = "inline-block";
+      restartButton.style.borderRadius = "100px";
+      restartButton.style.overflow = "hidden";
+      restartButton.style.border = "none";
+      restartButton.style.backgroundColor = "transparent";
+      restartButton.style.position = "absolute";
+      restartButton.style.top = "37.5%";
+      restartButton.style.left = "57.5%";
+      restartButton.style.transform = "translate(-50%, -50%)";
+
+      let restartButtonImg = document.createElement("img");
+      restartButtonImg.src = "img/green_button.png";
+      restartButtonImg.style.height = "100%";
+      restartButtonImg.style.width = "100%";
+      restartButtonImg.style.display = "block";
+
+      let restartButtonText = document.createElement("p");
+      restartButtonText.innerHTML = "RESTART";
+      restartButtonText.style.display = "inline-block";
+      restartButtonText.style.fontFamily = "SF-Pro";
+      restartButtonText.style.color = "white";
+      restartButtonText.style.fontSize = "18px";
+      restartButtonText.style.position = "absolute";
+      restartButtonText.style.top = "50%";
+      restartButtonText.style.left = "50%";
+      restartButtonText.style.transform = "translate(-50%, -50%)";
+      restartButtonText.style.overflow = "hidden";
+
+      restartButton.addEventListener("mouseover", () => {
+        restartButton.style.cursor = "pointer";
+        restartButton.style.filter = "grayscale(50%)";
+      });
+
+      restartButton.addEventListener("mouseleave", () => {
+        restartButton.style.cursor = "auto";
+        restartButton.style.filter = "grayscale(0%)";
+      });
+
+      restartButton.addEventListener("click", () => {
+        popUpOpen = false;
+        gameStarted(game);
+        if (playing) {
+          playInteractSound();
+          playSound(1);
+        }
+      });
+
+      restartButton.appendChild(restartButtonImg);
+      restartButton.appendChild(restartButtonText);
+      body.appendChild(restartButton);
+
+      let backButton = document.createElement("button");
+      backButton.style.display = "inline-block";
+      backButton.style.overflow = "hidden";
+      backButton.style.position = "absolute";
+      backButton.style.top = "37.5%";
+      backButton.style.left = "42.5%";
+      backButton.style.transform = "translate(-50%, -50%)";
+      backButton.style.border = "2px solid black";
+      backButton.style.backgroundColor = "rgb(48, 47, 47)";
+      backButton.style.borderRadius = "25px";
+      backButton.style.width = "15%";
+      backButton.style.height = "8%";
+
+      let backButtonText = document.createElement("p");
+      backButtonText.innerHTML = "BACK";
+      backButtonText.style.fontFamily = "SF-Pro";
+      backButtonText.style.fontSize = "18px";
+      backButtonText.style.color = "white";
+
+      backButton.addEventListener("mouseover", () => {
+        backButton.style.cursor = "pointer";
+        backButton.style.backgroundColor = "rgb(30, 30, 30)";
+      });
+
+      backButton.addEventListener("mouseleave", () => {
+        backButton.style.cursor = "auto";
+        backButton.style.backgroundColor = "rgb(48, 47, 47)";
+      });
+
+      backButton.addEventListener("click", () => {
+        popUpOpen = false;
+        gameScreen(game);
+        if (playing) {
+          playSound(0);
+          playInteractSound();
+        }
+      });
+
+      backButton.appendChild(backButtonText);
+      body.appendChild(backButton);
+
+      body.appendChild(gameOverText);
+    }, 100);
+  }
+
   function movePlayer() {
     let wasOnGround = false;
 
     if (playerY > 3000) {
-      isGameOver = true;
+      if (!gameOverShown) {
+        gameOver();
+      }
     }
 
     for (let i = 0; i < ground.length; i++) {
@@ -2123,7 +2252,7 @@ function gameStarted(game) {
     }
 
     if (!isGameOver) {
-      score += 0.1;
+      score += 0.1 * playerData.Game[game - 1].GlobalScoreMultiplier;
       document.getElementById("score-text").innerHTML = `Score: ${Math.floor(
         score
       )}`;
@@ -2132,7 +2261,7 @@ function gameStarted(game) {
     if (score > playerData.Game[game - 1].BestScore) {
       playerData.Game[game - 1].BestScore = Math.floor(score);
       savePlayerData(game);
-    
+
       if (!highScoreShown) {
         highScoreShown = true;
 
@@ -2159,7 +2288,7 @@ function gameStarted(game) {
       standard: 0,5%
       alle 250 score doppelte chance
     */
-   console.log(score)
+
     if (Math.random() < 0.005 * (Math.floor(score / 250) + 1)) {
       spawnFallingObject();
     }
@@ -2172,122 +2301,6 @@ function gameStarted(game) {
     drawFallingObjects();
     checkCoinCollision();
     checkFallingObjectCollision();
-
-    if (isGameOver && !gameOverShown) {
-      gameOverShown = true;
-      popUpOpen = true;
-
-      if (playing) {
-        playSound(2);
-      }
-
-      setTimeout(() => {
-        let gameOverText = document.createElement("h1");
-        gameOverText.innerHTML = "Game Over!";
-        gameOverText.style.color = "black";
-        gameOverText.style.fontFamily = "Uberschriften";
-        gameOverText.style.position = "absolute";
-        gameOverText.style.top = "30%";
-        gameOverText.style.left = "50%";
-        gameOverText.style.transform = "translate(-50%, -50%)";
-        gameOverText.style.fontSize = "50px";
-
-        let restartButton = document.createElement("button");
-        restartButton.style.display = "inline-block";
-        restartButton.style.borderRadius = "100px";
-        restartButton.style.overflow = "hidden";
-        restartButton.style.border = "none";
-        restartButton.style.backgroundColor = "transparent";
-        restartButton.style.position = "absolute";
-        restartButton.style.top = "37.5%";
-        restartButton.style.left = "57.5%";
-        restartButton.style.transform = "translate(-50%, -50%)";
-
-        let restartButtonImg = document.createElement("img");
-        restartButtonImg.src = "img/green_button.png";
-        restartButtonImg.style.height = "100%";
-        restartButtonImg.style.width = "100%";
-        restartButtonImg.style.display = "block";
-
-        let restartButtonText = document.createElement("p");
-        restartButtonText.innerHTML = "RESTART";
-        restartButtonText.style.display = "inline-block";
-        restartButtonText.style.fontFamily = "SF-Pro";
-        restartButtonText.style.color = "white";
-        restartButtonText.style.fontSize = "18px";
-        restartButtonText.style.position = "absolute";
-        restartButtonText.style.top = "50%";
-        restartButtonText.style.left = "50%";
-        restartButtonText.style.transform = "translate(-50%, -50%)";
-        restartButtonText.style.overflow = "hidden";
-
-        restartButton.addEventListener("mouseover", () => {
-          restartButton.style.cursor = "pointer";
-          restartButton.style.filter = "grayscale(50%)";
-        });
-
-        restartButton.addEventListener("mouseleave", () => {
-          restartButton.style.cursor = "auto";
-          restartButton.style.filter = "grayscale(0%)";
-        });
-
-        restartButton.addEventListener("click", () => {
-          popUpOpen = false;
-          gameStarted(game);
-          if (playing) {
-            playInteractSound();
-            playSound(1);
-          }
-        });
-
-        restartButton.appendChild(restartButtonImg);
-        restartButton.appendChild(restartButtonText);
-        body.appendChild(restartButton);
-
-        let backButton = document.createElement("button");
-        backButton.style.display = "inline-block";
-        backButton.style.overflow = "hidden";
-        backButton.style.position = "absolute";
-        backButton.style.top = "37.5%";
-        backButton.style.left = "42.5%";
-        backButton.style.transform = "translate(-50%, -50%)";
-        backButton.style.border = "2px solid black";
-        backButton.style.backgroundColor = "rgb(48, 47, 47)";
-        backButton.style.borderRadius = "25px";
-        backButton.style.width = "15%";
-        backButton.style.height = "8%";
-
-        let backButtonText = document.createElement("p");
-        backButtonText.innerHTML = "BACK";
-        backButtonText.style.fontFamily = "SF-Pro";
-        backButtonText.style.fontSize = "18px";
-        backButtonText.style.color = "white";
-
-        backButton.addEventListener("mouseover", () => {
-          backButton.style.cursor = "pointer";
-          backButton.style.backgroundColor = "rgb(30, 30, 30)";
-        });
-
-        backButton.addEventListener("mouseleave", () => {
-          backButton.style.cursor = "auto";
-          backButton.style.backgroundColor = "rgb(48, 47, 47)";
-        });
-
-        backButton.addEventListener("click", () => {
-          popUpOpen = false;
-          gameScreen(game);
-          if (playing) {
-            playSound(0);
-            playInteractSound();
-          }
-        });
-
-        backButton.appendChild(backButtonText);
-        body.appendChild(backButton);
-
-        body.appendChild(gameOverText);
-      }, 100);
-    }
 
     drawPlayer();
     movePlayer();
