@@ -17,12 +17,33 @@ document.addEventListener("keydown", function (event) {
 
 document.addEventListener("keydown", function (event) {
   if (event.key === "c") {
-//confirmScreen(-1, resetConfirmText);
-//settingsButton(1);
-//volumeOff();
+    //confirmScreen(-1, resetConfirmText);
+    //settingsButton(1);
+    //volumeOff();
     shop(-1);
   }
 });
+
+function openMenuAnimation(element) {
+  gsap.fromTo(
+    element,
+    { scale: 0, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 0.5, ease: "power2.out" }
+  );
+}
+
+function closeMenuAnimation(element, onComplete) {
+  gsap.to(element, {
+    scale: 0,
+    opacity: 0,
+    duration: 0.5,
+    ease: "power2.in",
+    onComplete: () => {
+      if (onComplete) onComplete();
+    },
+  });
+}
+
 
 function settingsButton(game, currentScreen) {
   let settingButton = document.createElement("button");
@@ -67,15 +88,8 @@ function settingsButton(game, currentScreen) {
 
   settingButton.addEventListener("click", () => {
     if (!popUpOpen) {
-      gsap.fromTo(
-        settingButton,
-        { scale: 1 },
-        {
-          scale: 1.2,
-          duration: 0.2,
-          yoyo: true,
-          repeat: 1,
-          onComplete: () => {
+        
+          
             popUpOpen = true;
 
             if (playing) {
@@ -193,7 +207,8 @@ function settingsButton(game, currentScreen) {
 
             let forwardButtonInput = document.createElement("Input");
             forwardButtonInput.type = "text";
-            forwardButtonInput.value = playerData.Game[game - 1].Movement.Forward;
+            forwardButtonInput.value =
+              playerData.Game[game - 1].Movement.Forward;
             forwardButtonInput.style.display = "inline-block";
             forwardButtonInput.style.overflow = "hidden";
             forwardButtonInput.style.position = "absolute";
@@ -238,7 +253,8 @@ function settingsButton(game, currentScreen) {
             forwardButtonInput.addEventListener("input", () => {
               let forwardKey = document.getElementById("forwardText");
               if (forwardButtonInput.value != "") {
-                playerData.Game[game - 1].Movement.Forward = forwardButtonInput.value;
+                playerData.Game[game - 1].Movement.Forward =
+                  forwardButtonInput.value;
                 forwardKey.innerHTML = forwardButtonInput.value;
                 savePlayerData();
               } else {
@@ -246,7 +262,7 @@ function settingsButton(game, currentScreen) {
                 forwardKey.innerHTML = "w";
                 savePlayerData();
               }
-//console.log(playerData);
+              //console.log(playerData);
             });
 
             let backwardText = document.createElement("p");
@@ -273,7 +289,8 @@ function settingsButton(game, currentScreen) {
 
             let backwardButtonInput = document.createElement("Input");
             backwardButtonInput.type = "text";
-            backwardButtonInput.value = playerData.Game[game - 1].Movement.Backward;
+            backwardButtonInput.value =
+              playerData.Game[game - 1].Movement.Backward;
             backwardButtonInput.style.display = "inline-block";
             backwardButtonInput.style.overflow = "hidden";
             backwardButtonInput.style.position = "absolute";
@@ -327,7 +344,7 @@ function settingsButton(game, currentScreen) {
                 backwardKey.innerHTML = "s";
                 savePlayerData();
               }
-//console.log(playerData);
+              //console.log(playerData);
             });
 
             let jumpText = document.createElement("p");
@@ -407,7 +424,7 @@ function settingsButton(game, currentScreen) {
                 jumpKey.innerHTML = "space";
                 savePlayerData();
               }
-//console.log(playerData);
+              //console.log(playerData);
             });
 
             let resumeButton = document.createElement("button");
@@ -449,8 +466,10 @@ function settingsButton(game, currentScreen) {
             });
 
             resumeButton.addEventListener("click", () => {
-              body.removeChild(backgroundDiv);
-              popUpOpen = false;
+              closeMenuAnimation(backgroundDiv, () => {
+                body.removeChild(backgroundDiv);
+                popUpOpen = false;
+              });
 
               if (playing) {
                 playInteractSound();
@@ -487,22 +506,24 @@ function settingsButton(game, currentScreen) {
             });
 
             backButton.addEventListener("click", () => {
-              if (currentScreen == 1) {
-                chooseGame(game);
-              } else if (currentScreen == 2) {
-                chooseGame(game);
-              } else if (currentScreen == 3) {
-                startGame(game);
-              } else if (currentScreen == 4) {
-                gameScreen(game);
-              }
+              closeMenuAnimation(backgroundDiv, () => {
+                if (currentScreen == 1) {
+                  chooseGame(game);
+                } else if (currentScreen == 2) {
+                  chooseGame(game);
+                } else if (currentScreen == 3) {
+                  startGame(game);
+                } else if (currentScreen == 4) {
+                  gameScreen(game);
+                }
 
-              if (playing) {
-                playSound(0);
-                playInteractSound();
-              }
+                if (playing) {
+                  playSound(0);
+                  playInteractSound();
+                }
 
-              popUpOpen = false;
+                popUpOpen = false;
+              });
             });
 
             backgroundDiv.appendChild(settingsHeader);
@@ -535,11 +556,13 @@ function settingsButton(game, currentScreen) {
 
             backgroundDiv.appendChild(keyDiv);
             body.appendChild(backgroundDiv);
-          },
+
+            openMenuAnimation(backgroundDiv);
+          }
         }
       );
-    }
-  });
+    
+  
 
   settingButton.appendChild(settingButtonImg);
   settingButton.appendChild(settingButtonIcon);
@@ -1025,6 +1048,7 @@ function startGame(game) {
 
   resetButton.addEventListener("click", () => {
     if (!popUpOpen) {
+      
       confirmScreen(game, resetConfirmText);
       if (playing) {
         playInteractSound();
@@ -1035,7 +1059,7 @@ function startGame(game) {
   resetButton.appendChild(resetButtonImg);
   resetButton.appendChild(resetButtonText);
   body.appendChild(resetButton);
-
+  
   let backButton = document.createElement("button");
   let backButtonImg = document.createElement("img");
   let backImg = document.createElement("img");
@@ -1259,13 +1283,15 @@ function confirmScreen(game, text) {
   });
 
   yesButton.addEventListener("click", () => {
-    resetPlayerData(game);
-    //console.log("resetPlayerData", playerData);
-    chooseGame();
+    closeMenuAnimation(backgroundDiv, () => {
+      resetPlayerData(game);
+      chooseGame();
+      popUpOpen = false;
+    });
+
     if (playing) {
       playInteractSound();
     }
-    popUpOpen = false;
   });
 
   noText.innerHTML = "No, Keep Profil";
@@ -1296,8 +1322,11 @@ function confirmScreen(game, text) {
   });
 
   noButton.addEventListener("click", () => {
-    body.removeChild(backgroundDiv);
-    popUpOpen = false;
+    closeMenuAnimation(backgroundDiv, () => {
+      body.removeChild(backgroundDiv);
+      popUpOpen = false;
+    });
+
     if (playing) {
       playInteractSound();
     }
@@ -1311,6 +1340,8 @@ function confirmScreen(game, text) {
   yesButton.appendChild(yesText);
   backgroundDiv.appendChild(yesButton);
   body.appendChild(backgroundDiv);
+
+  openMenuAnimation(backgroundDiv);
 }
 
 function gameScreen(game) {
@@ -1627,7 +1658,7 @@ function gameScreen(game) {
   coinsImg.style.overflow = "hidden";
 
   let coins = document.createElement("p");
-  coins.id = "coinDisplay"
+  coins.id = "coinDisplay";
   coins.innerHTML = `: ${playerData.Game[game - 1].Coins}`;
   coins.style.display = "inline-block";
   coins.style.fontFamily = "SF-Pro";
@@ -1764,8 +1795,11 @@ function shop(game) {
   });
 
   backButton.addEventListener("click", () => {
-    body.removeChild(shopBackground);
-    body.removeChild(shopDiv);
+    closeMenuAnimation(shopDiv, () => {
+      body.removeChild(shopBackground);
+      body.removeChild(shopDiv);
+    });
+
     if (playing) {
       playInteractSound();
       playSound(0);
@@ -1827,7 +1861,9 @@ function shop(game) {
     itemPrice.style.color = "white";
 
     let buyButton = document.createElement("button");
-    buyButton.innerHTML = playerData.Game[game - 1].ItemUnlocked.Items[id] ? "Bought" : "Buy";
+    buyButton.innerHTML = playerData.Game[game - 1].ItemUnlocked.Items[id]
+      ? "Bought"
+      : "Buy";
     buyButton.style.fontFamily = "SF-Pro";
     buyButton.style.color = "#fff";
     buyButton.style.padding = "10px 20px";
@@ -1838,7 +1874,6 @@ function shop(game) {
     buyButton.style.borderRadius = "12px";
     buyButton.style.boxShadow = "0px 0px 15px 2px rgba(255,255,255,0.25)";
 
-
     buyButton.addEventListener("mouseover", () => {
       buyButton.style.cursor = "pointer";
       buyButton.style.background = "linear-gradient(145deg, #2a2a2a, #1a1a1a)";
@@ -1848,32 +1883,40 @@ function shop(game) {
     });
 
     buyButton.addEventListener("click", () => {
-      if (playerData.Game[game - 1].Coins >= price && !playerData.Game[game - 1].ItemUnlocked.Items[id]) {
+      if (
+        playerData.Game[game - 1].Coins >= price &&
+        !playerData.Game[game - 1].ItemUnlocked.Items[id]
+      ) {
         buyButton.innerHTML = "Bought";
         playerData.Game[game - 1].ItemUnlocked.Items[id] = true;
         playerData.Game[game - 1].Coins -= price;
         savePlayerData(game);
-        document.getElementById("coinDisplay").innerHTML = `: ${playerData.Game[game - 1].Coins}`;
-        alert("You bought the item!"+playerData.Game[game - 1].ItemUnlocked.Items[id]);
+        document.getElementById("coinDisplay").innerHTML = `: ${
+          playerData.Game[game - 1].Coins
+        }`;
+        alert(
+          "You bought the item!" +
+            playerData.Game[game - 1].ItemUnlocked.Items[id]
+        );
 
-          switch (id) {
-            case 0:
-              playerData.Game[game - 1].GlobalScoreMultiplier += 1;
-              savePlayerData();
-              break;
-            case 1:
-              console.log("Eistee unlocked!");
-              savePlayerData();
-              break;
-            case 2:
-              playerData.Game[game - 1].SpeedMultiplier += 0.1;
-              playerData.Game[game - 1].JumpPower -= -5;
-              savePlayerData();
-              break;
-          }
-      }else if (playerData.Game[game - 1].ItemUnlocked.Items[id]) {
+        switch (id) {
+          case 0:
+            playerData.Game[game - 1].GlobalScoreMultiplier += 1;
+            savePlayerData();
+            break;
+          case 1:
+            console.log("Eistee unlocked!");
+            savePlayerData();
+            break;
+          case 2:
+            playerData.Game[game - 1].SpeedMultiplier += 0.1;
+            playerData.Game[game - 1].JumpPower -= -5;
+            savePlayerData();
+            break;
+        }
+      } else if (playerData.Game[game - 1].ItemUnlocked.Items[id]) {
         showShopMessage("You already bought this item!");
-      }else if (playerData.Game[game - 1].Coins < price) {
+      } else if (playerData.Game[game - 1].Coins < price) {
         showShopMessage("You don't have enough coins to buy this item!");
       }
 
@@ -1890,9 +1933,8 @@ function shop(game) {
   }
 
   createShopItem("img/uhr.png", 1, "Rolex Datejust 43", 0);
-  createShopItem("img/crocs.png", 2, "Lightning McQueen Crocs" , 2);
+  createShopItem("img/crocs.png", 2, "Lightning McQueen Crocs", 2);
   createShopItem("img/eistee.png", 300, "Eistee Pfirsich", 3);
-  
 
   body.appendChild(shopBackground);
   shopDiv.appendChild(shopHeader);
@@ -1902,6 +1944,8 @@ function shop(game) {
   shopDiv.appendChild(backButton);
   shopDiv.appendChild(shopBody);
   body.appendChild(shopDiv);
+
+  openMenuAnimation(shopDiv);
 }
 
 function gameStarted(game) {
@@ -2383,23 +2427,23 @@ function gameStarted(game) {
       backButton.style.borderRadius = "25px";
       backButton.style.width = "15%";
       backButton.style.height = "8%";
-  
+
       let backButtonText = document.createElement("p");
       backButtonText.innerHTML = "BACK";
       backButtonText.style.fontFamily = "SF-Pro";
       backButtonText.style.fontSize = "18px";
       backButtonText.style.color = "white";
-  
+
       backButton.addEventListener("mouseover", () => {
         backButton.style.cursor = "pointer";
         backButton.style.backgroundColor = "rgb(30, 30, 30)";
       });
-  
+
       backButton.addEventListener("mouseleave", () => {
         backButton.style.cursor = "auto";
         backButton.style.backgroundColor = "rgb(48, 47, 47)";
       });
-  
+
       backButton.addEventListener("click", () => {
         popUpOpen = false;
         gameScreen(game);
@@ -2408,10 +2452,10 @@ function gameStarted(game) {
           playInteractSound();
         }
       });
-  
+
       backButton.appendChild(backButtonText);
       body.appendChild(backButton);
-  
+
       gsap.fromTo(
         backButton,
         { scale: 0, opacity: 0 },
@@ -2422,25 +2466,25 @@ function gameStarted(game) {
 
   function movePlayer() {
     let wasOnGround = false;
-  
+
     if (playerY > canvas.height - 25) {
       if (!gameOverShown) {
         gameOver();
       }
     }
-  
+
     for (let i = 0; i < ground.length; i++) {
       let current = ground[i];
-  
+
       let nextPlayerBottom = playerY + playerHeight + velocityY;
       let groundY = canvas.height - 1.5 * groundHeight + 14;
-  
+
       let isFallingOntoPlatform =
         playerY + playerHeight <= groundY &&
         nextPlayerBottom >= groundY &&
         playerX + playerWidth > current.x &&
         playerX < current.x + current.width;
-  
+
       if (isFallingOntoPlatform) {
         playerY = groundY - playerHeight;
         velocityY = 0;
@@ -2449,25 +2493,25 @@ function gameStarted(game) {
         break;
       }
     }
-  
+
     if (!wasOnGround) {
       velocityY += gravity;
       velocityY = Math.min(velocityY, 20);
       isJumping = true;
     }
-  
+
     playerY += velocityY;
-  
+
     playerX += playerSpeed * playerDirection;
     playerX = Math.max(0, Math.min(playerX, canvas.width / 1.5));
-  
+
     const isBeyondSecondThird = playerX >= (2 * canvas.width) / 3;
     isIdle = playerDirection === 0 && !isJumping && !isBeyondSecondThird;
-  
+
     if (!isIdle) {
       idleTimer = 0;
     }
-  
+
     if (playerDirection < 0) {
       isFlipped = true;
     } else if (playerDirection > 0) {
@@ -2515,7 +2559,7 @@ function gameStarted(game) {
     });
 
     if (
-      ground[ground.length - 1].x + ground[ground.length - 1].width < 
+      ground[ground.length - 1].x + ground[ground.length - 1].width <
       canvas.width
     ) {
       let width = Math.random() * (200 - 100) + 100;
