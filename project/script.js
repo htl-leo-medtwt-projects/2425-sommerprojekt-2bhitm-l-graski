@@ -2071,6 +2071,8 @@ function gameStarted(game) {
   let gravity = 0.8;
   let jumpPower = -17.5 - playerData.Game[game - 1].JumpPower;
   let isJumping = false;
+  let jumpCount = 0; // Track number of jumps
+
   let isGameOver = false;
   let gameOverShown = false;
   let highScoreShown;
@@ -2497,6 +2499,7 @@ function gameStarted(game) {
         playerY = groundY - playerHeight;
         velocityY = 0;
         isJumping = false;
+        jumpCount = 0;
         wasOnGround = true;
         break;
       }
@@ -2552,11 +2555,18 @@ function gameStarted(game) {
       }
     }
 
-    if (isGrounded && !isJumping) {
+    if (isGrounded) {
       velocityY = jumpPower;
       isJumping = true;
+      jumpCount = 1;
+    } else if (
+      !isGrounded &&
+      jumpCount === 1 &&
+      playerData.Game[game - 1].ItemUnlocked.Items[3]
+    ) {
+      velocityY = jumpPower;
+      jumpCount++;
     }
-    
   }
 
   function moveGround() {
