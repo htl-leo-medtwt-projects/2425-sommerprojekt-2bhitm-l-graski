@@ -2071,8 +2071,7 @@ function gameStarted(game) {
   let gravity = 0.8;
   let jumpPower = -17.5 - playerData.Game[game - 1].JumpPower;
   let isJumping = false;
-  let jumpCount = 0; // Track number of jumps
-
+  let jumpCount = 0;
   let isGameOver = false;
   let gameOverShown = false;
   let highScoreShown;
@@ -2305,9 +2304,9 @@ function gameStarted(game) {
       if (segment.coin) {
         let coin = segment.coin;
         if (
-          playerX < coin.x + 32 &&
+          playerX < coin.x + 128 &&
           playerX + playerWidth > coin.x &&
-          playerY < coin.y + 32 &&
+          playerY < coin.y + 128 &&
           playerY + playerHeight > coin.y
         ) {
           if (coin.element) document.body.removeChild(coin.element);
@@ -2501,6 +2500,7 @@ function gameStarted(game) {
         isJumping = false;
         jumpCount = 0;
         wasOnGround = true;
+        
         break;
       }
     }
@@ -2564,6 +2564,11 @@ function gameStarted(game) {
       jumpCount === 1 &&
       playerData.Game[game - 1].ItemUnlocked.Items[3]
     ) {
+      spawnParticles(
+          playerX + playerWidth / 2,
+          playerY + 1.5*playerHeight,
+          "#8C7F6B"
+        );
       velocityY = jumpPower;
       jumpCount++;
     }
