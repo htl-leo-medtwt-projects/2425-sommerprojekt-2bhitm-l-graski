@@ -36,7 +36,7 @@ function closeMenuAnimation(element, onComplete) {
   gsap.to(element, {
     scale: 0,
     opacity: 0,
-    duration: 0.5,
+    duration: 0.25,
     ease: "power2.in",
     onComplete: () => {
       if (onComplete) onComplete();
@@ -1768,7 +1768,7 @@ function shop(game) {
   backImg.style.display = "block";
   backImg.style.position = "absolute";
   backImg.style.top = "50%";
-  backImg.style.left = "20%";
+  backImg.style.right = "20%";
   backImg.style.transform = "translate(-50%, -50%)";
 
   backButtonText.innerHTML = "BACK";
@@ -1852,6 +1852,27 @@ function shop(game) {
     itemName.style.fontSize = "25px";
     itemName.style.marginBottom = "10px";
 
+    let info = document.createElement("img");
+    info.src = "img/info-i.png";
+    info.style.display = "flex";
+    info.style.width = "36px";
+    info.style.height = "36px";
+    info.style.position = "absolute";
+    info.style.top = "-10%";
+    info.style.right = "-10%";
+    info.style.cursor = "pointer";
+
+    info.addEventListener("click", () => {
+      let discription = [
+        "With its precise movement, striking design, and unmistakable aura\n of excellence, the Rolex Datejust 43 ensures your achievements count twice. A must-have\n for anyone who values ​​class and efficiency.\n This item doubles your Score!",
+        "These bright red Crocs, designed by the legendary Lightning McQueen, give you unimagined powers:\n With every step, you'll run faster and jump higher than you ever thought possible. Inspired by\n Radiator Springs' fastest car, they'll catapult you to the top.\n This item increases your speed by 10% and jump power by 5!",
+        "Refreshing, fruity, and full of energy: This Eistea Pfirsich gives you the boost you need\n for a second jump!\n Allows you to perform a double jump.",
+      ];
+    });
+
+    let itemImgDiv = document.createElement("div");
+    itemImgDiv.style.position = "relative";
+
     let itemImg = document.createElement("img");
     itemImg.src = img;
     itemImg.style.width = "128px";
@@ -1932,7 +1953,9 @@ function shop(game) {
     });
 
     itemDiv.appendChild(itemName);
-    itemDiv.appendChild(itemImg);
+    itemImgDiv.appendChild(info);
+    itemImgDiv.appendChild(itemImg);
+    itemDiv.appendChild(itemImgDiv);
     itemDiv.appendChild(itemPrice);
     itemDiv.appendChild(buyButton);
 
@@ -1941,7 +1964,7 @@ function shop(game) {
 
   createShopItem("img/uhr.png", 1, "Rolex Datejust 43", 0);
   createShopItem("img/crocs.png", 2, "Lightning McQueen Crocs", 2);
-  createShopItem("img/eistee.png", 300, "Eistee Pfirsich", 3);
+  createShopItem("img/eistee.png", 3, "Eistee Pfirsich", 3);
 
   body.appendChild(shopBackground);
   shopDiv.appendChild(shopHeader);
@@ -2176,7 +2199,9 @@ function gameStarted(game) {
 
   function drawFallingObjects() {
     fallingObjects.forEach((obj) => {
-      ctx.drawImage(fallingImage, obj.x, obj.y, 64, 64);
+      const img = new Image();
+      img.src = obj.image || "img/sew-test-note.png";
+      ctx.drawImage(img, obj.x, obj.y, 64, 64);
     });
   }
 
@@ -2192,14 +2217,27 @@ function gameStarted(game) {
   function checkFallingObjectCollision() {
     fallingObjects = fallingObjects.filter((obj) => {
       if (
+        !obj.collided &&
         playerX < obj.x + 64 &&
         playerX + playerWidth > obj.x &&
         playerY < obj.y + 64 &&
         playerY + playerHeight > obj.y
       ) {
-        spawnParticles(obj.x + 32, obj.y + 32, "#fff");
-        checkHealth();
-        return false;
+        if (Math.round(Math.random() * 100) === 1) {
+          obj.collided = true;
+          obj.image = "img/sew-test-note-1.png";
+          obj.speedX = 5;
+          obj.speedY = -2;
+          spawnParticles(obj.x + 32, obj.y + 32, "#00ff06");
+          lifes += 1;
+          console.log(lifes);
+          return true;
+        } else {
+          spawnParticles(obj.x + 32, obj.y + 32, "#ff0000");
+          checkHealth();
+          console.log(lifes);
+          return false;
+        }
       }
       return true;
     });
@@ -2371,8 +2409,8 @@ function gameStarted(game) {
       restartButton.style.border = "none";
       restartButton.style.backgroundColor = "transparent";
       restartButton.style.position = "absolute";
-      restartButton.style.top = "40%";
-      restartButton.style.left = "58%";
+      restartButton.style.top = "36%";
+      restartButton.style.left = "50%";
       restartButton.style.transform = "translate(-50%, -50%)";
 
       let restartButtonImg = document.createElement("img");
@@ -2500,7 +2538,7 @@ function gameStarted(game) {
         isJumping = false;
         jumpCount = 0;
         wasOnGround = true;
-        
+
         break;
       }
     }
@@ -2565,10 +2603,10 @@ function gameStarted(game) {
       playerData.Game[game - 1].ItemUnlocked.Items[3]
     ) {
       spawnParticles(
-          playerX + playerWidth / 2,
-          playerY + 1.5*playerHeight,
-          "#8C7F6B"
-        );
+        playerX + playerWidth / 2,
+        playerY + 1.5 * playerHeight,
+        "#8C7F6B"
+      );
       velocityY = jumpPower;
       jumpCount++;
     }
