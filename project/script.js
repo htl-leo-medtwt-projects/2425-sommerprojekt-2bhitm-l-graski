@@ -1721,6 +1721,8 @@ function showShopMessage(message) {
 }
 
 function shop(game) {
+  let window = 0;
+
   if (playing) {
     playSound(3);
   }
@@ -1806,14 +1808,27 @@ function shop(game) {
   });
 
   backButton.addEventListener("click", () => {
-    closeMenuAnimation(shopDiv, () => {
-      body.removeChild(shopBackground);
-      body.removeChild(shopDiv);
-    });
+    switch (window) {
+      case 0:
+        closeMenuAnimation(shopDiv, () => {
+          body.removeChild(shopBackground);
+          body.removeChild(shopDiv);
+        });
 
-    if (playing) {
-      playInteractSound();
-      playSound(0);
+        if (playing) {
+          playInteractSound();
+          playSound(0);
+        }
+        break;
+
+      case 1:
+        window = 0;
+        shopBody.style.transform = "rotateY(360deg)";
+        setTimeout(() => {
+          shopBody.innerHTML = "";
+          addItems();
+        }, 250);
+        break;
     }
   });
 
@@ -1830,6 +1845,10 @@ function shop(game) {
   shopBody.style.backgroundColor = "#141414";
   shopBody.style.border = "7.5px solid rgb(0,0,0,0.85)";
   shopBody.style.borderRadius = "25px";
+  shopBody.style.transition = "transform 0.8s";
+  shopBody.style.transformStyle = "preserve-3d";
+  shopBody.style.perspective = "1000px";
+  shopBody.style.overflowY = "auto";
 
   function createShopItem(img, price, name, id) {
     let itemDiv = document.createElement("div");
@@ -1840,7 +1859,7 @@ function shop(game) {
     itemDiv.style.flexDirection = "column";
     //itemDiv.style.flex = "0 0 33.33%";
     itemDiv.style.padding = "10px";
-    itemDiv.style.marginTop = "25px";
+    itemDiv.style.marginTop = "20px";
     itemDiv.style.backgroundColor = "rgba(11, 11, 11, 0.5)";
     itemDiv.style.border = "5px solid rgb(10,10,10,0.75)";
     itemDiv.style.borderRadius = "25px";
@@ -1863,13 +1882,38 @@ function shop(game) {
     info.style.cursor = "pointer";
 
     info.addEventListener("click", () => {
-      let discription = [
-        "With its precise movement, striking design, and unmistakable aura\n of excellence, the Rolex Datejust 43 ensures your achievements count twice. A must-have\n for anyone who values ​​class and efficiency.\n This item doubles your Score!",
+      window = 1;
+      let description = [
+        "With its precise movement, striking design, and unmistakable aura\n of excellence, the Rolex Datejust 41 ensures your achievements count twice. A must-have\n for anyone who values ​​class and efficiency.\n This item doubles your Score!",
         "These bright red Crocs, designed by the legendary Lightning McQueen, give you unimagined powers:\n With every step, you'll run faster and jump higher than you ever thought possible. Inspired by\n Radiator Springs' fastest car, they'll catapult you to the top.\n This item increases your speed by 10% and jump power by 5!",
         "Refreshing, fruity, and full of energy: This Eistea Pfirsich gives you the boost you need\n for a second jump!\n Allows you to perform a double jump.",
       ];
 
-      
+      shopBody.style.transform = "rotateY(180deg)";
+      setTimeout(() => {
+        shopBody.innerHTML = "";
+        let descriptionDiv = document.createElement("div");
+        descriptionDiv.style.transform = "rotateY(180deg)";
+
+        let descriptionHeader = document.createElement("h1");
+        descriptionHeader.innerHTML = name;
+        descriptionHeader.style.color = "white";
+        descriptionHeader.style.fontFamily = "SF-Pro";
+        descriptionHeader.style.fontSize = "25px";
+        descriptionHeader.style.fontWeight = "bolder";
+
+        let descriptionText = document.createElement("p");
+        descriptionText.innerHTML = description[id];
+        descriptionText.style.color = "white";
+        descriptionText.style.fontFamily = "SF-Pro";
+        descriptionText.style.fontSize = "20px";
+        descriptionText.style.margin = "10px";
+        descriptionText.style.fontWeight = "bolder";
+
+        descriptionDiv.appendChild(descriptionHeader);
+        descriptionDiv.appendChild(descriptionText);
+        shopBody.appendChild(descriptionDiv);
+      }, 250);
     });
 
     let itemImgDiv = document.createElement("div");
@@ -1935,12 +1979,22 @@ function shop(game) {
             savePlayerData();
             break;
           case 1:
-            console.log("Eistee unlocked!");
+            playerData.Game[game - 1].SpeedMultiplier += 0.1;
+            playerData.Game[game - 1].JumpPower -= -5;
             savePlayerData();
             break;
           case 2:
-            playerData.Game[game - 1].SpeedMultiplier += 0.1;
-            playerData.Game[game - 1].JumpPower -= -5;
+            console.log("Eistee unlocked!");
+            savePlayerData();
+            break;
+          case 3:
+            console.log("Gucci Belt unlocked!");
+            playerData.Game[game - 1].Life += 2;
+            savePlayerData();
+            break;
+          case 4:
+            console.log("Lotto 6er unlocked!");
+            playerData.Game[game - 1].Luck += 2;
             savePlayerData();
             break;
         }
@@ -1964,9 +2018,15 @@ function shop(game) {
     shopBody.appendChild(itemDiv);
   }
 
-  createShopItem("img/uhr.png", 1, "Rolex Datejust 43", 0);
-  createShopItem("img/crocs.png", 2, "Lightning McQueen Crocs", 2);
-  createShopItem("img/eistee.png", 3, "Eistee Pfirsich", 3);
+  function addItems() {
+    createShopItem("img/uhr.png", 1, "Rolex Datejust 41", 0);
+    createShopItem("img/crocs.png", 2, "Lightning McQueen Crocs", 1);
+    createShopItem("img/eistee.png", 3, "Eistee Pfirsich", 2);
+    createShopItem("img/belt.png", 4, "Gucci Belt", 3);
+    createShopItem("img/lotto.png", 5, "Lotto 6er", 4);
+  }
+
+  addItems();
 
   body.appendChild(shopBackground);
   shopDiv.appendChild(shopHeader);
@@ -2195,9 +2255,14 @@ function gameStarted(game) {
   let fallingObjects = [];
 
   function spawnFallingObject() {
-    let multiplier = 2*Math.random();
+    let multiplier = 2 * Math.random();
     const x = Math.random() * (canvas.width / 3) + (2 * canvas.width) / 3;
-    fallingObjects.push({ x, y: -100, speedX: -3 * multiplier, speedY: 4 * multiplier});
+    fallingObjects.push({
+      x,
+      y: -100,
+      speedX: -3 * multiplier,
+      speedY: 4 * multiplier,
+    });
   }
 
   function drawFallingObjects() {
@@ -2226,7 +2291,10 @@ function gameStarted(game) {
         playerY < obj.y + 64 &&
         playerY + playerHeight > obj.y
       ) {
-        if (Math.round(Math.random() * 100) <= 5 * playerData.Game[game - 1].Luck) {
+        if (
+          Math.round(Math.random() * 100) <=
+          5 * playerData.Game[game - 1].Luck
+        ) {
           obj.collided = true;
           obj.image = "img/sew-test-note-1.png";
           obj.speedX = 3 * (2 * Math.random());
@@ -2603,7 +2671,7 @@ function gameStarted(game) {
     } else if (
       !isGrounded &&
       jumpCount === 1 &&
-      playerData.Game[game - 1].ItemUnlocked.Items[3]
+      playerData.Game[game - 1].ItemUnlocked.Items[2]
     ) {
       spawnParticles(
         playerX + playerWidth / 2,

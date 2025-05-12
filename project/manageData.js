@@ -15,6 +15,8 @@ let PlayerBluePrint = {
       0: false, // 0 = Watch
       1: false, // 1 = Eistee
       2: false, // 2 = Crocs
+      3: false, // 3 = belt
+      4: false, // 4 = lotto
     },
   },
   Movement: {
@@ -43,6 +45,8 @@ let playerData = {
           0: false, // 0 = Watch
           1: false, // 1 = Eistee
           2: false, // 2 = Crocs
+          3: false, // 3 = belt
+          4: false, // 4 = lotto
         },
       },
       Movement: {
@@ -68,6 +72,8 @@ let playerData = {
           0: false, // 0 = Watch
           1: false, // 1 = Eistee
           2: false, // 2 = Crocs
+          3: false, // 3 = belt
+          4: false, // 4 = lotto
         },
       },
       Movement: {
@@ -93,6 +99,8 @@ let playerData = {
           0: false, // 0 = Watch
           1: false, // 1 = Eistee
           2: false, // 2 = Crocs
+          3: false, // 3 = belt
+          4: false, // 4 = lotto
         },
       },
       Movement: {
