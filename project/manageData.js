@@ -7,6 +7,7 @@ let PlayerBluePrint = {
   Life: 1,
   SpeedMultiplier: 1,
   JumpPower: 0,
+  Luck: 1,
   Sprite: "img/thomas_sprite_all.png",
   ItemUnlocked: {
     Skins: {},
@@ -34,6 +35,7 @@ let playerData = {
       Life: 1,
       SpeedMultiplier: 1,
       JumpPower: 0,
+      Luck: 1,
       Sprite: "img/thomas_sprite_all.png",
       ItemUnlocked: {
         Skins: {},
@@ -58,6 +60,7 @@ let playerData = {
       Life: 1,
       SpeedMultiplier: 1,
       JumpPower: 0,
+      Luck: 1,
       Sprite: "img/thomas_sprite_all.png",
       ItemUnlocked: {
         Skins: {},
@@ -82,6 +85,7 @@ let playerData = {
       Life: 1,
       SpeedMultiplier: 1,
       JumpPower: 0,
+      Luck: 1,
       Sprite: "img/thomas_sprite_all.png",
       ItemUnlocked: {
         Skins: {},

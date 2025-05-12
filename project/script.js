@@ -1768,7 +1768,7 @@ function shop(game) {
   backImg.style.display = "block";
   backImg.style.position = "absolute";
   backImg.style.top = "50%";
-  backImg.style.right = "20%";
+  backImg.style.left = "20%";
   backImg.style.transform = "translate(-50%, -50%)";
 
   backButtonText.innerHTML = "BACK";
@@ -1868,6 +1868,8 @@ function shop(game) {
         "These bright red Crocs, designed by the legendary Lightning McQueen, give you unimagined powers:\n With every step, you'll run faster and jump higher than you ever thought possible. Inspired by\n Radiator Springs' fastest car, they'll catapult you to the top.\n This item increases your speed by 10% and jump power by 5!",
         "Refreshing, fruity, and full of energy: This Eistea Pfirsich gives you the boost you need\n for a second jump!\n Allows you to perform a double jump.",
       ];
+
+      
     });
 
     let itemImgDiv = document.createElement("div");
@@ -2193,8 +2195,9 @@ function gameStarted(game) {
   let fallingObjects = [];
 
   function spawnFallingObject() {
+    let multiplier = 2*Math.random();
     const x = Math.random() * (canvas.width / 3) + (2 * canvas.width) / 3;
-    fallingObjects.push({ x, y: -100, speedX: -3, speedY: 4 });
+    fallingObjects.push({ x, y: -100, speedX: -3 * multiplier, speedY: 4 * multiplier});
   }
 
   function drawFallingObjects() {
@@ -2223,11 +2226,11 @@ function gameStarted(game) {
         playerY < obj.y + 64 &&
         playerY + playerHeight > obj.y
       ) {
-        if (Math.round(Math.random() * 100) === 1) {
+        if (Math.round(Math.random() * 100) <= 5 * playerData.Game[game - 1].Luck) {
           obj.collided = true;
           obj.image = "img/sew-test-note-1.png";
-          obj.speedX = 5;
-          obj.speedY = -2;
+          obj.speedX = 3 * (2 * Math.random());
+          obj.speedY = -4 * (2 * Math.random());
           spawnParticles(obj.x + 32, obj.y + 32, "#00ff06");
           lifes += 1;
           console.log(lifes);
