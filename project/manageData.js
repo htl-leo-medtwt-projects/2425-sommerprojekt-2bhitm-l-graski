@@ -17,6 +17,7 @@ let PlayerBluePrint = {
       2: false, // 2 = Crocs
       3: false, // 3 = belt
       4: false, // 4 = lotto
+      5: false, // 5 = E53 Coupe
     },
   },
   Movement: {
@@ -47,6 +48,7 @@ let playerData = {
           2: false, // 2 = Crocs
           3: false, // 3 = belt
           4: false, // 4 = lotto
+          5: false, // 5 = E53 Coupe
         },
       },
       Movement: {
@@ -74,6 +76,7 @@ let playerData = {
           2: false, // 2 = Crocs
           3: false, // 3 = belt
           4: false, // 4 = lotto
+          5: false, // 5 = E53 Coupe
         },
       },
       Movement: {
@@ -101,6 +104,7 @@ let playerData = {
           2: false, // 2 = Crocs
           3: false, // 3 = belt
           4: false, // 4 = lotto
+          5: false, // 5 = E53 Coupe
         },
       },
       Movement: {

@@ -4,7 +4,6 @@ let resetConfirmText =
 let coinImg = "coin.png";
 let popUpOpen = false;
 let firstLoad = false;
-let items;
 
 loadPlayerData();
 
@@ -1659,8 +1658,8 @@ function gameScreen(game) {
   let coinsImg = document.createElement("img");
   coinsImg.src = `img/${coinImg}`;
   coinsImg.style.display = "block";
-  coinsImg.style.width = "85px";
-  coinsImg.style.height = "64px";
+  coinsImg.style.width = "32px";
+  coinsImg.style.height = "32px";
   coinsImg.style.position = "absolute";
   coinsImg.style.top = "55%";
   coinsImg.style.left = "10%";
@@ -1826,6 +1825,7 @@ function shop(game) {
         shopBody.style.transform = "rotateY(360deg)";
         setTimeout(() => {
           shopBody.innerHTML = "";
+          shopBody.style.overflowY = "auto";
           addItems();
         }, 250);
         break;
@@ -1887,28 +1887,36 @@ function shop(game) {
         "With its precise movement, striking design, and unmistakable aura\n of excellence, the Rolex Datejust 41 ensures your achievements count twice. A must-have\n for anyone who values ​​class and efficiency.\n This item doubles your Score!",
         "These bright red Crocs, designed by the legendary Lightning McQueen, give you unimagined powers:\n With every step, you'll run faster and jump higher than you ever thought possible. Inspired by\n Radiator Springs' fastest car, they'll catapult you to the top.\n This item increases your speed by 10% and jump power by 5!",
         "Refreshing, fruity, and full of energy: This Eistea Pfirsich gives you the boost you need\n for a second jump!\n Allows you to perform a double jump.",
+        "The Gucci Belt is not just a fashion statement, it's a symbol of status and power.\n With this belt, you can show the world that you are not only stylish, but also have the\n strength to take on any challenge. This item gives you 2 extra lives!",
+        "The Lotto 6er is not just a game of chance, it's a ticket to your dreams.\n With this item, you can increase your luck and make your wildest dreams come true.\n This item increases your luck by 2!",
+        "",
       ];
 
       shopBody.style.transform = "rotateY(180deg)";
       setTimeout(() => {
         shopBody.innerHTML = "";
+        shopBody.style.overflowY = "hidden";
         let descriptionDiv = document.createElement("div");
         descriptionDiv.style.transform = "rotateY(180deg)";
+        descriptionDiv.style.marginBottom = "80%";
 
         let descriptionHeader = document.createElement("h1");
         descriptionHeader.innerHTML = name;
         descriptionHeader.style.color = "white";
         descriptionHeader.style.fontFamily = "SF-Pro";
-        descriptionHeader.style.fontSize = "25px";
+        descriptionHeader.style.fontSize = "50px";
         descriptionHeader.style.fontWeight = "bolder";
+        descriptionHeader.style.textAlign = "center";
+        descriptionHeader.style.margin = "50px 0 30px 0";
 
         let descriptionText = document.createElement("p");
         descriptionText.innerHTML = description[id];
         descriptionText.style.color = "white";
         descriptionText.style.fontFamily = "SF-Pro";
-        descriptionText.style.fontSize = "20px";
+        descriptionText.style.fontSize = "30px";
         descriptionText.style.margin = "10px";
-        descriptionText.style.fontWeight = "bolder";
+        descriptionText.style.textAlign = "center";
+        descriptionText.style.fontWeight = "bold";
 
         descriptionDiv.appendChild(descriptionHeader);
         descriptionDiv.appendChild(descriptionText);
@@ -2024,6 +2032,7 @@ function shop(game) {
     createShopItem("img/eistee.png", 3, "Eistee Pfirsich", 2);
     createShopItem("img/belt.png", 4, "Gucci Belt", 3);
     createShopItem("img/lotto.png", 5, "Lotto 6er", 4);
+    createShopItem("img/autoschlüssel.png", 6, "E53 Coupé", 5);
   }
 
   addItems();
@@ -2088,14 +2097,35 @@ function gameStarted(game) {
   statsDiv.style.display = "inline-block";
   statsDiv.style.overflow = "hidden";
   statsDiv.style.position = "absolute";
-  statsDiv.style.top = "7.5%";
+  statsDiv.style.top = "9%";
   statsDiv.style.left = "7.5%";
   statsDiv.style.transform = "translate(-50%, -50%)";
   statsDiv.style.width = "256px";
-  statsDiv.style.height = "100px";
+  statsDiv.style.height = "133px";
   statsDiv.style.backgroundColor = "rgb(53, 53, 53, 0.7)";
   statsDiv.style.borderRadius = "20px";
   statsDiv.style.border = "3px solid rgb(35, 35, 35, 0.7)";
+
+  let healthDiv = document.createElement("div");
+  healthDiv.style.display = "flex";
+  healthDiv.style.alignItems = "center";
+  healthDiv.style.margin = "2.5% 5%";
+
+  let healthText = document.createElement("p");
+  healthText.innerHTML = `${lifes}x`;
+  healthText.id = "health-text";
+  healthText.style.display = "inline-block";
+  healthText.style.fontFamily = "SF-Pro";
+  healthText.style.color = "white";
+  healthText.style.fontSize = "20px";
+  healthText.style.marginRight = "5px";
+
+  let healthImg = document.createElement("img");
+  healthImg.id = "health-img";
+  healthImg.src = "img/heart-full.png";
+  healthImg.style.display = "block";
+  healthImg.style.width = "32px";
+  healthImg.style.height = "32px";
 
   let scoreText = document.createElement("p");
   scoreText.id = "score-text";
@@ -2104,19 +2134,18 @@ function gameStarted(game) {
   scoreText.style.fontFamily = "SF-Pro";
   scoreText.style.color = "white";
   scoreText.style.fontSize = "20px";
-  scoreText.style.position = "absolute";
-  scoreText.style.top = "7.5%";
-  scoreText.style.left = "2%";
+  scoreText.style.margin = "0 5% 1.5% 5%";
+
+  let coinsDiv = document.createElement("div");
+  coinsDiv.style.display = "flex";
+  coinsDiv.style.alignItems = "center";
+  coinsDiv.style.margin = "2.5% 5%";
 
   let coinsImg = document.createElement("img");
   coinsImg.src = `img/${coinImg}`;
   coinsImg.style.display = "block";
-  coinsImg.style.width = "85px";
-  coinsImg.style.height = "64px";
-  coinsImg.style.position = "absolute";
-  coinsImg.style.top = "55%";
-  coinsImg.style.left = "10%";
-  coinsImg.style.transform = "translate(-50%, -50%)";
+  coinsImg.style.width = "32px";
+  coinsImg.style.height = "32px";
   coinsImg.style.overflow = "hidden";
 
   let coins = document.createElement("p");
@@ -2125,15 +2154,15 @@ function gameStarted(game) {
   coins.style.fontFamily = "SF-Pro";
   coins.style.color = "white";
   coins.style.fontSize = "20px";
-  coins.style.position = "absolute";
-  coins.style.top = "51.5%";
-  coins.style.left = "17.5%";
-  coins.style.transform = "translate(0, -50%)";
   coins.style.overflow = "hidden";
 
+  coinsDiv.appendChild(coinsImg);
+  coinsDiv.appendChild(coins);
+  healthDiv.appendChild(healthText);
+  healthDiv.appendChild(healthImg);
+  statsDiv.appendChild(healthDiv);
   statsDiv.appendChild(scoreText);
-  statsDiv.appendChild(coinsImg);
-  statsDiv.appendChild(coins);
+  statsDiv.appendChild(coinsDiv);
   body.appendChild(statsDiv);
 
   let canvas = document.createElement("canvas");
@@ -2214,7 +2243,40 @@ function gameStarted(game) {
   let isStarted = false;
 
   let spriteImage = new Image();
-  spriteImage.src = "img/thomas_sprite_all.png";
+
+  switch ([playerData.Game[game - 1].ItemUnlocked.Items[0], playerData.Game[game - 1].ItemUnlocked.Items[1], playerData.Game[game - 1].ItemUnlocked.Items[3]].map(v => v ? "1" : "0").join("")) {
+  case "100":
+    spriteImage.src = "img/thomas_sprite_all-1-0-0.png";
+    //console.log("100");
+    break;
+  case "010":
+    spriteImage.src = "img/thomas_sprite_all-0-1-0.png";
+    //console.log("010");
+    break;
+  case "001":
+    spriteImage.src = "img/thomas_sprite_all-0-0-1.png";
+    //console.log("001");
+    break;
+  case "110":
+    spriteImage.src = "img/thomas_sprite_all-1-1-0.png";
+    //console.log("110");
+    break;
+  case "101":
+    spriteImage.src = "img/thomas_sprite_all-1-0-1.png";
+    //console.log("101");
+    break;
+  case "011":
+    spriteImage.src = "img/thomas_sprite_all-0-1-1.png";
+    //console.log("011");
+    break;
+  case "111":
+    spriteImage.src = "img/thomas_sprite_all-1-1-1.png";
+    //console.log("111");
+    break;
+  default:
+    spriteImage.src = "img/thomas_sprite_all.png";
+    //console.log("000");
+}
 
   let scaledSpriteImage = document.createElement("canvas");
   let scaledSpriteCtx = scaledSpriteImage.getContext("2d");
@@ -2260,7 +2322,7 @@ function gameStarted(game) {
     fallingObjects.push({
       x,
       y: -100,
-      speedX: -3 * multiplier,
+      speedX: -3,
       speedY: 4 * multiplier,
     });
   }
@@ -2285,6 +2347,7 @@ function gameStarted(game) {
   function checkFallingObjectCollision() {
     fallingObjects = fallingObjects.filter((obj) => {
       if (
+        !isGameOver &&
         !obj.collided &&
         playerX < obj.x + 64 &&
         playerX + playerWidth > obj.x &&
@@ -2301,12 +2364,13 @@ function gameStarted(game) {
           obj.speedY = -4 * (2 * Math.random());
           spawnParticles(obj.x + 32, obj.y + 32, "#00ff06");
           lifes += 1;
-          console.log(lifes);
+          //console.log(lifes);
+          document.getElementById("health-text").innerHTML = `${lifes}x`;
           return true;
         } else {
           spawnParticles(obj.x + 32, obj.y + 32, "#ff0000");
           checkHealth();
-          console.log(lifes);
+          //console.log(lifes);
           return false;
         }
       }
@@ -2433,13 +2497,21 @@ function gameStarted(game) {
   }
 
   function checkHealth() {
-    lifes -= 1;
+    if (lifes > 0) {
+      lifes -= 1;
+    }
+
+    document.getElementById("health-text").innerHTML = `${lifes}x`;
     if (lifes <= 0 && !gameOverShown) {
       gameOver();
     }
   }
 
   function gameOver() {
+    lifes = 0;
+    document.getElementById("health-text").innerHTML = `${lifes}x`;
+    document.getElementById("health-img").src = "img/heart-empty.png";
+
     isGameOver = true;
     popUpOpen = true;
     gameOverShown = true;
