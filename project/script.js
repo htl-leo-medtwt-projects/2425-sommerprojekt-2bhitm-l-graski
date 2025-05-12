@@ -1901,7 +1901,7 @@ function shop(game) {
         "Refreshing, fruity, and full of energy: This Eistea Pfirsich gives you the boost you need for a second jump! Allows you to perform a double jump.",
         "The Gucci Belt is not just a fashion statement, it's a symbol of status and power. With this belt, you can show the world that you are not only stylish, but also have the strength to take on any challenge. This item gives you 2 extra lives!",
         "The Lotto 6er is not just a game of chance, it's a ticket to your dreams. With this item, you can increase your luck and make your wildest dreams come true. This item increases your luck by 2!",
-        "",
+        "A stylish and powerful coupe with a mind of its own. The E53 Coupé doesn’t just drive—it protects. When the player takes fatal damage, there’s a 20% chance the E53 Coupé will kick into overdrive, saving its driver by launching them to the edge of the screen instead of letting them perish. Ability: Last-Chance Escape – 20% chance to survive a fatal hit and be launched to the screen's edge.",
       ];
 
       shopBody.style.transform = "rotateY(180deg)";
@@ -2692,6 +2692,37 @@ function gameStarted(game) {
     let wasOnGround = false;
 
     if (playerY > canvas.height - 25) {
+      if (
+        playerData.Game[game - 1].ItemUnlocked.Items[5] &&
+        Math.random() * 100 <= 20 * playerData.Game[game - 1].Luck &&
+        !isGameOver
+      ) {
+        checkHealth();
+        document.getElementById("health-text").innerHTML = `${lifes}x`;
+        console.log("damaged");
+
+        if (lifes > 0) {
+          spawnParticles(
+            playerX + playerWidth / 2,
+            playerY + playerHeight / 2,
+            "#fff"
+          );
+          playerY = 0;
+          velocityY = 0;
+          gravity = 0.3;
+          spawnParticles(
+            playerX + playerWidth / 2,
+            playerY + playerHeight * 2,
+            "#FFD700"
+          );
+
+          setTimeout(() => {
+            gravity = 0.8;
+          }, 1000);
+          return;
+        }
+      }
+
       if (!gameOverShown) {
         gameOver();
       }
