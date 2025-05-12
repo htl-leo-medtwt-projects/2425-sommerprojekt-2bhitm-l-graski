@@ -953,6 +953,7 @@ function startGame(game) {
   nameButton.style.top = "71%";
   nameButton.style.left = "50%";
   nameButton.style.transform = "translate(-50%, -50%)";
+  nameButton.style.color = "white";
 
   let nameButtonInput = document.createElement("input");
   nameButtonInput.type = "text";
@@ -968,6 +969,7 @@ function startGame(game) {
   nameButtonInput.style.fontFamily = "SF-Pro";
   nameButtonInput.style.fontSize = "24px";
   nameButtonInput.style.padding = "15px 10px";
+  nameButtonInput.style.color = "white";
 
   nameButtonInput.addEventListener("input", () => {
     playerData.Game[game - 1].PlayerName = nameButtonInput.value;
@@ -1816,7 +1818,9 @@ function shop(game) {
 
         if (playing) {
           playInteractSound();
-          playSound(0);
+          setTimeout(() => {
+            playSound(0);
+          }, 200);
         }
         break;
 
@@ -1828,6 +1832,10 @@ function shop(game) {
           shopBody.style.overflowY = "auto";
           addItems();
         }, 250);
+
+        if (playing) {
+          playInteractSound();
+        }
         break;
     }
   });
@@ -1882,13 +1890,17 @@ function shop(game) {
     info.style.cursor = "pointer";
 
     info.addEventListener("click", () => {
+      if (playing) {
+        playInteractSound();
+      }
+
       window = 1;
       let description = [
-        "With its precise movement, striking design, and unmistakable aura\n of excellence, the Rolex Datejust 41 ensures your achievements count twice. A must-have\n for anyone who values ​​class and efficiency.\n This item doubles your Score!",
-        "These bright red Crocs, designed by the legendary Lightning McQueen, give you unimagined powers:\n With every step, you'll run faster and jump higher than you ever thought possible. Inspired by\n Radiator Springs' fastest car, they'll catapult you to the top.\n This item increases your speed by 10% and jump power by 5!",
-        "Refreshing, fruity, and full of energy: This Eistea Pfirsich gives you the boost you need\n for a second jump!\n Allows you to perform a double jump.",
-        "The Gucci Belt is not just a fashion statement, it's a symbol of status and power.\n With this belt, you can show the world that you are not only stylish, but also have the\n strength to take on any challenge. This item gives you 2 extra lives!",
-        "The Lotto 6er is not just a game of chance, it's a ticket to your dreams.\n With this item, you can increase your luck and make your wildest dreams come true.\n This item increases your luck by 2!",
+        "With its precise movement, striking design, and unmistakable aura of excellence, the Rolex Datejust 41 ensures your achievements count twice. A must-have for anyone who values ​​class and efficiency. This item doubles your Score!",
+        "These bright red Crocs, designed by the legendary Lightning McQueen, give you unimagined powers: With every step, you'll run faster and jump higher than you ever thought possible. Inspired by Radiator Springs' fastest car, they'll catapult you to the top. This item increases your speed by 10% and jump power by 5!",
+        "Refreshing, fruity, and full of energy: This Eistea Pfirsich gives you the boost you need for a second jump! Allows you to perform a double jump.",
+        "The Gucci Belt is not just a fashion statement, it's a symbol of status and power. With this belt, you can show the world that you are not only stylish, but also have the strength to take on any challenge. This item gives you 2 extra lives!",
+        "The Lotto 6er is not just a game of chance, it's a ticket to your dreams. With this item, you can increase your luck and make your wildest dreams come true. This item increases your luck by 2!",
         "",
       ];
 
@@ -1914,9 +1926,10 @@ function shop(game) {
         descriptionText.style.color = "white";
         descriptionText.style.fontFamily = "SF-Pro";
         descriptionText.style.fontSize = "30px";
-        descriptionText.style.margin = "10px";
+        descriptionText.style.margin = "10px auto";
         descriptionText.style.textAlign = "center";
         descriptionText.style.fontWeight = "bold";
+        descriptionText.style.width = "80%";
 
         descriptionDiv.appendChild(descriptionHeader);
         descriptionDiv.appendChild(descriptionText);
@@ -1931,8 +1944,8 @@ function shop(game) {
     itemImg.src = img;
     itemImg.style.width = "128px";
     itemImg.style.height = "128px";
-    itemImg.style.backgroundColor = "white";
-    itemImg.style.border = "5px solid white";
+    //itemImg.style.backgroundColor = "white";
+    //itemImg.style.border = "5px solid white";
     itemImg.style.borderRadius = "25px";
 
     let itemPrice = document.createElement("p");
@@ -1981,6 +1994,10 @@ function shop(game) {
           playerData.Game[game - 1].Coins
         }`;
 
+        if (playing) {
+          playBuySound();
+        }
+
         switch (id) {
           case 0:
             playerData.Game[game - 1].GlobalScoreMultiplier += 1;
@@ -1992,24 +2009,30 @@ function shop(game) {
             savePlayerData();
             break;
           case 2:
-            console.log("Eistee unlocked!");
+            //console.log("Eistee unlocked!");
             savePlayerData();
             break;
           case 3:
-            console.log("Gucci Belt unlocked!");
+            //console.log("Gucci Belt unlocked!");
             playerData.Game[game - 1].Life += 2;
             savePlayerData();
             break;
           case 4:
-            console.log("Lotto 6er unlocked!");
+            //console.log("Lotto 6er unlocked!");
             playerData.Game[game - 1].Luck += 2;
             savePlayerData();
             break;
         }
       } else if (playerData.Game[game - 1].ItemUnlocked.Items[id]) {
         showShopMessage("You already bought this item!");
+        if (playing) {
+          playDeniedSound();
+        }
       } else if (playerData.Game[game - 1].Coins < price) {
         showShopMessage("You don't have enough coins to buy this item!");
+        if (playing) {
+          playDeniedSound();
+        }
       }
 
       if (playing) {
@@ -2244,39 +2267,47 @@ function gameStarted(game) {
 
   let spriteImage = new Image();
 
-  switch ([playerData.Game[game - 1].ItemUnlocked.Items[0], playerData.Game[game - 1].ItemUnlocked.Items[1], playerData.Game[game - 1].ItemUnlocked.Items[3]].map(v => v ? "1" : "0").join("")) {
-  case "100":
-    spriteImage.src = "img/thomas_sprite_all-1-0-0.png";
-    //console.log("100");
-    break;
-  case "010":
-    spriteImage.src = "img/thomas_sprite_all-0-1-0.png";
-    //console.log("010");
-    break;
-  case "001":
-    spriteImage.src = "img/thomas_sprite_all-0-0-1.png";
-    //console.log("001");
-    break;
-  case "110":
-    spriteImage.src = "img/thomas_sprite_all-1-1-0.png";
-    //console.log("110");
-    break;
-  case "101":
-    spriteImage.src = "img/thomas_sprite_all-1-0-1.png";
-    //console.log("101");
-    break;
-  case "011":
-    spriteImage.src = "img/thomas_sprite_all-0-1-1.png";
-    //console.log("011");
-    break;
-  case "111":
-    spriteImage.src = "img/thomas_sprite_all-1-1-1.png";
-    //console.log("111");
-    break;
-  default:
-    spriteImage.src = "img/thomas_sprite_all.png";
+  switch (
+    [
+      playerData.Game[game - 1].ItemUnlocked.Items[0],
+      playerData.Game[game - 1].ItemUnlocked.Items[1],
+      playerData.Game[game - 1].ItemUnlocked.Items[3],
+    ]
+      .map((v) => (v ? "1" : "0"))
+      .join("")
+  ) {
+    case "100":
+      spriteImage.src = "img/thomas_sprite_all-1-0-0.png";
+      //console.log("100");
+      break;
+    case "010":
+      spriteImage.src = "img/thomas_sprite_all-0-1-0.png";
+      //console.log("010");
+      break;
+    case "001":
+      spriteImage.src = "img/thomas_sprite_all-0-0-1.png";
+      //console.log("001");
+      break;
+    case "110":
+      spriteImage.src = "img/thomas_sprite_all-1-1-0.png";
+      //console.log("110");
+      break;
+    case "101":
+      spriteImage.src = "img/thomas_sprite_all-1-0-1.png";
+      //console.log("101");
+      break;
+    case "011":
+      spriteImage.src = "img/thomas_sprite_all-0-1-1.png";
+      //console.log("011");
+      break;
+    case "111":
+      spriteImage.src = "img/thomas_sprite_all-1-1-1.png";
+      //console.log("111");
+      break;
+    default:
+      spriteImage.src = "img/thomas_sprite_all.png";
     //console.log("000");
-}
+  }
 
   let scaledSpriteImage = document.createElement("canvas");
   let scaledSpriteCtx = scaledSpriteImage.getContext("2d");
@@ -2366,6 +2397,9 @@ function gameStarted(game) {
           lifes += 1;
           //console.log(lifes);
           document.getElementById("health-text").innerHTML = `${lifes}x`;
+          if (playing) {
+            playPickupSound();
+          }
           return true;
         } else {
           spawnParticles(obj.x + 32, obj.y + 32, "#ff0000");

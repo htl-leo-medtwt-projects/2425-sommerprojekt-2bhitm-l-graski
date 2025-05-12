@@ -4,11 +4,10 @@ let inGameSound = new Audio("sounds/in-game.mp3");
 inGameSound.volume = 0.4;
 let deathSound = new Audio("sounds/death.wav");
 let interactSound = new Audio("sounds/interact.wav");
-let shopSound
-let buySound;
+let shopSound = new Audio("sounds/shop_music.mp3");
 let playing = false;
 
-let gobalFalse = false;
+let gobalFalse = true;
 
 function toggleSound(location) {
   if (gobalFalse) {
@@ -43,6 +42,7 @@ function stopSound() {
   interactSound.pause();
   interactSound.currentTime = 0;
 
+  shopSound.pause();
 }
 
 function playSound(location) {
@@ -71,6 +71,8 @@ function playSound(location) {
         break;
 
         case 3:
+        shopSound.play();
+        shopSound.loop = true;
           break;
     } 
   }
@@ -91,7 +93,15 @@ function playPickupSound() {
 
 function playBuySound() {
   if (gobalFalse) {
+    let buySound = new Audio("sounds/buy_sound.mp3");
     buySound.play();
+  }
+}
+
+function playDeniedSound() {
+  if (gobalFalse) {
+    let deniedSound = new Audio("sounds/denied_sound.mp3");
+    deniedSound.play();
   }
 }
 
