@@ -2533,6 +2533,9 @@ function gameStarted(game) {
   function checkHealth() {
     if (lifes > 0) {
       lifes -= 1;
+      if (playing) {
+        playHurtSound();
+      }
     }
 
     document.getElementById("health-text").innerHTML = `${lifes}x`;
@@ -2715,6 +2718,10 @@ function gameStarted(game) {
             playerY + playerHeight * 2,
             "#FFD700"
           );
+
+          if (playing) {
+            playSaveEffectSound();
+          }
 
           setTimeout(() => {
             gravity = 0.8;

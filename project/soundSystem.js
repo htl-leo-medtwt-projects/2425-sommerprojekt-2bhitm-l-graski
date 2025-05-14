@@ -5,6 +5,7 @@ inGameSound.volume = 0.4;
 let deathSound = new Audio("sounds/death.wav");
 let interactSound = new Audio("sounds/interact.wav");
 let shopSound = new Audio("sounds/shop_music.mp3");
+let saveEffectSound = new Audio("sounds/save_effect_sound.mp3");
 let playing = false;
 
 let gobalFalse = true;
@@ -43,6 +44,9 @@ function stopSound() {
   interactSound.currentTime = 0;
 
   shopSound.pause();
+
+  saveEffectSound.pause();
+  saveEffectSound.currentTime = 0;
 }
 
 function playSound(location) {
@@ -70,11 +74,11 @@ function playSound(location) {
         deathSound.play();
         break;
 
-        case 3:
+      case 3:
         shopSound.play();
         shopSound.loop = true;
-          break;
-    } 
+        break;
+    }
   }
 }
 
@@ -102,6 +106,19 @@ function playDeniedSound() {
   if (gobalFalse) {
     let deniedSound = new Audio("sounds/denied_sound.mp3");
     deniedSound.play();
+  }
+}
+
+function playHurtSound() {
+  if (gobalFalse) {
+    let hurtSound = new Audio("sounds/hurt_sound.mp3");
+    hurtSound.play();
+  }
+}
+
+function playSaveEffectSound() {
+  if (gobalFalse) {
+    saveEffectSound.play();
   }
 }
 
