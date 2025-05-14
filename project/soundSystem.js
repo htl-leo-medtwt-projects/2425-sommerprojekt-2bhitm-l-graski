@@ -1,7 +1,5 @@
 let startScreenSound = new Audio("sounds/start-screen.mp3");
-startScreenSound.volume = 0.7;
 let inGameSound = new Audio("sounds/in-game.mp3");
-inGameSound.volume = 0.4;
 let deathSound = new Audio("sounds/death.wav");
 let interactSound = new Audio("sounds/interact.wav");
 let shopSound = new Audio("sounds/shop_music.mp3");
