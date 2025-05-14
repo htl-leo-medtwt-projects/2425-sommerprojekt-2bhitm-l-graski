@@ -5,6 +5,7 @@ let coinImg = "coin.png";
 let popUpOpen = false;
 let firstLoad = false;
 
+
 loadPlayerData();
 
 document.addEventListener("keydown", function (event) {
@@ -2049,6 +2050,201 @@ function shop(game) {
     shopBody.appendChild(itemDiv);
   }
 
+  function addSkin(img, price, name, id) {
+    let itemDiv = document.createElement("div");
+    itemDiv.style.display = "flex";
+    itemDiv.style.alignItems = "center";
+    itemDiv.style.boxSizing = "border-box";
+    itemDiv.style.justifyContent = "space-between";
+    itemDiv.style.flexDirection = "column";
+    //itemDiv.style.flex = "0 0 33.33%";
+    itemDiv.style.padding = "10px";
+    itemDiv.style.marginTop = "20px";
+    itemDiv.style.backgroundColor = "rgba(11, 11, 11, 0.5)";
+    itemDiv.style.border = "5px solid rgb(10,10,10,0.75)";
+    itemDiv.style.borderRadius = "25px";
+
+    let itemName = document.createElement("p");
+    itemName.innerHTML = playerData.Game[game - 1].ItemUnlocked.Skins[id].Active
+      ? "Thomas"
+      : "Köhrer";
+    itemName.style.color = "white";
+    itemName.style.fontFamily = "SF-Pro";
+    itemName.style.fontSize = "25px";
+    itemName.style.marginBottom = "10px";
+
+    let info = document.createElement("img");
+    info.src = "img/info-i.png";
+    info.style.display = "flex";
+    info.style.width = "36px";
+    info.style.height = "36px";
+    info.style.position = "absolute";
+    info.style.top = "-10%";
+    info.style.right = "-10%";
+    info.style.cursor = "pointer";
+
+    info.addEventListener("click", () => {
+      if (playing) {
+        playInteractSound();
+      }
+
+      window = 1;
+      let description = "Raphi Köhri"
+
+      shopBody.style.transform = "rotateY(180deg)";
+      setTimeout(() => {
+        shopBody.innerHTML = "";
+        shopBody.style.overflowY = "hidden";
+        let descriptionDiv = document.createElement("div");
+        descriptionDiv.style.transform = "rotateY(180deg)";
+        descriptionDiv.style.marginBottom = "80%";
+
+        let descriptionHeader = document.createElement("h1");
+        descriptionHeader.innerHTML = name;
+        descriptionHeader.style.color = "white";
+        descriptionHeader.style.fontFamily = "SF-Pro";
+        descriptionHeader.style.fontSize = "50px";
+        descriptionHeader.style.fontWeight = "bolder";
+        descriptionHeader.style.textAlign = "center";
+        descriptionHeader.style.margin = "50px 0 30px 0";
+
+        let descriptionText = document.createElement("p");
+        descriptionText.innerHTML = description;
+        descriptionText.style.color = "white";
+        descriptionText.style.fontFamily = "SF-Pro";
+        descriptionText.style.fontSize = "30px";
+        descriptionText.style.margin = "10px auto";
+        descriptionText.style.textAlign = "center";
+        descriptionText.style.fontWeight = "bold";
+        descriptionText.style.width = "80%";
+
+        descriptionDiv.appendChild(descriptionHeader);
+        descriptionDiv.appendChild(descriptionText);
+        shopBody.appendChild(descriptionDiv);
+      }, 250);
+    });
+
+    let itemImgDiv = document.createElement("div");
+    itemImgDiv.style.position = "relative";
+    let itemImg = document.createElement("img");
+
+    if (
+      playerData.Game[game - 1].ItemUnlocked.Skins[id].Active 
+    ) {
+      itemImg.src = `img/${playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Sprite.split('_')[0]}.png`;
+    }else if (
+      playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Active 
+    ) {
+      itemImg.src = `img/${playerData.Game[game - 1].ItemUnlocked.Skins[id].Sprite.split('_')[0]}.png`;
+    }
+    itemImg.style.width = "128px";
+    itemImg.style.height = "128px";
+    //itemImg.style.backgroundColor = "white";
+    //itemImg.style.border = "5px solid white";
+    itemImg.style.borderRadius = "25px";
+
+    let itemPrice = document.createElement("p");
+    itemPrice.innerHTML = `Price: ${price} coins`;
+    itemPrice.style.fontFamily = "SF-Pro";
+    itemPrice.style.marginLeft = "10px";
+    itemPrice.style.width = "168px";
+    itemPrice.style.textAlign = "center";
+    itemPrice.style.fontSize = "17.5px";
+    itemPrice.style.borderBottom = "1px solid #ccc";
+
+    itemPrice.style.color = "white";
+
+    let buyButton = document.createElement("button");
+    buyButton.innerHTML = playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought
+      ? "Switch"
+      : "Buy";
+    buyButton.style.fontFamily = "SF-Pro";
+    buyButton.style.color = "#fff";
+    buyButton.style.padding = "10px 20px";
+    buyButton.style.marginTop = "10px";
+    buyButton.style.fontSize = "16px";
+    buyButton.style.background = "linear-gradient(145deg, #1f1f1f, #121212)";
+    buyButton.style.border = "none";
+    buyButton.style.borderRadius = "12px";
+    buyButton.style.boxShadow = "0px 0px 15px 2px rgba(255,255,255,0.25)";
+
+    buyButton.addEventListener("mouseover", () => {
+      buyButton.style.cursor = "pointer";
+      buyButton.style.background = "linear-gradient(145deg, #2a2a2a, #1a1a1a)";
+    });
+    buyButton.addEventListener("mouseleave", () => {
+      buyButton.style.background = "linear-gradient(145deg, #1f1f1f, #121212)";
+    });
+
+    buyButton.addEventListener("click", () => {
+      if (
+        playerData.Game[game - 1].Coins >= price &&
+        !playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought
+      ) {
+        buyButton.innerHTML = "Switch";
+        playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought = true;
+        playerData.Game[game - 1].ItemUnlocked.Skins[id].Active = true;
+        playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Active = false;
+        playerData.Game[game - 1].Coins -= price;
+        playerData.Game[game - 1].Sprite = playerData.Game[game - 1].ItemUnlocked.Skins[id].Sprite;
+        savePlayerData(game);
+        
+        document.getElementById("coinDisplay").innerHTML = `: ${
+          playerData.Game[game - 1].Coins
+        }`;
+
+        if (playing) {
+          playBuySound();
+        }
+
+        switch (id) {
+          case 0:
+            
+            break;
+        }
+      } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id].Active) {
+        itemImg.src = `img/thomas.png`;
+        itemName.innerHTML = "Thomas"
+        playerData.Game[game - 1].ItemUnlocked.Skins[id].Active = false;
+        playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Active = true;
+        playerData.Game[game - 1].Sprite = playerData.Game[game - 1].ItemUnlocked.Skins[id].Sprite;
+        savePlayerData();
+        if (playing) {
+          playInteractSound()
+        }
+        console.log("thomas")
+      } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Active) {
+        itemImg.src = `img/kohrer.png`;
+        itemName.innerHTML = "Köhrer"
+        playerData.Game[game - 1].ItemUnlocked.Skins[id].Active = true;
+        playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Active = false;
+        playerData.Game[game - 1].Sprite = playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Sprite;
+        savePlayerData();
+        if (playing) {
+          playInteractSound()
+        }
+        console.log("köhrer")
+      }else if (playerData.Game[game - 1].Coins < price) {
+        showShopMessage("You don't have enough coins to buy this item!");
+        if (playing) {
+          playDeniedSound();
+        }
+      }
+
+      if (playing) {
+      }
+    });
+
+    itemDiv.appendChild(itemName);
+    itemImgDiv.appendChild(info);
+    itemImgDiv.appendChild(itemImg);
+    itemDiv.appendChild(itemImgDiv);
+    itemDiv.appendChild(itemPrice);
+    itemDiv.appendChild(buyButton);
+
+    shopBody.appendChild(itemDiv);
+  }
+
   function addItems() {
     createShopItem("img/uhr.png", 1, "Rolex Datejust 41", 0);
     createShopItem("img/crocs.png", 2, "Lightning McQueen Crocs", 1);
@@ -2056,6 +2252,7 @@ function shop(game) {
     createShopItem("img/belt.png", 4, "Gucci Belt", 3);
     createShopItem("img/lotto.png", 5, "Lotto 6er", 4);
     createShopItem("img/autoschlüssel.png", 6, "E53 Coupé", 5);
+    addSkin(playerData.Game[game - 1].Sprite, 0, "Köhrer", 0);
   }
 
   addItems();
@@ -2277,35 +2474,35 @@ function gameStarted(game) {
       .join("")
   ) {
     case "100":
-      spriteImage.src = "img/thomas_sprite_all-1-0-0.png";
+      spriteImage.src = `img/${playerData.Game[game - 1].Sprite}-1-0-0.png`;
       //console.log("100");
       break;
     case "010":
-      spriteImage.src = "img/thomas_sprite_all-0-1-0.png";
+      spriteImage.src = `img/${playerData.Game[game - 1].Sprite}-0-1-0.png`;
       //console.log("010");
       break;
     case "001":
-      spriteImage.src = "img/thomas_sprite_all-0-0-1.png";
+      spriteImage.src = `img/${playerData.Game[game - 1].Sprite}-0-0-1.png`;
       //console.log("001");
       break;
     case "110":
-      spriteImage.src = "img/thomas_sprite_all-1-1-0.png";
+      spriteImage.src = `img/${playerData.Game[game - 1].Sprite}-1-1-0.png`;
       //console.log("110");
       break;
     case "101":
-      spriteImage.src = "img/thomas_sprite_all-1-0-1.png";
+      spriteImage.src = `img/${playerData.Game[game - 1].Sprite}-1-0-1.png`;
       //console.log("101");
       break;
     case "011":
-      spriteImage.src = "img/thomas_sprite_all-0-1-1.png";
+      spriteImage.src = `img/${playerData.Game[game - 1].Sprite}-0-1-1.png`;
       //console.log("011");
       break;
     case "111":
-      spriteImage.src = "img/thomas_sprite_all-1-1-1.png";
+      spriteImage.src = `img/${playerData.Game[game - 1].Sprite}-1-1-1.png`;
       //console.log("111");
       break;
     default:
-      spriteImage.src = "img/thomas_sprite_all.png";
+      spriteImage.src = `img/${playerData.Game[game - 1].Sprite}.png`;
     //console.log("000");
   }
 

@@ -8,9 +8,22 @@ let PlayerBluePrint = {
   SpeedMultiplier: 1,
   JumpPower: 0,
   Luck: 1,
-  Sprite: "img/thomas_sprite_all.png",
+  Sprite: "thomas_sprite",
   ItemUnlocked: {
-    Skins: {},
+    Skins: {
+          0: {
+            // Kohrer
+            Bought: false,
+            Active: false,
+            Sprite: "kohrer_sprite",
+          },
+          1: {
+            // Thomas
+            Bought: true,
+            Active: true,
+            Sprite: "thomas_sprite",
+          },
+        },
     Items: {
       0: false, // 0 = Watch
       1: false, // 1 = Eistee
@@ -18,6 +31,7 @@ let PlayerBluePrint = {
       3: false, // 3 = belt
       4: false, // 4 = lotto
       5: false, // 5 = E53 Coupe
+      6: false, // 7 = Kohrer
     },
   },
   Movement: {
@@ -39,9 +53,22 @@ let playerData = {
       SpeedMultiplier: 1,
       JumpPower: 0,
       Luck: 1,
-      Sprite: "img/thomas_sprite_all.png",
+      Sprite: "thomas_sprite",
       ItemUnlocked: {
-        Skins: {},
+        Skins: {
+          0: {
+            // Kohrer
+            Bought: false,
+            Active: false,
+            Sprite: "kohrer_sprite",
+          },
+          1: {
+            // Thomas
+            Bought: true,
+            Active: true,
+            Sprite: "thomas_sprite",
+          },
+        },
         Items: {
           0: false, // 0 = Watch
           1: false, // 1 = Eistee
@@ -49,6 +76,7 @@ let playerData = {
           3: false, // 3 = belt
           4: false, // 4 = lotto
           5: false, // 5 = E53 Coupe
+          6: false, // 7 = Kohrer
         },
       },
       Movement: {
@@ -67,9 +95,22 @@ let playerData = {
       SpeedMultiplier: 1,
       JumpPower: 0,
       Luck: 1,
-      Sprite: "img/thomas_sprite_all.png",
+      Sprite: "thomas_sprite",
       ItemUnlocked: {
-        Skins: {},
+        Skins: {
+          0: {
+            // Kohrer
+            Bought: false,
+            Active: false,
+            Sprite: "kohrer_sprite",
+          },
+          1: {
+            // Thomas
+            Bought: true,
+            Active: true,
+            Sprite: "thomas_sprite",
+          },
+        },
         Items: {
           0: false, // 0 = Watch
           1: false, // 1 = Eistee
@@ -77,6 +118,7 @@ let playerData = {
           3: false, // 3 = belt
           4: false, // 4 = lotto
           5: false, // 5 = E53 Coupe
+          6: false, // 7 = Kohrer
         },
       },
       Movement: {
@@ -95,9 +137,22 @@ let playerData = {
       SpeedMultiplier: 1,
       JumpPower: 0,
       Luck: 1,
-      Sprite: "img/thomas_sprite_all.png",
+      Sprite: "thomas_sprite",
       ItemUnlocked: {
-        Skins: {},
+        Skins: {
+          0: {
+            // Kohrer
+            Bought: false,
+            Active: false,
+            Sprite: "kohrer_sprite",
+          },
+          1: {
+            // Thomas
+            Bought: true,
+            Active: true,
+            Sprite: "thomas_sprite",
+          },
+        },
         Items: {
           0: false, // 0 = Watch
           1: false, // 1 = Eistee
