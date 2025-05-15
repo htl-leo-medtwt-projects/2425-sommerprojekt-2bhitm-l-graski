@@ -5,7 +5,6 @@ let coinImg = "coin.png";
 let popUpOpen = false;
 let firstLoad = false;
 
-
 loadPlayerData();
 
 document.addEventListener("keydown", function (event) {
@@ -2050,7 +2049,7 @@ function shop(game) {
     shopBody.appendChild(itemDiv);
   }
 
-  function addSkin(img, price, name, id) {
+  function addSkin(price, name, id) {
     let itemDiv = document.createElement("div");
     itemDiv.style.display = "flex";
     itemDiv.style.alignItems = "center";
@@ -2065,9 +2064,13 @@ function shop(game) {
     itemDiv.style.borderRadius = "25px";
 
     let itemName = document.createElement("p");
-    itemName.innerHTML = playerData.Game[game - 1].ItemUnlocked.Skins[id].Active
-      ? "Thomas"
-      : "Köhrer";
+    if (playerData.Game[game - 1].ItemUnlocked.Skins[id].Active) {
+      itemName.innerHTML = "Köhrer";
+    } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active && playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought) {
+      itemName.innerHTML = "Thomas";
+    } else {
+      itemName.innerHTML = "Köhrer";
+      }
     itemName.style.color = "white";
     itemName.style.fontFamily = "SF-Pro";
     itemName.style.fontSize = "25px";
@@ -2089,7 +2092,7 @@ function shop(game) {
       }
 
       window = 1;
-      let description = "Raphi Köhri"
+      let description = "Raphi Köhri";
 
       shopBody.style.transform = "rotateY(180deg)";
       setTimeout(() => {
@@ -2128,14 +2131,12 @@ function shop(game) {
     itemImgDiv.style.position = "relative";
     let itemImg = document.createElement("img");
 
-    if (
-      playerData.Game[game - 1].ItemUnlocked.Skins[id].Active 
-    ) {
-      itemImg.src = `img/${playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Sprite.split('_')[0]}.png`;
-    }else if (
-      playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Active 
-    ) {
-      itemImg.src = `img/${playerData.Game[game - 1].ItemUnlocked.Skins[id].Sprite.split('_')[0]}.png`;
+    if (playerData.Game[game - 1].ItemUnlocked.Skins[id].Active) {
+      itemImg.src = `img/kohrer.png`;
+    } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active && playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought) {
+      itemImg.src = `img/thomas.png`;
+    }else {
+      itemImg.src = `img/kohrer.png`;
     }
     itemImg.style.width = "128px";
     itemImg.style.height = "128px";
@@ -2155,7 +2156,8 @@ function shop(game) {
     itemPrice.style.color = "white";
 
     let buyButton = document.createElement("button");
-    buyButton.innerHTML = playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought
+    buyButton.innerHTML = playerData.Game[game - 1].ItemUnlocked.Skins[id]
+      .Bought
       ? "Switch"
       : "Buy";
     buyButton.style.fontFamily = "SF-Pro";
@@ -2183,12 +2185,9 @@ function shop(game) {
       ) {
         buyButton.innerHTML = "Switch";
         playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought = true;
-        playerData.Game[game - 1].ItemUnlocked.Skins[id].Active = true;
-        playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Active = false;
         playerData.Game[game - 1].Coins -= price;
-        playerData.Game[game - 1].Sprite = playerData.Game[game - 1].ItemUnlocked.Skins[id].Sprite;
-        savePlayerData(game);
-        
+        itemImg.src = `img/thomas.png`;
+        itemName.innerHTML = "Thomas";
         document.getElementById("coinDisplay").innerHTML = `: ${
           playerData.Game[game - 1].Coins
         }`;
@@ -2196,43 +2195,48 @@ function shop(game) {
         if (playing) {
           playBuySound();
         }
-
-        switch (id) {
-          case 0:
-            
-            break;
-        }
       } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id].Active) {
         itemImg.src = `img/thomas.png`;
-        itemName.innerHTML = "Thomas"
+        itemName.innerHTML = "Thomas";
         playerData.Game[game - 1].ItemUnlocked.Skins[id].Active = false;
-        playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Active = true;
-        playerData.Game[game - 1].Sprite = playerData.Game[game - 1].ItemUnlocked.Skins[id].Sprite;
+        playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active = true;
+        playerData.Game[game - 1].Sprite =
+          playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Sprite;
         savePlayerData();
         if (playing) {
-          playInteractSound()
+          playInteractSound();
         }
-        console.log("thomas")
+        console.log("thomas");
       } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Active) {
         itemImg.src = `img/kohrer.png`;
-        itemName.innerHTML = "Köhrer"
+        itemName.innerHTML = "Köhrer";
         playerData.Game[game - 1].ItemUnlocked.Skins[id].Active = true;
-        playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Active = false;
-        playerData.Game[game - 1].Sprite = playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Sprite;
+        playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active = false;
+        playerData.Game[game - 1].Sprite =
+          playerData.Game[game - 1].ItemUnlocked.Skins[id].Sprite;
         savePlayerData();
         if (playing) {
-          playInteractSound()
+          playInteractSound();
         }
-        console.log("köhrer")
-      }else if (playerData.Game[game - 1].Coins < price) {
+        console.log("köhrer");
+      } else if (playerData.Game[game - 1].Coins < price) {
         showShopMessage("You don't have enough coins to buy this item!");
         if (playing) {
           playDeniedSound();
         }
       }
 
-      if (playing) {
-      }
+      /*if (playerData.Game[game - 1].ItemUnlocked.Skins[id].Active) {
+        playerData.Game[game - 1].Life *= 2;
+        playerData.Game[game - 1].GlobalScoreMultiplier *= 2;
+        playerData.Game[game - 1].Luck *= 2;
+        savePlayerData();
+      }else if (playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active && playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought) {
+        playerData.Game[game - 1].Life /= 2;
+        playerData.Game[game - 1].GlobalScoreMultiplier /= 2;
+        playerData.Game[game - 1].Luck /= 2;
+        savePlayerData();
+      }*/
     });
 
     itemDiv.appendChild(itemName);
@@ -2252,7 +2256,7 @@ function shop(game) {
     createShopItem("img/belt.png", 4, "Gucci Belt", 3);
     createShopItem("img/lotto.png", 5, "Lotto 6er", 4);
     createShopItem("img/autoschlüssel.png", 6, "E53 Coupé", 5);
-    addSkin(playerData.Game[game - 1].Sprite, 0, "Köhrer", 0);
+    addSkin(0, "Köhrer", 0);
   }
 
   addItems();
@@ -2270,7 +2274,7 @@ function shop(game) {
 }
 
 function gameStarted(game) {
-  let lifes = playerData.Game[game - 1].Life;
+  let lifes = playerData.Game[game - 1].Life * playerData.Game[game - 1].ItemUnlocked.Skins[0].Active ? 2 : 1;
 
   body.innerHTML = "";
   body.removeAttribute("style");
@@ -2584,7 +2588,7 @@ function gameStarted(game) {
       ) {
         if (
           Math.round(Math.random() * 100) <=
-          5 * playerData.Game[game - 1].Luck
+          5 * (playerData.Game[game - 1].Luck * playerData.Game[game - 1].ItemUnlocked.Skins[0].Active ? 2 : 1)
         ) {
           obj.collided = true;
           obj.image = "img/sew-test-note-1.png";
@@ -3055,7 +3059,7 @@ function gameStarted(game) {
     }
 
     if (!isGameOver) {
-      score += 0.1 * playerData.Game[game - 1].GlobalScoreMultiplier;
+      score += 0.1 * (playerData.Game[game - 1].GlobalScoreMultiplier * playerData.Game[game - 1].ItemUnlocked.Skins[0].Active ? 2 : 1);
       document.getElementById("score-text").innerHTML = `Score: ${Math.floor(
         score
       )}`;
