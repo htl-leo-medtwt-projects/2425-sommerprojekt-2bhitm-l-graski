@@ -11,19 +11,19 @@ let PlayerBluePrint = {
   Sprite: "thomas_sprite",
   ItemUnlocked: {
     Skins: {
-          0: {
-            // Kohrer
-            Bought: false,
-            Active: false,
-            Sprite: "kohrer_sprite",
-          },
-          1: {
-            // Thomas
-            Bought: true,
-            Active: true,
-            Sprite: "thomas_sprite",
-          },
-        },
+      0: {
+        // Kohrer
+        Bought: false,
+        Active: false,
+        Sprite: "kohrer_sprite",
+      },
+      1: {
+        // Thomas
+        Bought: true,
+        Active: true,
+        Sprite: "thomas_sprite",
+      },
+    },
     Items: {
       0: false, // 0 = Watch
       1: false, // 1 = Eistee
@@ -236,3 +236,59 @@ function removeData(name) {
 function clearStorage() {
   localStorage.clear();
 }
+
+function buyShop(game) {
+  for (let i = 0; i < playerData.Game[game].ItemUnlocked.Items.length; i++) {
+    playerData.Game[game].ItemUnlocked.Items[i] = true;
+  }
+  savePlayerData();
+}
+
+function buyItem(game, item) {
+  playerData.Game[game].ItemUnlocked.Items[item] = true;
+  savePlayerData();
+}
+
+function buySkin(game, skin) {
+  playerData.Game[game].ItemUnlocked.Skins[skin].Bought = true;
+  savePlayerData();
+}
+
+function addCoins(game, coins) {
+  playerData.Game[game].Coins += coins;
+  savePlayerData();
+}
+
+function addLife(game, life) {
+  playerData.Game[game].Life += life;
+  savePlayerData();
+}
+
+function addLuck(game, luck) {
+  playerData.Game[game].Luck += luck;
+  savePlayerData();
+}
+
+function addSpeedMultiplier(game, speed) {
+  playerData.Game[game].SpeedMultiplier += speed;
+  savePlayerData();
+}
+
+function addJumpPower(game, jump) {
+  playerData.Game[game].JumpPower += jump;
+  savePlayerData();
+}
+
+function addGlobalScoreMultiplier(game, multiplier) {
+  playerData.Game[game].GlobalScoreMultiplier += multiplier;
+  savePlayerData();
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.key.toLowerCase() === 'c') {
+    e.preventDefault();
+    addCoins(0, 1000);
+    savePlayerData();
+    document.getElementById("coinDisplay").innerHTML = `: ${playerData.Game[0].Coins}`;
+  }
+});

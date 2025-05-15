@@ -2250,13 +2250,13 @@ function shop(game) {
   }
 
   function addItems() {
-    createShopItem("img/uhr.png", 1, "Rolex Datejust 41", 0);
-    createShopItem("img/crocs.png", 2, "Lightning McQueen Crocs", 1);
-    createShopItem("img/eistee.png", 3, "Eistee Pfirsich", 2);
-    createShopItem("img/belt.png", 4, "Gucci Belt", 3);
-    createShopItem("img/lotto.png", 5, "Lotto 6er", 4);
-    createShopItem("img/autoschlüssel.png", 6, "E53 Coupé", 5);
-    addSkin(0, "Köhrer", 0);
+    createShopItem("img/uhr.png", 25, "Rolex Datejust 41", 0);
+    createShopItem("img/crocs.png", 50, "Lightning McQueen Crocs", 1);
+    createShopItem("img/eistee.png", 250, "Eistee Pfirsich", 2);
+    createShopItem("img/belt.png", 100, "Gucci Belt", 3);
+    createShopItem("img/lotto.png", 500, "Lotto 6er", 4);
+    createShopItem("img/autoschlüssel.png", 1000, "E53 Coupé", 5);
+    addSkin(1000, "Köhrer", 0);
   }
 
   addItems();
@@ -3204,11 +3204,11 @@ function gameStarted(game) {
     let forwardKey = playerData.Game[game - 1].Movement.Forward.toLowerCase();
     let backwardKey = playerData.Game[game - 1].Movement.Backward.toLowerCase();
 
-    if (e.key === backwardKey) {
+    if (e.key === backwardKey || e.key === "ArrowLeft") {
       playerDirection = -1;
-    } else if (e.key === forwardKey) {
+    } else if (e.key === forwardKey || e.key === "ArrowRight") {
       playerDirection = 1;
-    } else if (e.key === jumpKey) {
+    } else if (e.key === jumpKey || e.key === "ArrowUp") {
       jump();
     }
   });
@@ -3217,7 +3217,7 @@ function gameStarted(game) {
     let forwardKey = playerData.Game[game - 1].Movement.Forward.toLowerCase();
     let backwardKey = playerData.Game[game - 1].Movement.Backward.toLowerCase();
 
-    if (e.key === backwardKey || e.key === forwardKey) {
+    if (e.key === backwardKey || e.key === forwardKey || e.key === "ArrowLeft" || e.key === "ArrowRight") {
       playerDirection = 0;
     }
   });
