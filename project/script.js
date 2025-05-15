@@ -2274,7 +2274,11 @@ function shop(game) {
 }
 
 function gameStarted(game) {
-  let lifes = playerData.Game[game - 1].Life * playerData.Game[game - 1].ItemUnlocked.Skins[0].Active ? 2 : 1;
+  let lifeMultiplier = playerData.Game[game - 1].ItemUnlocked.Skins[0].Active
+    ? 2
+    : 1;
+  let lifes = playerData.Game[game - 1].Life * lifeMultiplier;
+  //console.log(lifeMultiplier)
 
   body.innerHTML = "";
   body.removeAttribute("style");
@@ -2577,6 +2581,10 @@ function gameStarted(game) {
   }
 
   function checkFallingObjectCollision() {
+    let luckMultiplier = playerData.Game[game - 1].ItemUnlocked.Skins[0].Active
+      ? 2
+      : 1;
+      //console.log(luckMultiplier)
     fallingObjects = fallingObjects.filter((obj) => {
       if (
         !isGameOver &&
@@ -2588,7 +2596,7 @@ function gameStarted(game) {
       ) {
         if (
           Math.round(Math.random() * 100) <=
-          5 * (playerData.Game[game - 1].Luck * playerData.Game[game - 1].ItemUnlocked.Skins[0].Active ? 2 : 1)
+          5 * (playerData.Game[game - 1].Luck * luckMultiplier)
         ) {
           obj.collided = true;
           obj.image = "img/sew-test-note-1.png";
@@ -3059,7 +3067,12 @@ function gameStarted(game) {
     }
 
     if (!isGameOver) {
-      score += 0.1 * (playerData.Game[game - 1].GlobalScoreMultiplier * playerData.Game[game - 1].ItemUnlocked.Skins[0].Active ? 2 : 1);
+      let scoreMultiplier = playerData.Game[game - 1].GlobalScoreMultiplier
+      if (playerData.Game[game - 1].ItemUnlocked.Skins[0].Active) {
+        scoreMultiplier *= 2;
+      }
+      score += 0.1 * scoreMultiplier;
+      //console.log(scoreMultiplier);
       document.getElementById("score-text").innerHTML = `Score: ${Math.floor(
         score
       )}`;
