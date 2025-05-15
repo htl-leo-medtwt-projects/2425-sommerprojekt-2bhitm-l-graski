@@ -2206,7 +2206,7 @@ function shop(game) {
         if (playing) {
           playInteractSound();
         }
-        console.log("thomas");
+        //console.log("thomas");
       } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Active) {
         itemImg.src = `img/kohrer.png`;
         itemName.innerHTML = "Köhrer";
@@ -2218,7 +2218,7 @@ function shop(game) {
         if (playing) {
           playInteractSound();
         }
-        console.log("köhrer");
+        //console.log("köhrer");
       } else if (playerData.Game[game - 1].Coins < price) {
         showShopMessage("You don't have enough coins to buy this item!");
         if (playing) {
@@ -2588,6 +2588,7 @@ function gameStarted(game) {
     fallingObjects = fallingObjects.filter((obj) => {
       if (
         !isGameOver &&
+        !gameOverShown &&
         !obj.collided &&
         playerX < obj.x + 64 &&
         playerX + playerWidth > obj.x &&
@@ -2748,12 +2749,14 @@ function gameStarted(game) {
     }
 
     document.getElementById("health-text").innerHTML = `${lifes}x`;
-    if (lifes <= 0 && !gameOverShown) {
+    if (lifes <= 0 && !gameOverShown && !isGameOver) {
       gameOver();
     }
   }
 
   function gameOver() {
+    if (gameOverShown || isGameOver) return;
+
     lifes = 0;
     document.getElementById("health-text").innerHTML = `${lifes}x`;
     document.getElementById("health-img").src = "img/heart-empty.png";
@@ -2907,7 +2910,8 @@ function gameStarted(game) {
       if (
         playerData.Game[game - 1].ItemUnlocked.Items[5] &&
         Math.random() * 100 <= 20 * playerData.Game[game - 1].Luck &&
-        !isGameOver
+        !isGameOver &&
+        !gameOverShown
       ) {
         checkHealth();
         document.getElementById("health-text").innerHTML = `${lifes}x`;
@@ -2939,7 +2943,7 @@ function gameStarted(game) {
         }
       }
 
-      if (!gameOverShown) {
+      if (!gameOverShown && !isGameOver) {
         gameOver();
       }
     }
@@ -3066,7 +3070,7 @@ function gameStarted(game) {
       ground.shift();
     }
 
-    if (!isGameOver) {
+    if (!isGameOver && !gameOverShown) {
       let scoreMultiplier = playerData.Game[game - 1].GlobalScoreMultiplier
       if (playerData.Game[game - 1].ItemUnlocked.Skins[0].Active) {
         scoreMultiplier *= 2;
@@ -3148,11 +3152,11 @@ function gameStarted(game) {
     drawPlayer();
     movePlayer();
 
-    if (!isGameOver) {
+    if (!isGameOver && !gameOverShown) {
       moveFallingObjects();
     }
 
-    if (playerX >= canvas.width / 1.5 && !isGameOver) {
+    if (playerX >= canvas.width / 1.5 && !isGameOver && !gameOverShown) {
       moveGround();
     }
 
