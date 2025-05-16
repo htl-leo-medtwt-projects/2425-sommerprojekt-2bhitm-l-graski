@@ -6,7 +6,7 @@ let shopSound = new Audio("sounds/shop_music.mp3");
 let saveEffectSound = new Audio("sounds/save_effect_sound.mp3");
 let playing = false;
 
-let gobalFalse = false;
+let gobalFalse = true;
 
 function toggleSound(location) {
   if (gobalFalse) {
@@ -107,9 +107,16 @@ function playDeniedSound() {
   }
 }
 
-function playHurtSound() {
+function playHurtSoundThomas() {
   if (gobalFalse) {
-    let hurtSound = new Audio("sounds/hurt_sound.mp3");
+    let hurtSound = new Audio("sounds/hurt_sound-thomas.mp3");
+    hurtSound.play();
+  }
+}
+
+function playHurtSoundKohrer() {
+  if (gobalFalse) {
+    let hurtSound = new Audio("sounds/hurt_sound-kohrer.mp3");
     hurtSound.play();
   }
 }

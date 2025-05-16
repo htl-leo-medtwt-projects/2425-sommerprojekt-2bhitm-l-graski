@@ -2066,11 +2066,14 @@ function shop(game) {
     let itemName = document.createElement("p");
     if (playerData.Game[game - 1].ItemUnlocked.Skins[id].Active) {
       itemName.innerHTML = "Köhrer";
-    } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active && playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought) {
+    } else if (
+      playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active &&
+      playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought
+    ) {
       itemName.innerHTML = "Thomas";
     } else {
       itemName.innerHTML = "Köhrer";
-      }
+    }
     itemName.style.color = "white";
     itemName.style.fontFamily = "SF-Pro";
     itemName.style.fontSize = "25px";
@@ -2133,9 +2136,12 @@ function shop(game) {
 
     if (playerData.Game[game - 1].ItemUnlocked.Skins[id].Active) {
       itemImg.src = `img/kohrer.png`;
-    } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active && playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought) {
+    } else if (
+      playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active &&
+      playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought
+    ) {
       itemImg.src = `img/thomas.png`;
-    }else {
+    } else {
       itemImg.src = `img/kohrer.png`;
     }
     itemImg.style.width = "128px";
@@ -2201,13 +2207,13 @@ function shop(game) {
         playerData.Game[game - 1].ItemUnlocked.Skins[id].Active = false;
         playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active = true;
         playerData.Game[game - 1].Sprite =
-          playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Sprite;
+          playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Sprite;
         savePlayerData();
         if (playing) {
           playInteractSound();
         }
         //console.log("thomas");
-      } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id+1].Active) {
+      } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active) {
         itemImg.src = `img/kohrer.png`;
         itemName.innerHTML = "Köhrer";
         playerData.Game[game - 1].ItemUnlocked.Skins[id].Active = true;
@@ -2584,7 +2590,7 @@ function gameStarted(game) {
     let luckMultiplier = playerData.Game[game - 1].ItemUnlocked.Skins[0].Active
       ? 2
       : 1;
-      //console.log(luckMultiplier)
+    //console.log(luckMultiplier)
     fallingObjects = fallingObjects.filter((obj) => {
       if (
         !isGameOver &&
@@ -2744,7 +2750,11 @@ function gameStarted(game) {
     if (lifes > 0) {
       lifes -= 1;
       if (playing) {
-        playHurtSound();
+        if (playerData.Game[game - 1].ItemUnlocked.Skins[0].Active) {
+          playHurtSoundKohrer();
+        } else {
+          playHurtSoundThomas();
+        }
       }
     }
 
@@ -3071,7 +3081,7 @@ function gameStarted(game) {
     }
 
     if (!isGameOver && !gameOverShown) {
-      let scoreMultiplier = playerData.Game[game - 1].GlobalScoreMultiplier
+      let scoreMultiplier = playerData.Game[game - 1].GlobalScoreMultiplier;
       if (playerData.Game[game - 1].ItemUnlocked.Skins[0].Active) {
         scoreMultiplier *= 2;
       }
@@ -3217,7 +3227,12 @@ function gameStarted(game) {
     let forwardKey = playerData.Game[game - 1].Movement.Forward.toLowerCase();
     let backwardKey = playerData.Game[game - 1].Movement.Backward.toLowerCase();
 
-    if (e.key === backwardKey || e.key === forwardKey || e.key === "ArrowLeft" || e.key === "ArrowRight") {
+    if (
+      e.key === backwardKey ||
+      e.key === forwardKey ||
+      e.key === "ArrowLeft" ||
+      e.key === "ArrowRight"
+    ) {
       playerDirection = 0;
     }
   });
