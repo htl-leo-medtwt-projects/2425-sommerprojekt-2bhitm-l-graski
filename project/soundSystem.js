@@ -6,7 +6,7 @@ let shopSound = new Audio("sounds/shop_music.mp3");
 let saveEffectSound = new Audio("sounds/save_effect_sound.mp3");
 let playing = false;
 
-let gobalFalse = true;
+let gobalFalse = false;
 
 function toggleSound(location) {
   if (gobalFalse) {

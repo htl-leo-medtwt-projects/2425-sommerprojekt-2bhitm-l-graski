@@ -2095,7 +2095,8 @@ function shop(game) {
       }
 
       window = 1;
-      let description = "Raphi Köhri";
+      let description = ["The Köhrer Skin doubles your Score multiplier, your Health, and your Luck!", "The Thomas Skin does absolutely nothing. But it looks cool!"];
+
 
       shopBody.style.transform = "rotateY(180deg)";
       setTimeout(() => {
@@ -2103,10 +2104,10 @@ function shop(game) {
         shopBody.style.overflowY = "hidden";
         let descriptionDiv = document.createElement("div");
         descriptionDiv.style.transform = "rotateY(180deg)";
-        descriptionDiv.style.marginBottom = "80%";
+        descriptionDiv.style.marginBottom = "45%";
 
         let descriptionHeader = document.createElement("h1");
-        descriptionHeader.innerHTML = name;
+        descriptionHeader.innerHTML = playerData.Game[game - 1].ItemUnlocked.Skins[id].Active ? "Köhrer" : "Thomas";
         descriptionHeader.style.color = "white";
         descriptionHeader.style.fontFamily = "SF-Pro";
         descriptionHeader.style.fontSize = "50px";
@@ -2115,7 +2116,8 @@ function shop(game) {
         descriptionHeader.style.margin = "50px 0 30px 0";
 
         let descriptionText = document.createElement("p");
-        descriptionText.innerHTML = description;
+        descriptionText.innerHTML = playerData.Game[game - 1].ItemUnlocked.Skins[id].Active
+          ? description[0] : description[1];
         descriptionText.style.color = "white";
         descriptionText.style.fontFamily = "SF-Pro";
         descriptionText.style.fontSize = "30px";
@@ -2553,8 +2555,10 @@ function gameStarted(game) {
   let coinImage = new Image();
   coinImage.src = "img/brain.gif";
 
-  let fallingImage = new Image();
-  fallingImage.src = "img/sew-test-note.png";
+  const fallingObjectImage = new Image();
+  fallingObjectImage.src = "img/sew-test-note.png";
+  const fallingObjectHitImage = new Image();
+  fallingObjectHitImage.src = "img/sew-test-note-1.png";
 
   let fallingObjects = [];
 
@@ -2566,14 +2570,14 @@ function gameStarted(game) {
       y: -100,
       speedX: -3,
       speedY: 4 * multiplier,
+      image: fallingObjectImage,
+      collided: false
     });
   }
 
   function drawFallingObjects() {
     fallingObjects.forEach((obj) => {
-      const img = new Image();
-      img.src = obj.image || "img/sew-test-note.png";
-      ctx.drawImage(img, obj.x, obj.y, 64, 64);
+      ctx.drawImage(obj.image, obj.x, obj.y, 64, 64);
     });
   }
 
@@ -2590,7 +2594,6 @@ function gameStarted(game) {
     let luckMultiplier = playerData.Game[game - 1].ItemUnlocked.Skins[0].Active
       ? 2
       : 1;
-    //console.log(luckMultiplier)
     fallingObjects = fallingObjects.filter((obj) => {
       if (
         !isGameOver &&
@@ -2606,12 +2609,11 @@ function gameStarted(game) {
           5 * (playerData.Game[game - 1].Luck * luckMultiplier)
         ) {
           obj.collided = true;
-          obj.image = "img/sew-test-note-1.png";
+          obj.image = fallingObjectHitImage;
           obj.speedX = 3 * (2 * Math.random());
           obj.speedY = -4 * (2 * Math.random());
           spawnParticles(obj.x + 32, obj.y + 32, "#00ff06");
           lifes += 1;
-          //console.log(lifes);
           document.getElementById("health-text").innerHTML = `${lifes}x`;
           if (playing) {
             playPickupSound();
@@ -2620,7 +2622,6 @@ function gameStarted(game) {
         } else {
           spawnParticles(obj.x + 32, obj.y + 32, "#ff0000");
           checkHealth();
-          //console.log(lifes);
           return false;
         }
       }
