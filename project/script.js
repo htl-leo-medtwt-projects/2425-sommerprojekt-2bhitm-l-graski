@@ -2095,8 +2095,10 @@ function shop(game) {
       }
 
       window = 1;
-      let description = ["The Köhrer Skin doubles your Score multiplier, your Health, and your Luck!", "The Thomas Skin does absolutely nothing. But it looks cool!"];
-
+      let description = [
+        "The Köhrer Skin doubles your Score multiplier, your Health, and your Luck!",
+        "The Thomas Skin does absolutely nothing. But it looks cool!",
+      ];
 
       shopBody.style.transform = "rotateY(180deg)";
       setTimeout(() => {
@@ -2107,7 +2109,16 @@ function shop(game) {
         descriptionDiv.style.marginBottom = "45%";
 
         let descriptionHeader = document.createElement("h1");
-        descriptionHeader.innerHTML = playerData.Game[game - 1].ItemUnlocked.Skins[id].Active ? "Köhrer" : "Thomas";
+
+        if (
+          playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought &&
+          playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active
+        ) {
+          descriptionHeader.innerHTML = "Thomas";
+        } else {
+          descriptionHeader.innerHTML = name;
+        }
+
         descriptionHeader.style.color = "white";
         descriptionHeader.style.fontFamily = "SF-Pro";
         descriptionHeader.style.fontSize = "50px";
@@ -2116,8 +2127,16 @@ function shop(game) {
         descriptionHeader.style.margin = "50px 0 30px 0";
 
         let descriptionText = document.createElement("p");
-        descriptionText.innerHTML = playerData.Game[game - 1].ItemUnlocked.Skins[id].Active
-          ? description[0] : description[1];
+
+        if (
+          playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought &&
+          playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active
+        ) {
+          descriptionText.innerHTML = description[1];
+        } else {
+          descriptionText.innerHTML = description[0];
+        }
+
         descriptionText.style.color = "white";
         descriptionText.style.fontFamily = "SF-Pro";
         descriptionText.style.fontSize = "30px";
@@ -2571,7 +2590,7 @@ function gameStarted(game) {
       speedX: -3,
       speedY: 4 * multiplier,
       image: fallingObjectImage,
-      collided: false
+      collided: false,
     });
   }
 
@@ -2805,16 +2824,27 @@ function gameStarted(game) {
         { scale: 1.5, opacity: 1, duration: 0.5, ease: "power2.out" }
       );
 
+      let buttonRowDiv = document.createElement("div");
+      buttonRowDiv.style.position = "absolute";
+      buttonRowDiv.style.top = "40%";
+      buttonRowDiv.style.left = "50%";
+      buttonRowDiv.style.transform = "translate(-50%, -50%)";
+      buttonRowDiv.style.display = "flex";
+      buttonRowDiv.style.gap = "16px";
+      buttonRowDiv.style.justifyContent = "center";
+      buttonRowDiv.style.alignItems = "center";
+      buttonRowDiv.style.width = "auto";
+      buttonRowDiv.style.zIndex = "10";
+
       let restartButton = document.createElement("button");
       restartButton.style.display = "inline-block";
       restartButton.style.borderRadius = "100px";
       restartButton.style.overflow = "hidden";
       restartButton.style.border = "none";
       restartButton.style.backgroundColor = "transparent";
-      restartButton.style.position = "absolute";
-      restartButton.style.top = "36%";
-      restartButton.style.left = "50%";
-      restartButton.style.transform = "translate(-50%, -50%)";
+      restartButton.style.width = "250px";
+      restartButton.style.height = "60px";
+      restartButton.style.position = "relative";
 
       let restartButtonImg = document.createElement("img");
       restartButtonImg.src = "img/green_button.png";
@@ -2856,26 +2886,16 @@ function gameStarted(game) {
 
       restartButton.appendChild(restartButtonImg);
       restartButton.appendChild(restartButtonText);
-      body.appendChild(restartButton);
-
-      gsap.fromTo(
-        restartButton,
-        { scale: 0, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.5, ease: "power2.out", delay: 0.5 }
-      );
 
       let backButton = document.createElement("button");
       backButton.style.display = "inline-block";
       backButton.style.overflow = "hidden";
-      backButton.style.position = "absolute";
-      backButton.style.top = "40%";
-      backButton.style.left = "42%";
-      backButton.style.transform = "translate(-50%, -50%)";
       backButton.style.border = "2px solid black";
       backButton.style.backgroundColor = "rgb(48, 47, 47)";
       backButton.style.borderRadius = "25px";
-      backButton.style.width = "15%";
-      backButton.style.height = "8%";
+      backButton.style.width = "250px";
+      backButton.style.height = "60px";
+      backButton.style.position = "relative";
 
       let backButtonText = document.createElement("p");
       backButtonText.innerHTML = "BACK";
@@ -2883,6 +2903,11 @@ function gameStarted(game) {
       backButtonText.style.fontSize = "18px";
       backButtonText.style.color = "white";
       backButtonText.style.fontWeight = "bolder";
+      backButtonText.style.position = "absolute";
+      backButtonText.style.top = "50%";
+      backButtonText.style.left = "50%";
+      backButtonText.style.transform = "translate(-50%, -50%)";
+      backButtonText.style.margin = "0";
 
       backButton.addEventListener("mouseover", () => {
         backButton.style.cursor = "pointer";
@@ -2904,10 +2929,12 @@ function gameStarted(game) {
       });
 
       backButton.appendChild(backButtonText);
-      body.appendChild(backButton);
+      buttonRowDiv.appendChild(backButton);
+      buttonRowDiv.appendChild(restartButton);
+      body.appendChild(buttonRowDiv);
 
       gsap.fromTo(
-        backButton,
+        buttonRowDiv,
         { scale: 0, opacity: 0 },
         { scale: 1, opacity: 1, duration: 0.5, ease: "power2.out", delay: 0.5 }
       );
