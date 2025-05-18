@@ -2277,12 +2277,12 @@ function shop(game) {
   }
 
   function addItems() {
-    createShopItem("img/uhr.png", 25, "Rolex Datejust 41", 0);
-    createShopItem("img/crocs.png", 50, "Lightning McQueen Crocs", 1);
-    createShopItem("img/eistee.png", 250, "Eistee Pfirsich", 2);
-    createShopItem("img/belt.png", 100, "Gucci Belt", 3);
-    createShopItem("img/lotto.png", 500, "Lotto 6er", 4);
-    createShopItem("img/autoschlüssel.png", 1000, "E53 Coupé", 5);
+    createShopItem("img/uhr.png", 500, "Rolex Datejust 41", 0);
+    createShopItem("img/crocs.png", 200, "Lightning McQueen Crocs", 1);
+    createShopItem("img/eistee.png", 350, "Eistee Pfirsich", 2);
+    createShopItem("img/belt.png", 250, "Gucci Belt", 3);
+    createShopItem("img/lotto.png", 100, "Lotto 6er", 4);
+    createShopItem("img/autoschlüssel.png", 400, "E53 Coupé", 5);
     addSkin(1000, "Köhrer", 0);
   }
 
@@ -2953,7 +2953,7 @@ function gameStarted(game) {
       ) {
         checkHealth();
         document.getElementById("health-text").innerHTML = `${lifes}x`;
-        console.log("damaged");
+        //console.log("damaged");
 
         if (lifes > 0) {
           spawnParticles(
