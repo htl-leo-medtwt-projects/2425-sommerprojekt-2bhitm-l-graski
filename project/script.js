@@ -482,29 +482,38 @@ function settingsButton(game, currentScreen) {
       backButton.style.top = "92%";
       backButton.style.left = "50%";
       backButton.style.transform = "translate(-50%, -50%)";
-      backButton.style.border = "2px solid black";
-      backButton.style.backgroundColor = "rgb(48, 47, 47)";
-      backButton.style.borderRadius = "25px";
+      backButton.style.border = "none";
+      backButton.style.backgroundColor = "transparent";
+      backButton.style.borderRadius = "15px";
       backButton.style.width = "28%";
       backButton.style.height = "10%";
+
+      let backButtonImg = document.createElement("img");
+      backButtonImg.src = "img/black_button.png";
+      backButtonImg.style.height = "100%";
+      backButtonImg.style.width = "100%";
+      backButtonImg.style.display = "block";
 
       let backButtonText = document.createElement("p");
       backButtonText.innerHTML = "Back";
       backButtonText.style.fontFamily = "SF-Pro";
+      backButtonText.style.position = "absolute";
+      backButtonText.style.top = "50%";
+      backButtonText.style.left = "50%";
+      backButtonText.style.transform = "translate(-50%, -50%)";
       backButtonText.style.fontSize = "18px";
       backButtonText.style.color = "white";
       backButtonText.style.fontWeight = "bolder";
 
       backButton.addEventListener("mouseover", () => {
         backButton.style.cursor = "pointer";
-        backButton.style.backgroundColor = "rgb(30, 30, 30)";
+        backButtonText.style.color = "lightgrey";
       });
 
       backButton.addEventListener("mouseleave", () => {
         backButton.style.cursor = "auto";
-        backButton.style.backgroundColor = "rgb(48, 47, 47)";
+        backButtonText.style.color = "white";
       });
-
       backButton.addEventListener("click", () => {
         closeMenuAnimation(backgroundDiv, () => {
           if (currentScreen == 1) {
@@ -552,6 +561,7 @@ function settingsButton(game, currentScreen) {
       backgroundDiv.appendChild(resumeButton);
 
       backButton.appendChild(backButtonText);
+      backButton.appendChild(backButtonImg);
       backgroundDiv.appendChild(backButton);
 
       backgroundDiv.appendChild(keyDiv);
@@ -650,6 +660,7 @@ function chooseGame() {
   button1.style.borderRadius = "100px";
   button1.style.position = "relative";
   button1.style.overflow = "hidden";
+  button1.style.marginBottom = "10px";
   button1.style.border = "none";
   button1.style.backgroundColor = "transparent";
 
@@ -697,6 +708,7 @@ function chooseGame() {
   button2.style.borderRadius = "100px";
   button2.style.position = "relative";
   button2.style.overflow = "hidden";
+  button2.style.marginBottom = "10px";
   button2.style.border = "none";
   button2.style.backgroundColor = "transparent";
 
@@ -1105,12 +1117,12 @@ function startGame(game) {
 
   backButton.addEventListener("mouseover", () => {
     backButton.style.cursor = "pointer";
-    backButton.style.filter = "grayscale(50%)";
+    backButtonText.style.color = "lightgrey";
   });
 
   backButton.addEventListener("mouseleave", () => {
     backButton.style.cursor = "auto";
-    backButton.style.filter = "grayscale(0%)";
+    backButtonText.style.color = "white";
   });
 
   backButton.addEventListener("click", () => {
@@ -1223,8 +1235,6 @@ function confirmScreen(game, text) {
   let yesButton = document.createElement("button");
   let yesImg = document.createElement("img");
   let yesText = document.createElement("p");
-  let noButton = document.createElement("button");
-  let noText = document.createElement("p");
 
   popUpOpen = true;
 
@@ -1300,32 +1310,44 @@ function confirmScreen(game, text) {
     }
   });
 
-  noText.innerHTML = "No, Keep Profil";
-  noText.style.fontFamily = "SF-Pro";
-  noText.style.fontSize = "18px";
-  noText.style.color = "white";
-  noText.style.fontWeight = "bold";
-
+  let noButton = document.createElement("button");
   noButton.style.display = "inline-block";
   noButton.style.overflow = "hidden";
   noButton.style.position = "absolute";
   noButton.style.top = "92%";
-  noButton.style.left = "57.5%";
+  noButton.style.left = "55%";
   noButton.style.transform = "translate(-50%, -50%)";
-  noButton.style.border = "2px solid black";
-  noButton.style.backgroundColor = "rgb(48, 47, 47)";
-  noButton.style.borderRadius = "25px";
-  noButton.style.width = "25%";
+  noButton.style.border = "none";
+  noButton.style.backgroundColor = "transparent";
+  noButton.style.borderRadius = "15px";
+  noButton.style.width = "28%";
   noButton.style.height = "10%";
+
+  let noButtonImg = document.createElement("img");
+  noButtonImg.src = "img/black_button.png";
+  noButtonImg.style.height = "100%";
+  noButtonImg.style.width = "100%";
+  noButtonImg.style.display = "block";
+
+  let noButtonText = document.createElement("p");
+  noButtonText.innerHTML = "No, Keep Profil";
+  noButtonText.style.fontFamily = "SF-Pro";
+  noButtonText.style.position = "absolute";
+  noButtonText.style.top = "50%";
+  noButtonText.style.left = "50%";
+  noButtonText.style.transform = "translate(-50%, -50%)";
+  noButtonText.style.fontSize = "18px";
+  noButtonText.style.color = "white";
+  noButtonText.style.fontWeight = "bolder";
 
   noButton.addEventListener("mouseover", () => {
     noButton.style.cursor = "pointer";
-    noButton.style.backgroundColor = "rgb(30, 30, 30)";
+    noButtonText.style.color = "lightgrey";
   });
 
   noButton.addEventListener("mouseleave", () => {
     noButton.style.cursor = "auto";
-    noButton.style.backgroundColor = "rgb(48, 47, 47)";
+    noButtonText.style.color = "white";
   });
 
   noButton.addEventListener("click", () => {
@@ -1341,7 +1363,8 @@ function confirmScreen(game, text) {
 
   backgroundDiv.appendChild(confirmHeader);
   backgroundDiv.appendChild(confirmText);
-  noButton.appendChild(noText);
+  noButton.appendChild(noButtonText);
+  noButton.appendChild(noButtonImg);
   backgroundDiv.appendChild(noButton);
   yesButton.appendChild(yesImg);
   yesButton.appendChild(yesText);
@@ -1559,9 +1582,9 @@ function gameScreen(game) {
   playerNameDiv.style.transform = "translate(-50%, -50%)";
   playerNameDiv.style.width = "256px";
   playerNameDiv.style.height = "32px";
-  playerNameDiv.style.backgroundColor = "rgb(53, 53, 53)";
+  playerNameDiv.style.backgroundColor = "transparent";
   playerNameDiv.style.borderRadius = "10px";
-  playerNameDiv.style.border = "3px solid rgb(35, 35, 35)";
+  playerNameDiv.style.border = "none";
 
   let playerName = document.createElement("p");
   playerName.innerHTML = playerData.Game[game - 1].PlayerName;
@@ -1578,7 +1601,14 @@ function gameScreen(game) {
   playerName.style.transform = "translate(-50%, -50%)";
   playerName.style.overflow = "hidden";
 
+  let playerNameImg = document.createElement("img");
+  playerNameImg.src = "img/black_button.png";
+  playerNameImg.style.height = "100%";
+  playerNameImg.style.width = "100%";
+  playerNameImg.style.display = "block";
+
   playerNameDiv.appendChild(playerName);
+  playerNameDiv.appendChild(playerNameImg);
   body.appendChild(playerNameDiv);
 
   let shopButton = document.createElement("button");
@@ -2326,9 +2356,9 @@ function gameStarted(game) {
   playerNameDiv.style.transform = "translate(-50%, -50%)";
   playerNameDiv.style.width = "256px";
   playerNameDiv.style.height = "32px";
-  playerNameDiv.style.backgroundColor = "rgb(53, 53, 53)";
+  playerNameDiv.style.backgroundColor = "transparent";
   playerNameDiv.style.borderRadius = "10px";
-  playerNameDiv.style.border = "3px solid rgb(35, 35, 35)";
+  playerNameDiv.style.border = "none";
 
   let playerName = document.createElement("p");
   playerName.innerHTML = playerData.Game[game - 1].PlayerName;
@@ -2345,7 +2375,14 @@ function gameStarted(game) {
   playerName.style.transform = "translate(-50%, -50%)";
   playerName.style.overflow = "hidden";
 
+  let playerNameImg = document.createElement("img");
+  playerNameImg.src = "img/black_button.png";
+  playerNameImg.style.height = "100%";
+  playerNameImg.style.width = "100%";
+  playerNameImg.style.display = "block";
+
   playerNameDiv.appendChild(playerName);
+  playerNameDiv.appendChild(playerNameImg);
   body.appendChild(playerNameDiv);
 
   let statsDiv = document.createElement("div");
@@ -2890,12 +2927,18 @@ function gameStarted(game) {
       let backButton = document.createElement("button");
       backButton.style.display = "inline-block";
       backButton.style.overflow = "hidden";
-      backButton.style.border = "2px solid black";
-      backButton.style.backgroundColor = "rgb(48, 47, 47)";
+      backButton.style.border = "none";
+      backButton.style.backgroundColor = "transparent";
       backButton.style.borderRadius = "25px";
       backButton.style.width = "250px";
       backButton.style.height = "60px";
       backButton.style.position = "relative";
+
+      let backButtonImg = document.createElement("img");
+      backButtonImg.src = "img/black_button.png";
+      backButtonImg.style.height = "100%";
+      backButtonImg.style.width = "100%";
+      backButtonImg.style.display = "block";
 
       let backButtonText = document.createElement("p");
       backButtonText.innerHTML = "BACK";
@@ -2911,12 +2954,12 @@ function gameStarted(game) {
 
       backButton.addEventListener("mouseover", () => {
         backButton.style.cursor = "pointer";
-        backButton.style.backgroundColor = "rgb(30, 30, 30)";
+        backButtonText.style.color = "lightgrey";
       });
 
       backButton.addEventListener("mouseleave", () => {
         backButton.style.cursor = "auto";
-        backButton.style.backgroundColor = "rgb(48, 47, 47)";
+        backButtonText.style.color = "white";
       });
 
       backButton.addEventListener("click", () => {
@@ -2929,6 +2972,7 @@ function gameStarted(game) {
       });
 
       backButton.appendChild(backButtonText);
+      backButton.appendChild(backButtonImg);
       buttonRowDiv.appendChild(backButton);
       buttonRowDiv.appendChild(restartButton);
       body.appendChild(buttonRowDiv);
@@ -3090,8 +3134,9 @@ function gameStarted(game) {
       ground[ground.length - 1].x + ground[ground.length - 1].width <
       canvas.width
     ) {
-      let width = Math.random() * (200 - 100) + 100;
-      let gap = Math.random() * (200 - 100) + 75;
+      let width = Math.random() * (250 - 100) + 100;
+      let gap = Math.random() * (180 - 75) + 50;
+
       let newSegment = { x: canvas.width + gap, width: width };
       if (Math.random() < 0.5) {
         newSegment.coin = {
