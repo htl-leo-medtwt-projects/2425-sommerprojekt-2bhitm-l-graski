@@ -4,6 +4,7 @@ let resetConfirmText =
 let coinImg = "coin.png";
 let popUpOpen = false;
 let firstLoad = false;
+let escapeListener;
 
 loadPlayerData();
 
@@ -470,10 +471,24 @@ function settingsButton(game, currentScreen) {
           popUpOpen = false;
         });
 
+        document.removeEventListener("keydown", escapeListener);
+        escapeListener = null;
+
         if (playing) {
           playInteractSound();
         }
       });
+
+      if (escapeListener) {
+        document.removeEventListener("keydown", escapeListener);
+        escapeListener = null;
+      }
+      escapeListener = function (event) {
+        if (event.key === "Escape") {
+          resumeButton.click();
+        }
+      };
+      document.addEventListener("keydown", escapeListener);
 
       let backButton = document.createElement("button");
       backButton.style.display = "inline-block";
@@ -1018,6 +1033,13 @@ function startGame(game) {
     nameButtonInput.style.cursor = "text";
   });
 
+  nameButtonInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      nameButtonInput.blur();
+      nameButtonInput.style.cursor = "pointer";
+    }
+  });
+
   nameButton.appendChild(nameButtonInput);
   body.appendChild(nameButton);
 
@@ -1356,10 +1378,24 @@ function confirmScreen(game, text) {
       popUpOpen = false;
     });
 
+    document.removeEventListener("keydown", escapeListener);
+    escapeListener = null;
+
     if (playing) {
       playInteractSound();
     }
   });
+
+  if (escapeListener) {
+    document.removeEventListener("keydown", escapeListener);
+    escapeListener = null;
+  }
+  escapeListener = function (event) {
+    if (event.key === "Escape") {
+      noButton.click();
+    }
+  };
+  document.addEventListener("keydown", escapeListener);
 
   backgroundDiv.appendChild(confirmHeader);
   backgroundDiv.appendChild(confirmText);
@@ -1844,6 +1880,10 @@ function shop(game) {
         closeMenuAnimation(shopDiv, () => {
           body.removeChild(shopBackground);
           body.removeChild(shopDiv);
+          if (escapeListener) {
+            document.removeEventListener("keydown", escapeListener);
+            escapeListener = null;
+          }
         });
 
         if (playing) {
@@ -1869,6 +1909,21 @@ function shop(game) {
         break;
     }
   });
+
+  if (escapeListener) {
+    document.removeEventListener("keydown", escapeListener);
+    escapeListener = null;
+  }
+  escapeListener = function (event) {
+    if (event.key === "Escape") {
+      if (window === 0) {
+        backButton.click();
+      } else {
+        backButton.click();
+      }
+    }
+  };
+  document.addEventListener("keydown", escapeListener);
 
   let shopBody = document.createElement("div");
   shopBody.style.display = "flex";

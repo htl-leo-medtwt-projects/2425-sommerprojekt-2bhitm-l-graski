@@ -6,10 +6,10 @@ let shopSound = new Audio("sounds/shop_music.mp3");
 let saveEffectSound = new Audio("sounds/save_effect_sound.mp3");
 let playing = false;
 
-let gobalFalse = true;
+let gobalSound = true;
 
 function toggleSound(location) {
-  if (gobalFalse) {
+  if (gobalSound) {
     let musicIcon = [...document.getElementsByClassName("music-button-icon")];
 
     if (playing) {
@@ -48,7 +48,7 @@ function stopSound() {
 }
 
 function playSound(location) {
-  if (gobalFalse) {
+  if (gobalSound) {
     let musicIcon = [...document.getElementsByClassName("music-button-icon")];
     musicIcon.forEach((e) => {
       e.src = "img/sound-icon-on.png";
@@ -81,48 +81,48 @@ function playSound(location) {
 }
 
 function playInteractSound() {
-  if (gobalFalse) {
+  if (gobalSound) {
     interactSound.play();
   }
 }
 
 function playPickupSound() {
-  if (gobalFalse) {
+  if (gobalSound) {
     let pickupSound = new Audio("sounds/pick-up.wav");
     pickupSound.play();
   }
 }
 
 function playBuySound() {
-  if (gobalFalse) {
+  if (gobalSound) {
     let buySound = new Audio("sounds/buy_sound.mp3");
     buySound.play();
   }
 }
 
 function playDeniedSound() {
-  if (gobalFalse) {
+  if (gobalSound) {
     let deniedSound = new Audio("sounds/denied_sound.mp3");
     deniedSound.play();
   }
 }
 
 function playHurtSoundThomas() {
-  if (gobalFalse) {
+  if (gobalSound) {
     let hurtSound = new Audio("sounds/hurt_sound-thomas.mp3");
     hurtSound.play();
   }
 }
 
 function playHurtSoundKohrer() {
-  if (gobalFalse) {
+  if (gobalSound) {
     let hurtSound = new Audio("sounds/hurt_sound-kohrer.mp3");
     hurtSound.play();
   }
 }
 
 function playSaveEffectSound() {
-  if (gobalFalse) {
+  if (gobalSound) {
     saveEffectSound.play();
   }
 }
