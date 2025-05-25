@@ -983,6 +983,7 @@ function startGame(game) {
   nameButton.style.color = "white";
 
   let nameButtonInput = document.createElement("input");
+  nameButtonInput.id = "name-button-input";
   nameButtonInput.type = "text";
   nameButtonInput.placeholder = playerData.Game[game - 1].PlayerName;
   nameButtonInput.style.overflow = "hidden";

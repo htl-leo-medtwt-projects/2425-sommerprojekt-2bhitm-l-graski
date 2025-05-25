@@ -45,3 +45,8 @@
     transform-origin: center;
   }
 }
+
+#name-button-input::placeholder {
+  color: #fff;
+  font-family: SF-Pro;
+}
