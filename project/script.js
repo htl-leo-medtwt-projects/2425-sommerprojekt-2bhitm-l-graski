@@ -2393,7 +2393,7 @@ function shop(game) {
         if (playing) {
           playBuySound();
         }
-      } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id].Active) {
+      } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id].Active && playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought) {
         itemImg.src = `img/thomas.png`;
         itemName.innerHTML = "Thomas";
         playerData.Game[game - 1].ItemUnlocked.Skins[id].Active = false;
@@ -2405,7 +2405,7 @@ function shop(game) {
           playInteractSound();
         }
         //console.log("thomas");
-      } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active) {
+      } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active && playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought) {
         itemImg.src = `img/kohrer.png`;
         itemName.innerHTML = "Köhrer";
         playerData.Game[game - 1].ItemUnlocked.Skins[id].Active = true;
