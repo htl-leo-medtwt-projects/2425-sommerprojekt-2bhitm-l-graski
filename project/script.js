@@ -1140,12 +1140,14 @@ function startGame(game) {
 
   backButton.addEventListener("mouseover", () => {
     backButton.style.cursor = "pointer";
-    backButtonText.style.color = "lightgrey";
+    backButtonText.style.color = "white";
+    backImg.style.filter = "invert(1)";
   });
 
   backButton.addEventListener("mouseleave", () => {
     backButton.style.cursor = "auto";
-    backButtonText.style.color = "white";
+    backButtonText.style.color = "black";
+    backImg.style.filter = "invert(0)";
   });
 
   backButton.addEventListener("click", () => {
