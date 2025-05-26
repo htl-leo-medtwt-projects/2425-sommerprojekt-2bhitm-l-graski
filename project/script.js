@@ -1430,10 +1430,20 @@ function gameScreen(game) {
   startButton.style.border = "none";
   startButton.style.backgroundColor = "transparent";
   startButton.style.position = "absolute";
-  startButton.style.top = "70%";
+  startButton.style.top = !playerData.Game[game - 1].Tutorial ? "80%" : "70%";
   startButton.style.left = "50%";
   startButton.style.transform = "translate(-50%, -50%)";
-  startButton.style.boxShadow = "10px 10px 40px 10px rgba(255,255,255,1)";
+  startButton.style.boxShadow = !playerData.Game[game - 1].Tutorial
+    ? "none"
+    : "10px 10px 40px 10px rgba(255,255,255,1)";
+  startButton.style.filter = !playerData.Game[game - 1].Tutorial
+    ? "grayscale(100%)"
+    : "grayscale(0%)";
+
+  if (!playerData.Game[game - 1].Tutorial) {
+    startButton.style.width = "128px";
+    startButton.style.height = "48px";
+  }
 
   let startButtonImg = document.createElement("img");
   startButtonImg.src = "img/green_button.png";
@@ -1448,7 +1458,9 @@ function gameScreen(game) {
   startButtonText.style.left = "50%";
   startButtonText.style.transform = "translate(-50%, -50%)";
   startButtonText.style.fontFamily = "SF-Pro";
-  startButtonText.style.fontSize = "25px";
+  startButtonText.style.fontSize = !playerData.Game[game - 1].Tutorial
+    ? "15px"
+    : "25px";
   startButtonText.style.color = "white";
   startButtonText.style.fontWeight = "bolder";
 
@@ -1459,7 +1471,9 @@ function gameScreen(game) {
 
   startButton.addEventListener("mouseleave", () => {
     startButton.style.cursor = "auto";
-    startButton.style.filter = "grayscale(0%)";
+    startButton.style.filter = !playerData.Game[game - 1].Tutorial
+      ? "grayscale(100%)"
+      : "grayscale(0%)";
   });
 
   startButton.addEventListener("click", () => {
@@ -1473,6 +1487,75 @@ function gameScreen(game) {
   startButton.appendChild(startButtonText);
   startButton.appendChild(startButtonImg);
   body.appendChild(startButton);
+
+  let tutorialButton = document.createElement("button");
+  tutorialButton.style.display = "inline-block";
+  tutorialButton.style.borderRadius = "100px";
+  tutorialButton.style.overflow = "hidden";
+  tutorialButton.style.border = "none";
+  tutorialButton.style.backgroundColor = "transparent";
+  tutorialButton.style.position = "absolute";
+  tutorialButton.style.top = playerData.Game[game - 1].Tutorial ? "80%" : "70%";
+  tutorialButton.style.left = "50%";
+  tutorialButton.style.transform = "translate(-50%, -50%)";
+  tutorialButton.style.boxShadow = playerData.Game[game - 1].Tutorial
+    ? "none"
+    : "10px 10px 40px 10px rgba(255,255,255,1)";
+  tutorialButton.style.filter = playerData.Game[game - 1].Tutorial
+    ? "grayscale(100%)"
+    : "grayscale(0%)";
+
+  if (playerData.Game[game - 1].Tutorial) {
+    tutorialButton.style.width = "128px";
+    tutorialButton.style.height = "48px";
+  }
+
+  let tutorialButtonImg = document.createElement("img");
+  tutorialButtonImg.src = "img/green_button.png";
+  tutorialButtonImg.style.height = "100%";
+  tutorialButtonImg.style.width = "100%";
+  tutorialButtonImg.style.display = "block";
+
+  let tutorialButtonText = document.createElement("p");
+  tutorialButtonText.innerHTML = "TUTORIAL";
+  tutorialButtonText.style.position = "absolute";
+  tutorialButtonText.style.top = "50%";
+  tutorialButtonText.style.left = "50%";
+  tutorialButtonText.style.transform = "translate(-50%, -50%)";
+  tutorialButtonText.style.fontFamily = "SF-Pro";
+  tutorialButtonText.style.fontSize = playerData.Game[game - 1].Tutorial
+    ? "15px"
+    : "25px";
+  tutorialButtonText.style.color = "white";
+  tutorialButtonText.style.fontWeight = "bolder";
+
+  tutorialButton.addEventListener("mouseover", () => {
+    tutorialButton.style.cursor = "pointer";
+    tutorialButton.style.filter = "grayscale(50%)";
+  });
+
+  tutorialButton.addEventListener("mouseleave", () => {
+    tutorialButton.style.cursor = "auto";
+    tutorialButton.style.filter = playerData.Game[game - 1].Tutorial
+      ? "grayscale(100%)"
+      : "grayscale(0%)";
+  });
+
+  tutorialButton.addEventListener("click", () => {
+    playerData.Game[game - 1].Tutorial = true;
+    savePlayerData();
+
+    startTutorial(game);
+
+    if (playing) {
+      playSound(1);
+      playInteractSound();
+    }
+  });
+
+  tutorialButton.appendChild(tutorialButtonText);
+  tutorialButton.appendChild(tutorialButtonImg);
+  body.appendChild(tutorialButton);
 
   let moveText = document.createElement("p");
   moveText.innerHTML = "PRESS TO MOVE";
@@ -2386,6 +2469,867 @@ function shop(game) {
   body.appendChild(shopDiv);
 
   openMenuAnimation(shopDiv);
+}
+
+function startTutorial(game) {
+  body.innerHTML = "";
+  body.removeAttribute("style");
+
+  body.style.backgroundImage = "url(img/classroom_without-tables.png)";
+  body.style.backgroundRepeat = "no-repeat";
+  body.style.backgroundSize = "cover";
+  body.style.overflow = "hidden";
+
+  settingsButton(1, 4);
+
+  let playerNameDiv = document.createElement("div");
+  playerNameDiv.style.display = "inline-block";
+  playerNameDiv.style.overflow = "hidden";
+  playerNameDiv.style.position = "absolute";
+  playerNameDiv.style.top = "5%";
+  playerNameDiv.style.left = "50%";
+  playerNameDiv.style.transform = "translate(-50%, -50%)";
+  playerNameDiv.style.width = "256px";
+  playerNameDiv.style.height = "32px";
+  playerNameDiv.style.backgroundColor = "transparent";
+  playerNameDiv.style.borderRadius = "10px";
+  playerNameDiv.style.border = "none";
+
+  let playerName = document.createElement("p");
+  playerName.innerHTML = playerData.Game[0].PlayerName;
+  playerName.style.display = "inline-block";
+  playerName.style.fontFamily = "SF-Pro";
+  playerName.style.color = "white";
+  playerName.style.fontSize = "20px";
+  playerName.style.textShadow =
+    "2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, " +
+    "1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000";
+  playerName.style.position = "absolute";
+  playerName.style.top = "50%";
+  playerName.style.left = "50%";
+  playerName.style.transform = "translate(-50%, -50%)";
+  playerName.style.overflow = "hidden";
+
+  let playerNameImg = document.createElement("img");
+  playerNameImg.src = "img/black_button.png";
+  playerNameImg.style.height = "100%";
+  playerNameImg.style.width = "100%";
+  playerNameImg.style.display = "block";
+
+  playerNameDiv.appendChild(playerName);
+  playerNameDiv.appendChild(playerNameImg);
+  body.appendChild(playerNameDiv);
+
+  let statsDiv = document.createElement("div");
+  statsDiv.style.display = "inline-block";
+  statsDiv.style.overflow = "hidden";
+  statsDiv.style.position = "absolute";
+  statsDiv.style.top = "9%";
+  statsDiv.style.left = "7.5%";
+  statsDiv.style.transform = "translate(-50%, -50%)";
+  statsDiv.style.width = "256px";
+  statsDiv.style.height = "133px";
+  statsDiv.style.backgroundColor = "rgb(53, 53, 53, 0.7)";
+  statsDiv.style.borderRadius = "20px";
+  statsDiv.style.border = "3px solid rgb(35, 35, 35, 0.7)";
+
+  let healthDiv = document.createElement("div");
+  healthDiv.style.display = "flex";
+  healthDiv.style.alignItems = "center";
+  healthDiv.style.margin = "2.5% 5%";
+
+  let healthText = document.createElement("p");
+  healthText.innerHTML = `∞`;
+  healthText.id = "health-text";
+  healthText.style.display = "inline-block";
+  healthText.style.fontFamily = "SF-Pro";
+  healthText.style.color = "white";
+  healthText.style.fontSize = "20px";
+  healthText.style.marginRight = "5px";
+
+  let healthImg = document.createElement("img");
+  healthImg.id = "health-img";
+  healthImg.src = "img/heart-full.png";
+  healthImg.style.display = "block";
+  healthImg.style.width = "32px";
+  healthImg.style.height = "32px";
+
+  let scoreText = document.createElement("p");
+  scoreText.id = "score-text";
+  scoreText.innerHTML = `Score: 0`;
+  scoreText.style.display = "inline-block";
+  scoreText.style.fontFamily = "SF-Pro";
+  scoreText.style.color = "white";
+  scoreText.style.fontSize = "20px";
+  scoreText.style.margin = "0 5% 1.5% 5%";
+
+  let coinsDiv = document.createElement("div");
+  coinsDiv.style.display = "flex";
+  coinsDiv.style.alignItems = "center";
+  coinsDiv.style.margin = "2.5% 5%";
+
+  let coinsImg = document.createElement("img");
+  coinsImg.src = `img/${coinImg}`;
+  coinsImg.style.display = "block";
+  coinsImg.style.width = "32px";
+  coinsImg.style.height = "32px";
+  coinsImg.style.overflow = "hidden";
+
+  let coins = document.createElement("p");
+  coins.innerHTML = `: 0`;
+  coins.style.display = "inline-block";
+  coins.style.fontFamily = "SF-Pro";
+  coins.style.color = "white";
+  coins.style.fontSize = "20px";
+  coins.style.overflow = "hidden";
+
+  coinsDiv.appendChild(coinsImg);
+  coinsDiv.appendChild(coins);
+  healthDiv.appendChild(healthText);
+  healthDiv.appendChild(healthImg);
+  statsDiv.appendChild(healthDiv);
+  statsDiv.appendChild(scoreText);
+  statsDiv.appendChild(coinsDiv);
+  body.appendChild(statsDiv);
+
+  let canvas = document.createElement("canvas");
+  document.body.appendChild(canvas);
+  let ctx = canvas.getContext("2d");
+
+  let groundHeight = 100;
+  let playerWidth = 50;
+  let playerHeight = 50;
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let coinAmount = 0;
+  let playerX = 0;
+  let playerY = canvas.height - 1.5 * groundHeight - playerHeight + 14;
+  let playerSpeed = 6;
+  let playerDirection = 0;
+  let velocityY = 0;
+  let gravity = 0.8;
+  let jumpPower = -17.5;
+  let isJumping = false;
+  let playerVisible = true;
+
+  let particles = [];
+
+  class Particle {
+    constructor(x, y, color) {
+      this.x = x;
+      this.y = y;
+      this.size = Math.random() * 5 + 5;
+      this.speedX = (Math.random() - 0.5) * 8;
+      this.speedY = (Math.random() - 0.5) * 8;
+      this.color = color;
+      this.alpha = 1;
+      this.decay = 0.06;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.alpha -= this.decay;
+      if (this.alpha < 0) this.alpha = 0;
+    }
+    draw(ctx) {
+      ctx.save();
+      ctx.globalAlpha = this.alpha;
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function spawnParticles(x, y, color) {
+    for (let i = 0; i < 20; i++) {
+      particles.push(new Particle(x, y, color));
+    }
+  }
+
+  let groundImage = new Image();
+  groundImage.src = "img/tisch.png";
+
+  let ground = [
+    { x: 0, width: 200 },
+    { x: 300, width: 200 },
+    { x: 600, width: 200 },
+    { x: 900, width: 200 },
+    { x: 1200, width: 200 },
+    { x: 1500, width: 200 },
+    { x: 1800, width: 200 },
+    { x: 2100, width: 200 },
+    { x: 2400, width: 200 },
+    { x: 2700, width: 200 },
+  ];
+
+  let spriteImage = new Image();
+  spriteImage.src = `img/thomas_sprite.png`;
+
+  let scaledSpriteImage = document.createElement("canvas");
+  let scaledSpriteCtx = scaledSpriteImage.getContext("2d");
+
+  spriteImage.onload = () => {
+    scaledSpriteImage.width = spriteImage.width * 2;
+    scaledSpriteImage.height = spriteImage.height * 2;
+    scaledSpriteCtx.drawImage(
+      spriteImage,
+      0,
+      0,
+      scaledSpriteImage.width,
+      scaledSpriteImage.height
+    );
+  };
+
+  const SPRITE_WIDTH = 700;
+  const SPRITE_HEIGHT = 850;
+  const SPRITE_SPACING = 400;
+  const SPRITE_ROW_SPACING = 300;
+  const RUN_FRAMES = 2;
+  const JUMP_FRAMES = 3;
+  const IDLE_FRAMES = 4;
+  const IDLE_ROW = 3;
+  let currentFrame = 0;
+  let frameCounter = 0;
+  let isFlipped = false;
+  let idleTimer = 0;
+  let isIdle = false;
+  let idleFrameDelay = Math.floor(Math.random() * (900 - 300 + 1)) + 300;
+
+  function drawPlayer() {
+    if (!playerVisible) return;
+    let spriteRow;
+    let totalFrames;
+    if (isIdle) {
+      spriteRow = IDLE_ROW;
+      totalFrames = IDLE_FRAMES;
+    } else if (isJumping) {
+      spriteRow = 2;
+      totalFrames = JUMP_FRAMES;
+    } else {
+      spriteRow = 1;
+      totalFrames = RUN_FRAMES;
+    }
+    let sourceY = (spriteRow - 1) * (SPRITE_HEIGHT + SPRITE_ROW_SPACING);
+
+    if (!isIdle || isJumping || playerDirection !== 0) {
+      frameCounter++;
+      if (frameCounter >= 10) {
+        currentFrame = (currentFrame + 1) % totalFrames;
+        frameCounter = 0;
+      }
+    } else if (isIdle) {
+      idleTimer++;
+      if (idleTimer >= idleFrameDelay) {
+        currentFrame = Math.floor(Math.random() * totalFrames);
+        idleTimer = 0;
+        idleFrameDelay = Math.floor(Math.random() * (900 - 300 + 1)) + 300;
+      }
+    } else {
+      currentFrame = 0;
+    }
+
+    ctx.save();
+    if (isFlipped) {
+      ctx.translate(playerX + playerWidth / 2, 0);
+      ctx.scale(-1, 1);
+      ctx.translate(-(playerX + playerWidth / 2), 0);
+    }
+    ctx.drawImage(
+      scaledSpriteImage,
+      currentFrame * (SPRITE_WIDTH + SPRITE_SPACING),
+      sourceY,
+      SPRITE_WIDTH,
+      SPRITE_HEIGHT,
+      playerX,
+      playerY,
+      playerWidth * 2,
+      playerHeight * 2
+    );
+    ctx.restore();
+  }
+
+  function drawGround() {
+    const groundOffset = 10;
+    ground.forEach((segment) => {
+      ctx.drawImage(
+        groundImage,
+        segment.x,
+        canvas.height - groundHeight + groundOffset,
+        segment.width,
+        groundHeight
+      );
+    });
+  }
+
+  function drawCoins() {
+    ground.forEach((segment) => {
+      if (segment.coin && !segment.coin.element) {
+        const img = document.createElement("img");
+        img.src = "img/brain.gif";
+        img.style.position = "absolute";
+        img.style.width = "128px";
+        img.style.height = "128px";
+        img.style.left = `${segment.coin.x}px`;
+        img.style.top = `${segment.coin.y}px`;
+        img.style.pointerEvents = "none";
+        document.body.appendChild(img);
+        segment.coin.element = img;
+      } else if (segment.coin && segment.coin.element) {
+        segment.coin.element.style.left = `${segment.coin.x}px`;
+      }
+    });
+  }
+
+  function checkCoinCollision() {
+    ground.forEach((segment) => {
+      if (segment.coin) {
+        let coin = segment.coin;
+        if (
+          playerX < coin.x + 128 &&
+          playerX + playerWidth > coin.x &&
+          playerY < coin.y + 128 &&
+          playerY + playerHeight > coin.y
+        ) {
+          if (coin.element) document.body.removeChild(coin.element);
+          segment.coin = null;
+          coinAmount += 1;
+          coins.innerHTML = `: ${coinAmount}`;
+          if (playing) {
+            playPickupSound();
+          }
+        }
+      }
+    });
+  }
+
+  function drawPortal() {
+  ground.forEach((segment) => {
+    if (segment.portal && !segment.portal.element) {
+      const img = document.createElement("img");
+      img.src = "img/portal.gif";
+      img.style.position = "absolute";
+      img.style.width = "128px";
+      img.style.height = "128px";
+      img.style.left = `${segment.portal.x}px`;
+      img.style.top = `${segment.portal.y}px`;
+      img.style.pointerEvents = "none";
+      document.body.appendChild(img);
+      segment.portal.element = img;
+    } else if (segment.portal && segment.portal.element) {
+      segment.portal.element.style.left = `${segment.portal.x}px`;
+      segment.portal.element.style.top = `${segment.portal.y}px`;
+    }
+  });
+}
+
+  function checkPortalCollision() {
+  ground.forEach((segment) => {
+    if (segment.portal) {
+      let portal = segment.portal;
+      if (
+        playerX < portal.x + 128 &&
+        playerX + playerWidth > portal.x &&
+        playerY < portal.y + 128 &&
+        playerY + playerHeight > portal.y
+      ) {
+        tutorialRunning = false;
+        gameScreen(game);
+
+        if (playing) {
+          playSound(0)
+        }
+      }
+    }
+  });
+}
+
+  function movePlayer() {
+    let wasOnGround = false;
+    for (let i = 0; i < ground.length; i++) {
+      let current = ground[i];
+      let nextPlayerBottom = playerY + playerHeight + velocityY;
+      let groundY = canvas.height - 1.5 * groundHeight + 14;
+      let isFallingOntoPlatform =
+        playerY + playerHeight <= groundY &&
+        nextPlayerBottom >= groundY &&
+        playerX + playerWidth > current.x &&
+        playerX < current.x + current.width;
+      if (isFallingOntoPlatform) {
+        playerY = groundY - playerHeight;
+        velocityY = 0;
+        isJumping = false;
+        jumpCount = 0;
+        wasOnGround = true;
+        break;
+      }
+    }
+    if (!wasOnGround) {
+      velocityY += gravity;
+      velocityY = Math.min(velocityY, 20);
+      isJumping = true;
+    }
+    playerY += velocityY;
+    playerX = Math.max(
+      0,
+      Math.min(
+        playerX + playerSpeed * playerDirection,
+        canvas.width - playerWidth
+      )
+    );
+    if (playerDirection < 0) {
+      isFlipped = true;
+    } else if (playerDirection > 0) {
+      isFlipped = false;
+    }
+    isIdle = playerDirection === 0 && !isJumping;
+    if (playerY > canvas.height) {
+      playerX = 10;
+      playerY = canvas.height - 1.5 * groundHeight - playerHeight + 14;
+      velocityY = 0;
+      spawnParticles(
+        playerX + playerWidth / 2,
+        playerY + playerHeight / 2,
+        "#00f"
+      );
+    }
+
+    setTimeout(() => {
+      moveTextFunction();
+    }, 150);
+
+    jumpTextFunction();
+    coinTextFunction();
+
+    if (coinAmount >= 1 && !showTestText) {
+      setTimeout(() => {
+        testTextFunction();
+      }, 250);
+    }
+  }
+
+  let showMoveText = false;
+  let showJumpText = false;
+  let showCoinText = false;
+  let showTestText = false;
+
+  let moveText = document.createElement("h1");
+  let jumpText = document.createElement("h1");
+  let coinText = document.createElement("h1");
+  let testText = document.createElement("h1");
+  let againText = document.createElement("h1");
+
+  function moveTextFunction() {
+    if (!showMoveText) {
+      showMoveText = true;
+      moveText.innerHTML = "Press 'A' and 'D' to move!";
+      moveText.style.color = "black";
+      moveText.style.fontFamily = "Uberschriften";
+      moveText.style.position = "absolute";
+      moveText.style.top = "35%";
+      moveText.style.left = "50%";
+      moveText.style.transform = "translate(-50%, -50%)";
+      moveText.style.fontSize = "50px";
+      moveText.style.opacity = "0";
+      body.appendChild(moveText);
+
+      gsap.fromTo(
+        moveText,
+        { scale: 0, opacity: 0 },
+        {
+          scale: 1.5,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+          onComplete: () => {
+            gsap.to(moveText, {
+              delay: 1,
+              opacity: 0,
+              duration: 0.5,
+              onComplete: () => {
+                if (moveText.parentNode) {
+                  body.removeChild(moveText);
+                }
+              },
+            });
+          },
+        }
+      );
+    }
+  }
+
+  function jumpTextFunction() {
+    if (
+      !showJumpText &&
+      playerX >= 185 - 2 * playerWidth &&
+      playerX <= 205 - playerWidth
+    ) {
+      showJumpText = true;
+      if (moveText.parentNode) {
+        body.removeChild(moveText);
+      }
+      jumpText.innerHTML = "Press 'Space' to jump!";
+      jumpText.style.color = "black";
+      jumpText.style.fontFamily = "Uberschriften";
+      jumpText.style.position = "absolute";
+      jumpText.style.top = "35%";
+      jumpText.style.left = "50%";
+      jumpText.style.transform = "translate(-50%, -50%)";
+      jumpText.style.fontSize = "50px";
+      jumpText.style.opacity = "0";
+      body.appendChild(jumpText);
+
+      gsap.fromTo(
+        jumpText,
+        { scale: 0, opacity: 0 },
+        {
+          scale: 1.5,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+          onComplete: () => {
+            gsap.to(jumpText, {
+              delay: 1,
+              opacity: 0,
+              duration: 0.5,
+              onComplete: () => {
+                if (jumpText.parentNode) {
+                  body.removeChild(jumpText);
+                }
+              },
+            });
+          },
+        }
+      );
+    }
+  }
+
+  function coinTextFunction() {
+    if (
+      !showCoinText &&
+      playerX >= 985 - 2 * playerWidth &&
+      playerX <= 1005 - playerWidth
+    ) {
+      showCoinText = true;
+      if (moveText.parentNode) {
+        body.removeChild(moveText);
+      }
+      if (jumpText.parentNode) {
+        body.removeChild(jumpText);
+      }
+      coinText.innerHTML = "Collect the Brains to get Coins!";
+      coinText.style.color = "black";
+      coinText.style.fontFamily = "Uberschriften";
+      coinText.style.position = "absolute";
+      coinText.style.top = "35%";
+      coinText.style.left = "50%";
+      coinText.style.transform = "translate(-50%, -50%)";
+      coinText.style.fontSize = "50px";
+      coinText.style.opacity = "0";
+      body.appendChild(coinText);
+
+      gsap.fromTo(
+        coinText,
+        { scale: 0, opacity: 0 },
+        {
+          scale: 1.5,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+          onComplete: () => {
+            gsap.to(coinText, {
+              delay: 1,
+              opacity: 0,
+              duration: 0.5,
+              onComplete: () => {
+                if (coinText.parentNode) {
+                  body.removeChild(coinText);
+                }
+              },
+            });
+          },
+        }
+      );
+
+      let middleGround = ground[4];
+      if (!middleGround.coin) {
+        middleGround.coin = {
+          x: middleGround.x + middleGround.width / 2 - 64,
+          y: canvas.height - groundHeight - 100,
+          element: null,
+        };
+      }
+    }
+  }
+
+  function testTextFunction() {
+    if (!showTestText) {
+      showTestText = true;
+      if (coinText.parentNode) {
+        body.removeChild(coinText);
+      }
+      testText.innerHTML = "Avoid the SEW Test";
+      testText.style.color = "black";
+      testText.style.fontFamily = "Uberschriften";
+      testText.style.position = "absolute";
+      testText.style.top = "35%";
+      testText.style.left = "50%";
+      testText.style.transform = "translate(-50%, -50%)";
+      testText.style.fontSize = "50px";
+      testText.style.opacity = "0";
+      body.appendChild(testText);
+
+      gsap.fromTo(
+        testText,
+        { scale: 0, opacity: 0 },
+        {
+          scale: 1.5,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+          onComplete: () => {
+            gsap.to(testText, {
+              delay: 1,
+              opacity: 0,
+              duration: 0.5,
+              onComplete: () => {
+                if (testText.parentNode) {
+                  body.removeChild(testText);
+                }
+              },
+            });
+          },
+        }
+      );
+
+      spawnFallingObject();
+    }
+  }
+
+  function tryAgainText() {
+    if (testText.parentNode) {
+      body.removeChild(testText);
+    }
+    againText.innerHTML = "Try Again!";
+    againText.style.color = "black";
+    againText.style.fontFamily = "Uberschriften";
+    againText.style.position = "absolute";
+    againText.style.top = "35%";
+    againText.style.left = "50%";
+    againText.style.transform = "translate(-50%, -50%)";
+    againText.style.fontSize = "50px";
+    againText.style.opacity = "0";
+    body.appendChild(againText);
+
+    gsap.fromTo(
+      againText,
+      { scale: 0, opacity: 0 },
+      {
+        scale: 1.5,
+        opacity: 1,
+        duration: 0.5,
+        ease: "power2.out",
+        onComplete: () => {
+          gsap.to(againText, {
+            delay: 1,
+            opacity: 0,
+            duration: 0.5,
+            onComplete: () => {
+              if (againText.parentNode) {
+                body.removeChild(againText);
+              }
+                  spawnFallingObject();
+
+            },
+          });
+        },
+      }
+    );
+  }
+
+  function jump() {
+    let isGrounded = false;
+    let groundY = canvas.height - 1.5 * groundHeight - playerHeight + 14;
+    if (playerY >= groundY - 1 && playerY <= groundY + 1) {
+      isGrounded = true;
+    } else {
+      for (let i = 0; i < ground.length; i++) {
+        let platform = ground[i];
+        let platformTop = canvas.height - 1.5 * groundHeight + 14;
+        let playerBottom = playerY + playerHeight;
+        let isOnPlatform =
+          playerBottom >= platformTop - 2 &&
+          playerBottom <= platformTop + 2 &&
+          playerX + playerWidth > platform.x &&
+          playerX < platform.x + platform.width;
+        if (isOnPlatform) {
+          isGrounded = true;
+          break;
+        }
+      }
+    }
+    if (isGrounded) {
+      velocityY = jumpPower;
+      isJumping = true;
+      jumpCount = 1;
+    }
+  }
+
+  let tutorialRunning = true;
+
+function draw() {
+  if (!tutorialRunning) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles = particles.filter((p) => p.alpha > 0);
+    particles.forEach((p) => {
+      p.update();
+      p.draw(ctx);
+    });
+    drawGround();
+    drawCoins();
+    drawPortal();
+    drawFallingObjects();
+    checkCoinCollision();
+    checkPortalCollision();
+    checkFallingObjectCollision();
+    drawPlayer();
+    movePlayer();
+    moveFallingObjects();
+    requestAnimationFrame(draw);
+  }
+
+  let fallingObjects = [];
+
+  function drawFallingObjects() {
+    fallingObjects.forEach((obj) => {
+      let img = new Image();
+      img.src = obj.image;
+      ctx.drawImage(img, obj.x, obj.y, obj.width, obj.height);
+    });
+  }
+
+  function moveFallingObjects() {
+  let portalSpawned = false;
+  fallingObjects = fallingObjects.filter((obj) => {
+    obj.y += obj.speedY;
+    if (obj.y >= canvas.height && !portalSpawned) {
+      setTimeout(() => {
+    
+    let portalText = document.createElement("h1");
+    portalText.innerHTML = "Enter the Portal!";
+    portalText.style.color = "black";
+    portalText.style.fontFamily = "Uberschriften";
+    portalText.style.position = "absolute";
+    portalText.style.top = "35%";
+    portalText.style.left = "50%";
+    portalText.style.transform = "translate(-50%, -50%)";
+    portalText.style.fontSize = "50px";
+    portalText.style.opacity = "0";
+    body.appendChild(portalText);
+
+    gsap.fromTo(
+      portalText,
+      { scale: 0, opacity: 0 },
+      {
+        scale: 1.5,
+        opacity: 1,
+        duration: 0.5,
+        ease: "power2.out",
+        onComplete: () => {
+          gsap.to(portalText, {
+            delay: 1,
+            opacity: 0,
+            duration: 0.5,
+            onComplete: () => {
+              if (portalText.parentNode) {
+                body.removeChild(portalText);
+              }
+            },
+          });
+        },
+      }
+    );
+
+      let middleGround = ground[6];
+      if (!middleGround.portal) {
+        middleGround.portal = {
+          x: middleGround.x + middleGround.width - 175,
+          y: canvas.height - groundHeight - 100,
+          element: null,
+        };
+        portalSpawned = true;
+      }
+    },350)
+      return false;
+    }
+    return obj.y < canvas.height;
+  });
+}
+
+  function spawnFallingObject() {
+    const x = canvas.width / 1.5 + 200;
+    fallingObjects.push({
+      x: x,
+      y: -64,
+      speedY: 6,
+      image: "img/sew-test-note.png",
+      width: 64,
+      height: 64,
+    });
+  }
+
+  function checkFallingObjectCollision() {
+    fallingObjects = fallingObjects.filter((obj) => {
+      if (
+        playerX < obj.x + obj.width &&
+        playerX + playerWidth > obj.x &&
+        playerY < obj.y + obj.height &&
+        playerY + playerHeight > obj.y
+      ) {
+        spawnParticles(
+          obj.x + obj.width / 2,
+          obj.y + obj.height / 2,
+          "#ff0000"
+        );
+        playerX = ground[4].x + ground[4].width / 2 - 64;
+        tryAgainText();
+        return false;
+      }
+      return true;
+    });
+  }
+
+  document.addEventListener("keydown", (e) => {
+    let jumpKey = "space";
+    if (jumpKey === "space") jumpKey = " ";
+    let forwardKey = "d";
+    let backwardKey = "a";
+    if (e.key === backwardKey || e.key === "ArrowLeft") {
+      playerDirection = -1;
+    } else if (e.key === forwardKey || e.key === "ArrowRight") {
+      playerDirection = 1;
+    } else if (e.key === jumpKey || e.key === "ArrowUp") {
+      jump();
+    }
+  });
+
+  document.addEventListener("keyup", (e) => {
+    let forwardKey = "d";
+    let backwardKey = "a";
+    if (
+      e.key === backwardKey ||
+      e.key === forwardKey ||
+      e.key === "ArrowLeft" ||
+      e.key === "ArrowRight"
+    ) {
+      playerDirection = 0;
+    }
+  });
+
+  draw();
 }
 
 function gameStarted(game) {

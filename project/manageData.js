@@ -1,5 +1,6 @@
 let PlayerBluePrint = {
   Used: false,
+  Tutorial: false,
   PlayerName: "NAME",
   Coins: 0,
   BestScore: 0,
@@ -45,6 +46,7 @@ let playerData = {
   Game: [
     {
       Used: false,
+      Tutorial: false,
       PlayerName: "NAME",
       Coins: 0,
       BestScore: 0,
@@ -87,6 +89,7 @@ let playerData = {
     },
     {
       Used: false,
+      Tutorial: false,
       PlayerName: "NAME",
       Coins: 0,
       BestScore: 0,
@@ -129,6 +132,7 @@ let playerData = {
     },
     {
       Used: false,
+      Tutorial: false,
       PlayerName: "NAME",
       Coins: 0,
       BestScore: 0,
