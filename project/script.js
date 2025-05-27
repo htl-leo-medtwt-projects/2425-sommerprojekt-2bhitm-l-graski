@@ -175,6 +175,7 @@ function settingsButton(game, currentScreen) {
         }
       });
 
+      /*
       let achievementButton = document.createElement("button");
       achievementButton.style.display = "inline-block";
       achievementButton.style.borderRadius = "100px";
@@ -225,7 +226,7 @@ function settingsButton(game, currentScreen) {
         achievementMenu(game);
       }
       });
-
+*/
       let keyDiv = document.createElement("div");
       keyDiv.style.width = "100%";
       keyDiv.style.height = "62%";
@@ -612,9 +613,9 @@ function settingsButton(game, currentScreen) {
       musicButton.appendChild(musicButtonIcon);
       backgroundDiv.appendChild(musicButton);
 
-      achievementButton.appendChild(achievementButtonImg);
+      /*achievementButton.appendChild(achievementButtonImg);
       achievementButton.appendChild(achievementButtonIcon);
-      backgroundDiv.appendChild(achievementButton);
+      backgroundDiv.appendChild(achievementButton);*/
 
       keyDiv.appendChild(forwardText);
       forwardButtonDiv.appendChild(forwardButtonImg);
@@ -739,8 +740,6 @@ function achievementMenu(game) {
   });
 
   backButton.addEventListener("click", () => {
-    
-    
     if (playing) {
       playInteractSound();
     }
@@ -752,8 +751,6 @@ function achievementMenu(game) {
       body.removeChild(achievementBackground);
       body.removeChild(achievementDiv);
       achievementsOpen = false;
-      
-      
     });
   });
 
@@ -763,7 +760,7 @@ function achievementMenu(game) {
   }
   escapeListener = function (event) {
     if (event.key === "Escape") {
-        backButton.click();
+      backButton.click();
     }
   };
   document.addEventListener("keydown", escapeListener);
@@ -785,6 +782,13 @@ function achievementMenu(game) {
   achievementBody.style.transformStyle = "preserve-3d";
   achievementBody.style.perspective = "1000px";
   achievementBody.style.overflowY = "auto";
+
+  function createAchievement(name, description, image) {
+    let achievement = document.createElement("div");
+    achievement.style.width = "200px";
+    achievement.style.height = "100px";
+    achievement.style.display = "flex";
+  }
 
   body.appendChild(achievementBackground);
   achievementDiv.appendChild(achievementHeader);
@@ -2600,7 +2604,10 @@ function shop(game) {
         if (playing) {
           playBuySound();
         }
-      } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id].Active && playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought) {
+      } else if (
+        playerData.Game[game - 1].ItemUnlocked.Skins[id].Active &&
+        playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought
+      ) {
         itemImg.src = `img/thomas.png`;
         itemName.innerHTML = "Thomas";
         playerData.Game[game - 1].ItemUnlocked.Skins[id].Active = false;
@@ -2612,7 +2619,10 @@ function shop(game) {
           playInteractSound();
         }
         //console.log("thomas");
-      } else if (playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active && playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought) {
+      } else if (
+        playerData.Game[game - 1].ItemUnlocked.Skins[id + 1].Active &&
+        playerData.Game[game - 1].ItemUnlocked.Skins[id].Bought
+      ) {
         itemImg.src = `img/kohrer.png`;
         itemName.innerHTML = "Köhrer";
         playerData.Game[game - 1].ItemUnlocked.Skins[id].Active = true;
@@ -3014,45 +3024,45 @@ function startTutorial(game) {
   }
 
   function drawPortal() {
-  ground.forEach((segment) => {
-    if (segment.portal && !segment.portal.element) {
-      const img = document.createElement("img");
-      img.src = "img/portal.gif";
-      img.style.position = "absolute";
-      img.style.width = "128px";
-      img.style.height = "128px";
-      img.style.left = `${segment.portal.x}px`;
-      img.style.top = `${segment.portal.y}px`;
-      img.style.pointerEvents = "none";
-      document.body.appendChild(img);
-      segment.portal.element = img;
-    } else if (segment.portal && segment.portal.element) {
-      segment.portal.element.style.left = `${segment.portal.x}px`;
-      segment.portal.element.style.top = `${segment.portal.y}px`;
-    }
-  });
-}
+    ground.forEach((segment) => {
+      if (segment.portal && !segment.portal.element) {
+        const img = document.createElement("img");
+        img.src = "img/portal.gif";
+        img.style.position = "absolute";
+        img.style.width = "128px";
+        img.style.height = "128px";
+        img.style.left = `${segment.portal.x}px`;
+        img.style.top = `${segment.portal.y}px`;
+        img.style.pointerEvents = "none";
+        document.body.appendChild(img);
+        segment.portal.element = img;
+      } else if (segment.portal && segment.portal.element) {
+        segment.portal.element.style.left = `${segment.portal.x}px`;
+        segment.portal.element.style.top = `${segment.portal.y}px`;
+      }
+    });
+  }
 
   function checkPortalCollision() {
-  ground.forEach((segment) => {
-    if (segment.portal) {
-      let portal = segment.portal;
-      if (
-        playerX < portal.x + 128 &&
-        playerX + playerWidth > portal.x &&
-        playerY < portal.y + 128 &&
-        playerY + playerHeight > portal.y
-      ) {
-        tutorialRunning = false;
-        gameScreen(game);
+    ground.forEach((segment) => {
+      if (segment.portal) {
+        let portal = segment.portal;
+        if (
+          playerX < portal.x + 128 &&
+          playerX + playerWidth > portal.x &&
+          playerY < portal.y + 128 &&
+          playerY + playerHeight > portal.y
+        ) {
+          tutorialRunning = false;
+          gameScreen(game);
 
-        if (playing) {
-          playSound(0)
+          if (playing) {
+            playSound(0);
+          }
         }
       }
-    }
-  });
-}
+    });
+  }
 
   function movePlayer() {
     if (isPaused) return;
@@ -3349,8 +3359,7 @@ function startTutorial(game) {
               if (againText.parentNode) {
                 body.removeChild(againText);
               }
-                  spawnFallingObject();
-
+              spawnFallingObject();
             },
           });
         },
@@ -3389,9 +3398,9 @@ function startTutorial(game) {
 
   let tutorialRunning = true;
 
-function draw() {
-  if (!tutorialRunning) return;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  function draw() {
+    if (!tutorialRunning) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles = particles.filter((p) => p.alpha > 0);
     particles.forEach((p) => {
       p.update();
@@ -3407,7 +3416,8 @@ function draw() {
     drawPlayer();
     movePlayer();
     moveFallingObjects();
-    requestAnimationFrame(draw);
+      requestAnimationFrame(draw);
+    
   }
 
   let fallingObjects = [];
@@ -3421,63 +3431,62 @@ function draw() {
   }
 
   function moveFallingObjects() {
-  if (isPaused) return;
-  let portalSpawned = false;
-  fallingObjects = fallingObjects.filter((obj) => {
-    obj.y += obj.speedY;
-    if (obj.y >= canvas.height && !portalSpawned) {
-      setTimeout(() => {
-    
-    let portalText = document.createElement("h1");
-    portalText.innerHTML = "Enter the Portal!";
-    portalText.style.color = "black";
-    portalText.style.fontFamily = "Uberschriften";
-    portalText.style.position = "absolute";
-    portalText.style.top = "35%";
-    portalText.style.left = "50%";
-    portalText.style.transform = "translate(-50%, -50%)";
-    portalText.style.fontSize = "50px";
-    portalText.style.opacity = "0";
-    body.appendChild(portalText);
+    if (isPaused) return;
+    let portalSpawned = false;
+    fallingObjects = fallingObjects.filter((obj) => {
+      obj.y += obj.speedY;
+      if (obj.y >= canvas.height && !portalSpawned) {
+        setTimeout(() => {
+          let portalText = document.createElement("h1");
+          portalText.innerHTML = "Enter the Portal!";
+          portalText.style.color = "black";
+          portalText.style.fontFamily = "Uberschriften";
+          portalText.style.position = "absolute";
+          portalText.style.top = "35%";
+          portalText.style.left = "50%";
+          portalText.style.transform = "translate(-50%, -50%)";
+          portalText.style.fontSize = "50px";
+          portalText.style.opacity = "0";
+          body.appendChild(portalText);
 
-    gsap.fromTo(
-      portalText,
-      { scale: 0, opacity: 0 },
-      {
-        scale: 1.5,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.out",
-        onComplete: () => {
-          gsap.to(portalText, {
-            delay: 1,
-            opacity: 0,
-            duration: 0.5,
-            onComplete: () => {
-              if (portalText.parentNode) {
-                body.removeChild(portalText);
-              }
-            },
-          });
-        },
-      }
-    );
+          gsap.fromTo(
+            portalText,
+            { scale: 0, opacity: 0 },
+            {
+              scale: 1.5,
+              opacity: 1,
+              duration: 0.5,
+              ease: "power2.out",
+              onComplete: () => {
+                gsap.to(portalText, {
+                  delay: 1,
+                  opacity: 0,
+                  duration: 0.5,
+                  onComplete: () => {
+                    if (portalText.parentNode) {
+                      body.removeChild(portalText);
+                    }
+                  },
+                });
+              },
+            }
+          );
 
-      let middleGround = ground[6];
-      if (!middleGround.portal) {
-        middleGround.portal = {
-          x: middleGround.x + middleGround.width - 175,
-          y: canvas.height - groundHeight - 100,
-          element: null,
-        };
-        portalSpawned = true;
+          let middleGround = ground[6];
+          if (!middleGround.portal) {
+            middleGround.portal = {
+              x: middleGround.x + middleGround.width - 175,
+              y: canvas.height - groundHeight - 100,
+              element: null,
+            };
+            portalSpawned = true;
+          }
+        }, 350);
+        return false;
       }
-    },350)
-      return false;
-    }
-    return obj.y < canvas.height;
-  });
-}
+      return obj.y < canvas.height;
+    });
+  }
 
   function spawnFallingObject() {
     if (isPaused) return;
