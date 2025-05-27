@@ -3,7 +3,9 @@ let resetConfirmText =
   "Are you sure you want to reset this profile?<br>Please note that all progress, settings, <br>and data associated with this profile will be permanently lost <br>if you proceed with the reset!";
 let coinImg = "coin.png";
 let popUpOpen = false;
+let achievementsOpen = false;
 let firstLoad = false;
+let isPaused = false;
 let escapeListener;
 
 loadPlayerData();
@@ -86,6 +88,8 @@ function settingsButton(game, currentScreen) {
   });
 
   settingButton.addEventListener("click", () => {
+    isPaused = true;
+
     if (!popUpOpen) {
       popUpOpen = true;
 
@@ -169,6 +173,57 @@ function settingsButton(game, currentScreen) {
         if (playing) {
           playInteractSound();
         }
+      });
+
+      let achievementButton = document.createElement("button");
+      achievementButton.style.display = "inline-block";
+      achievementButton.style.borderRadius = "100px";
+      achievementButton.style.overflow = "hidden";
+      achievementButton.style.border = "none";
+      achievementButton.style.backgroundColor = "transparent";
+      achievementButton.style.position = "absolute";
+      achievementButton.style.top = "16%";
+      achievementButton.style.left = "7.5%";
+      achievementButton.style.transform = "translate(-50%, -50%)";
+      achievementButton.style.width = "60px";
+      achievementButton.style.height = "60px";
+
+      let achievementButtonImg = document.createElement("img");
+      achievementButtonImg.src = "img/blue_button.png";
+      achievementButtonImg.style.height = "100%";
+      achievementButtonImg.style.width = "100%";
+      achievementButtonImg.style.display = "block";
+
+      let achievementButtonIcon = document.createElement("img");
+      achievementButtonIcon.classList = "achievement-icon";
+      achievementButtonIcon.src = "img/achievement-icon.png";
+      achievementButtonIcon.style.width = "80%";
+      achievementButtonIcon.style.height = "80%";
+      achievementButtonIcon.style.display = "block";
+      achievementButtonIcon.style.position = "absolute";
+      achievementButtonIcon.style.top = "50%";
+      achievementButtonIcon.style.left = "50%";
+      achievementButtonIcon.style.transform = "translate(-50%, -50%)";
+
+      achievementButton.addEventListener("mouseover", () => {
+        achievementButton.style.cursor = "pointer";
+        achievementButton.style.filter = "grayscale(50%)";
+      });
+
+      achievementButton.addEventListener("mouseleave", () => {
+        achievementButton.style.cursor = "auto";
+        achievementButton.style.filter = "grayscale(0%)";
+      });
+
+      achievementButton.addEventListener("click", () => {
+        if (!achievementsOpen) {
+          achievementsOpen = true;
+        if (playing) {
+          playInteractSound();
+        }
+
+        achievementMenu(game);
+      }
       });
 
       let keyDiv = document.createElement("div");
@@ -431,7 +486,7 @@ function settingsButton(game, currentScreen) {
       resumeButton.style.overflow = "hidden";
       resumeButton.style.position = "absolute";
       resumeButton.style.top = "92%";
-      resumeButton.style.left = "80%";
+      resumeButton.style.left = "50%";
       resumeButton.style.transform = "translate(-50%, -50%)";
       resumeButton.style.border = "none";
       resumeButton.style.backgroundColor = "transparent";
@@ -469,6 +524,7 @@ function settingsButton(game, currentScreen) {
         closeMenuAnimation(backgroundDiv, () => {
           body.removeChild(backgroundDiv);
           popUpOpen = false;
+          isPaused = false;
         });
 
         document.removeEventListener("keydown", escapeListener);
@@ -495,7 +551,7 @@ function settingsButton(game, currentScreen) {
       backButton.style.overflow = "hidden";
       backButton.style.position = "absolute";
       backButton.style.top = "92%";
-      backButton.style.left = "50%";
+      backButton.style.left = "80%";
       backButton.style.transform = "translate(-50%, -50%)";
       backButton.style.border = "none";
       backButton.style.backgroundColor = "transparent";
@@ -556,6 +612,10 @@ function settingsButton(game, currentScreen) {
       musicButton.appendChild(musicButtonIcon);
       backgroundDiv.appendChild(musicButton);
 
+      achievementButton.appendChild(achievementButtonImg);
+      achievementButton.appendChild(achievementButtonIcon);
+      backgroundDiv.appendChild(achievementButton);
+
       keyDiv.appendChild(forwardText);
       forwardButtonDiv.appendChild(forwardButtonImg);
       forwardButtonDiv.appendChild(forwardButtonInput);
@@ -589,6 +649,153 @@ function settingsButton(game, currentScreen) {
   settingButton.appendChild(settingButtonImg);
   settingButton.appendChild(settingButtonIcon);
   body.appendChild(settingButton);
+}
+
+function achievementMenu(game) {
+  let window = 0;
+
+  if (playing) {
+    playSound(3);
+  }
+
+  let achievementBackground = document.createElement("div");
+  achievementBackground.style.backgroundColor = "rgb(0,0,0,0.25)";
+  achievementBackground.style.width = "100%";
+  achievementBackground.style.height = "100%";
+  achievementBackground.style.position = "absolute";
+
+  let achievementDiv = document.createElement("div");
+  achievementDiv.style.backgroundColor = "rgb(0,0,0,0.75)";
+  achievementDiv.style.width = "75%";
+  achievementDiv.style.height = "90%";
+  achievementDiv.style.border = "7.5px solid rgb(0,0,0,0.85)";
+  achievementDiv.style.borderRadius = "25px";
+  achievementDiv.style.boxShadow = "0px 0px 20px 5px rgba(255,255,255,0.45)";
+  achievementDiv.style.position = "absolute";
+  achievementDiv.style.top = "50%";
+  achievementDiv.style.left = "50%";
+  achievementDiv.style.transform = "translate(-50%, -50%)";
+
+  let achievementHeader = document.createElement("h1");
+  achievementHeader.innerHTML = "Achievements";
+  achievementHeader.style.color = "white";
+  achievementHeader.style.fontFamily = "Uberschriften";
+  achievementHeader.style.textAlign = "center";
+  achievementHeader.style.padding = "10px 0";
+
+  let backButton = document.createElement("button");
+  //let backButtonImg = document.createElement("img");
+  let backImg = document.createElement("img");
+  let backButtonText = document.createElement("p");
+
+  /*
+  backButtonImg.src = "img/blue_button.png";
+  backButtonImg.style.width = "100%";
+  backButtonImg.style.height = "100%";
+  backButtonImg.style.display = "block";
+  */
+
+  backImg.src = "img/back-arrow.png";
+  backImg.style.width = "20px";
+  backImg.style.height = "20px";
+  backImg.style.display = "block";
+  backImg.style.position = "absolute";
+  backImg.style.top = "50%";
+  backImg.style.left = "20%";
+  backImg.style.transform = "translate(-50%, -50%)";
+
+  backButtonText.innerHTML = "BACK";
+  backButtonText.style.position = "absolute";
+  backButtonText.style.top = "50%";
+  backButtonText.style.left = "60%";
+  backButtonText.style.transform = "translate(-50%, -50%)";
+  backButtonText.style.fontFamily = "SF-Pro";
+  backButtonText.style.fontSize = "18px";
+  backButtonText.style.color = "black";
+  backButtonText.style.fontWeight = "bolder";
+
+  backButton.style.display = "inline-block";
+  backButton.style.overflow = "hidden";
+  backButton.style.position = "absolute";
+  backButton.style.top = "3.5%";
+  backButton.style.left = "3.5%";
+  backButton.style.transform = "translate(-50%, -50%)";
+  backButton.style.border = "6px solid rgb(0,0,0,0.85)";
+  backButton.style.borderRadius = "25px";
+  backButton.style.backgroundColor = "#fff";
+  backButton.style.width = "95px";
+  backButton.style.height = "47.5px";
+
+  backButton.addEventListener("mouseover", () => {
+    backButton.style.cursor = "pointer";
+    backButton.style.backgroundColor = "#d3d3d3";
+    backButton.style.border = "6px solid rgb(0,0,0,1)";
+  });
+
+  backButton.addEventListener("mouseleave", () => {
+    backButton.style.cursor = "auto";
+    backButton.style.backgroundColor = "#fff";
+    backButton.style.border = "6px solid rgb(0,0,0,0.85)";
+  });
+
+  backButton.addEventListener("click", () => {
+    
+    
+    if (playing) {
+      playInteractSound();
+    }
+
+    document.removeEventListener("keydown", escapeListener);
+    escapeListener = null;
+
+    closeMenuAnimation(achievementDiv, () => {
+      body.removeChild(achievementBackground);
+      body.removeChild(achievementDiv);
+      achievementsOpen = false;
+      
+      
+    });
+  });
+
+  if (escapeListener) {
+    document.removeEventListener("keydown", escapeListener);
+    escapeListener = null;
+  }
+  escapeListener = function (event) {
+    if (event.key === "Escape") {
+        backButton.click();
+    }
+  };
+  document.addEventListener("keydown", escapeListener);
+
+  let achievementBody = document.createElement("div");
+  achievementBody.style.display = "flex";
+  achievementBody.style.flexDirection = "row";
+  achievementBody.style.alignItems = "center";
+  achievementBody.style.justifyContent = "center";
+  achievementBody.style.flexWrap = "wrap";
+  achievementBody.style.margin = "10px auto";
+  achievementBody.style.gap = "10%";
+  achievementBody.style.width = "75%";
+  achievementBody.style.height = "85%";
+  achievementBody.style.backgroundColor = "#141414";
+  achievementBody.style.border = "7.5px solid rgb(0,0,0,0.85)";
+  achievementBody.style.borderRadius = "25px";
+  achievementBody.style.transition = "transform 0.8s";
+  achievementBody.style.transformStyle = "preserve-3d";
+  achievementBody.style.perspective = "1000px";
+  achievementBody.style.overflowY = "auto";
+
+  body.appendChild(achievementBackground);
+  achievementDiv.appendChild(achievementHeader);
+  //backButton.appendChild(backButtonImg);
+  backButton.appendChild(backImg);
+  backButton.appendChild(backButtonText);
+  achievementDiv.appendChild(backButton);
+  achievementDiv.appendChild(achievementBody);
+  body.appendChild(achievementDiv);
+
+  openMenuAnimation(achievementDiv);
 }
 
 function chooseGame() {
@@ -2480,7 +2687,7 @@ function startTutorial(game) {
   body.style.backgroundSize = "cover";
   body.style.overflow = "hidden";
 
-  settingsButton(1, 4);
+  settingsButton(game, 4);
 
   let playerNameDiv = document.createElement("div");
   playerNameDiv.style.display = "inline-block";
@@ -2848,6 +3055,7 @@ function startTutorial(game) {
 }
 
   function movePlayer() {
+    if (isPaused) return;
     let wasOnGround = false;
     for (let i = 0; i < ground.length; i++) {
       let current = ground[i];
@@ -3151,6 +3359,7 @@ function startTutorial(game) {
   }
 
   function jump() {
+    if (isPaused) return;
     let isGrounded = false;
     let groundY = canvas.height - 1.5 * groundHeight - playerHeight + 14;
     if (playerY >= groundY - 1 && playerY <= groundY + 1) {
@@ -3212,6 +3421,7 @@ function draw() {
   }
 
   function moveFallingObjects() {
+  if (isPaused) return;
   let portalSpawned = false;
   fallingObjects = fallingObjects.filter((obj) => {
     obj.y += obj.speedY;
@@ -3270,6 +3480,7 @@ function draw() {
 }
 
   function spawnFallingObject() {
+    if (isPaused) return;
     const x = canvas.width / 1.5 + 200;
     fallingObjects.push({
       x: x,
@@ -3506,6 +3717,7 @@ function gameStarted(game) {
     }
 
     update() {
+      if (isPaused) return;
       this.x += this.speedX;
       this.y += this.speedY;
       this.alpha -= this.decay;
@@ -3621,6 +3833,7 @@ function gameStarted(game) {
   let fallingObjects = [];
 
   function spawnFallingObject() {
+    if (isPaused) return;
     let multiplier = 2 * Math.random();
     const x = Math.random() * (canvas.width / 3) + (2 * canvas.width) / 3;
     fallingObjects.push({
@@ -3640,6 +3853,7 @@ function gameStarted(game) {
   }
 
   function moveFallingObjects() {
+    if (isPaused) return;
     fallingObjects.forEach((obj) => {
       obj.x += obj.speedX;
       obj.y += obj.speedY;
@@ -3762,6 +3976,7 @@ function gameStarted(game) {
   }
 
   function drawCoins() {
+    if (isPaused) return;
     ground.forEach((segment) => {
       if (segment.coin && !segment.coin.element) {
         const img = document.createElement("img");
@@ -3988,6 +4203,7 @@ function gameStarted(game) {
   }
 
   function movePlayer() {
+    if (isPaused) return;
     let wasOnGround = false;
 
     if (playerY > canvas.height - 25) {
@@ -4081,6 +4297,7 @@ function gameStarted(game) {
   }
 
   function jump() {
+    if (isPaused) return;
     let isGrounded = false;
     let groundY = canvas.height - 1.5 * groundHeight - playerHeight + 14;
 
@@ -4125,6 +4342,7 @@ function gameStarted(game) {
   }
 
   function moveGround() {
+    if (isPaused) return;
     ground.forEach((segment) => {
       segment.x -= groundSpeed;
       if (segment.coin) {
@@ -4266,6 +4484,7 @@ function gameStarted(game) {
   }
 
   function gameLoop() {
+    if (isPaused) return;
     const isBeyondSecondThird = playerX >= (2 * canvas.width) / 3;
 
     if (playerDirection === 0 && !isJumping && !isBeyondSecondThird) {
