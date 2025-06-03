@@ -596,6 +596,7 @@ function settingsButton(game, currentScreen) {
     }
 
     popUpOpen = false;
+    isPaused = false;
 
     if (gameKeydownListener) {
     document.removeEventListener("keydown", gameKeydownListener);
@@ -609,7 +610,7 @@ function settingsButton(game, currentScreen) {
     if (currentScreen == 3) {
       startGame(game);
     } else if (currentScreen == 4) {
-      gameStarted(game);
+      gameScreen(game);
     }
   });
 });
@@ -3709,7 +3710,7 @@ function gameStarted(game) {
 
   let score = 0;
   let playerX = 0;
-  let playerY = canvas.height - 1.5 * groundHeight - playerHeight + 14;
+  let playerY = canvas.height - 1.5 * groundHeight - playerHeight;
   let playerSpeed = 6 * playerData.Game[game - 1].SpeedMultiplier;
   let playerDirection = 0;
   let velocityY = 0;
