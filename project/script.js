@@ -7,6 +7,8 @@ let achievementsOpen = false;
 let firstLoad = false;
 let isPaused = false;
 let escapeListener;
+let gameKeydownListener = null;
+let gameKeyupListener = null;
 
 loadPlayerData();
 
@@ -22,7 +24,7 @@ document.addEventListener("keydown", function (event) {
     //confirmScreen(-1, resetConfirmText);
     //settingsButton(1);
     //volumeOff();
-    shop(-1);
+    //shop(-1);
   }
 });
 
@@ -587,25 +589,30 @@ function settingsButton(game, currentScreen) {
         backButtonText.style.color = "white";
       });
       backButton.addEventListener("click", () => {
-        closeMenuAnimation(backgroundDiv, () => {
-          if (currentScreen == 1) {
-            chooseGame(game);
-          } else if (currentScreen == 2) {
-            chooseGame(game);
-          } else if (currentScreen == 3) {
-            startGame(game);
-          } else if (currentScreen == 4) {
-            gameScreen(game);
-          }
+  closeMenuAnimation(backgroundDiv, () => {
+    if (playing) {
+      playSound(0);
+      playInteractSound();
+    }
 
-          if (playing) {
-            playSound(0);
-            playInteractSound();
-          }
+    popUpOpen = false;
 
-          popUpOpen = false;
-        });
-      });
+    if (gameKeydownListener) {
+    document.removeEventListener("keydown", gameKeydownListener);
+    gameKeydownListener = null;
+  }
+  if (gameKeyupListener) {
+    document.removeEventListener("keyup", gameKeyupListener);
+    gameKeyupListener = null;
+  }
+  
+    if (currentScreen == 3) {
+      startGame(game);
+    } else if (currentScreen == 4) {
+      gameStarted(game);
+    }
+  });
+});
 
       backgroundDiv.appendChild(settingsHeader);
 
@@ -2048,6 +2055,17 @@ function gameScreen(game) {
   statsDiv.appendChild(coinsImg);
   statsDiv.appendChild(coins);
   body.appendChild(statsDiv);
+
+  document.addEventListener("keydown", function (e) {
+    if (e.ctrlKey && e.key.toLowerCase() === "c") {
+      e.preventDefault();
+      addCoins(game - 1, 1000);
+      savePlayerData();
+      document.getElementById(
+        "coinDisplay"
+      ).innerHTML = `: ${playerData.Game[game - 1].Coins}`;
+    }
+  });
 }
 
 function showShopMessage(message) {
@@ -2181,6 +2199,7 @@ function shop(game) {
             document.removeEventListener("keydown", escapeListener);
             escapeListener = null;
           }
+          gameScreen(game);
         });
 
         if (playing) {
@@ -2342,9 +2361,9 @@ function shop(game) {
     itemPrice.style.color = "white";
 
     let buyButton = document.createElement("button");
-    buyButton.innerHTML = playerData.Game[game - 1].ItemUnlocked.Items[id]
-      ? "Bought"
-      : "Buy";
+    if (playerData.Game[game - 1].ItemUnlocked.Items[id] && playerData.Game[game - 1].ItemUnlocked.Items[id] != undefined) buyButton.innerHTML = "Bought"
+    else buyButton.innerHTML = "Buy";
+
     buyButton.style.fontFamily = "SF-Pro";
     buyButton.style.color = "#fff";
     buyButton.style.padding = "10px 20px";
@@ -2372,9 +2391,8 @@ function shop(game) {
         playerData.Game[game - 1].ItemUnlocked.Items[id] = true;
         playerData.Game[game - 1].Coins -= price;
         savePlayerData(game);
-        document.getElementById("coinDisplay").innerHTML = `: ${
-          playerData.Game[game - 1].Coins
-        }`;
+        document.getElementById("coinDisplay").innerHTML = `: ${playerData.Game[game - 1].Coins
+          }`;
 
         if (playing) {
           playBuySound();
@@ -2597,9 +2615,8 @@ function shop(game) {
         playerData.Game[game - 1].Coins -= price;
         itemImg.src = `img/thomas.png`;
         itemName.innerHTML = "Thomas";
-        document.getElementById("coinDisplay").innerHTML = `: ${
-          playerData.Game[game - 1].Coins
-        }`;
+        document.getElementById("coinDisplay").innerHTML = `: ${playerData.Game[game - 1].Coins
+          }`;
 
         if (playing) {
           playBuySound();
@@ -3416,8 +3433,8 @@ function startTutorial(game) {
     drawPlayer();
     movePlayer();
     moveFallingObjects();
-      requestAnimationFrame(draw);
-    
+    requestAnimationFrame(draw);
+
   }
 
   let fallingObjects = [];
@@ -3704,6 +3721,7 @@ function gameStarted(game) {
   let gameOverShown = false;
   let highScoreShown;
   let playerVisible = true;
+  let isStarted = false;
 
   if (playerData.Game[game - 1].BestScore > 0) {
     highScoreShown = false;
@@ -3755,18 +3773,17 @@ function gameStarted(game) {
 
   let ground = [];
   let groundSpeed = 4 * playerData.Game[game - 1].SpeedMultiplier;
-  let isStarted = false;
 
   let spriteImage = new Image();
 
   switch (
-    [
-      playerData.Game[game - 1].ItemUnlocked.Items[0],
-      playerData.Game[game - 1].ItemUnlocked.Items[1],
-      playerData.Game[game - 1].ItemUnlocked.Items[3],
-    ]
-      .map((v) => (v ? "1" : "0"))
-      .join("")
+  [
+    playerData.Game[game - 1].ItemUnlocked.Items[0],
+    playerData.Game[game - 1].ItemUnlocked.Items[1],
+    playerData.Game[game - 1].ItemUnlocked.Items[3],
+  ]
+    .map((v) => (v ? "1" : "0"))
+    .join("")
   ) {
     case "100":
       spriteImage.src = `img/${playerData.Game[game - 1].Sprite}-1-0-0.png`;
@@ -4477,12 +4494,10 @@ function gameStarted(game) {
     }
   }
 
-  window.addEventListener("click", function () {
-    if (!isStarted) {
-      isStarted = true;
-      gameLoop();
-    }
-  });
+  if (!isStarted) {
+    isStarted = true;
+    gameLoop();
+  }
 
   let x = 0;
 
@@ -4493,7 +4508,6 @@ function gameStarted(game) {
   }
 
   function gameLoop() {
-    if (isPaused) return;
     const isBeyondSecondThird = playerX >= (2 * canvas.width) / 3;
 
     if (playerDirection === 0 && !isJumping && !isBeyondSecondThird) {
@@ -4511,7 +4525,7 @@ function gameStarted(game) {
     draw();
   }
 
-  document.addEventListener("keydown", (e) => {
+  gameKeydownListener = function (e) {
     let jumpKey = playerData.Game[game - 1].Movement.Jump.toLowerCase();
     if (jumpKey === "space") jumpKey = " ";
     let forwardKey = playerData.Game[game - 1].Movement.Forward.toLowerCase();
@@ -4524,9 +4538,9 @@ function gameStarted(game) {
     } else if (e.key === jumpKey || e.key === "ArrowUp") {
       jump();
     }
-  });
+  };
 
-  document.addEventListener("keyup", (e) => {
+  gameKeyupListener = function (e) {
     let forwardKey = playerData.Game[game - 1].Movement.Forward.toLowerCase();
     let backwardKey = playerData.Game[game - 1].Movement.Backward.toLowerCase();
 
@@ -4538,5 +4552,8 @@ function gameStarted(game) {
     ) {
       playerDirection = 0;
     }
-  });
+  };
+
+  document.addEventListener("keydown", gameKeydownListener);
+  document.addEventListener("keyup", gameKeyupListener);
 }

@@ -288,13 +288,3 @@ function addGlobalScoreMultiplier(game, multiplier) {
   savePlayerData();
 }
 
-document.addEventListener("keydown", function (e) {
-  if (e.ctrlKey && e.key.toLowerCase() === "c") {
-    e.preventDefault();
-    addCoins(0, 1000);
-    savePlayerData();
-    document.getElementById(
-      "coinDisplay"
-    ).innerHTML = `: ${playerData.Game[0].Coins}`;
-  }
-});
